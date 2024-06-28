@@ -1,0 +1,13 @@
+syntax = "proto3";
+package vultisig.keygen.proto;
+option java_package = "vultisig.keygen.proto";
+option swift_prefix = "VS";
+
+message KeygenMessage {
+  string session_id = 1;
+  string hex_chain_code = 2;
+  string service_name = 3;
+  string encryption_key_hex = 4;
+  bool use_vultisig_relay = 5;
+  string vault_name = 6;
+}

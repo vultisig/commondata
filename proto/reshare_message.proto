@@ -1,0 +1,16 @@
+syntax = "proto3";
+package vultisig.keygen.proto;
+option java_package = "vultisig.keygen.proto";
+option swift_prefix = "VS";
+
+message ReshareMessage {
+  string session_id = 1;
+  string hex_chain_code = 2;
+  string service_name = 3;
+  string public_key_ecdsa = 4;
+  repeated string old_parties = 5;
+  string encryption_key_hex = 6;
+  bool use_vultisig_relay = 7;
+  string old_reshare_prefix = 8;
+  string vault_name = 9;
+}
