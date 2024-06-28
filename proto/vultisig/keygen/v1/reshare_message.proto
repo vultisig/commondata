@@ -1,7 +1,7 @@
 syntax = "proto3";
-package vultisig.keygen.proto;
+package vultisig.keygen.v1;
 
-option java_package = "vultisig.keygen.proto";
+option java_package = "vultisig.keygen.v1";
 option swift_prefix = "VS";
 
 message ReshareMessage {

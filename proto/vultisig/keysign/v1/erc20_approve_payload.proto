@@ -1,0 +1,10 @@
+syntax = "proto3";
+package vultisig.keysign.v1;
+
+option java_package = "vultisig.keysign.v1";
+option swift_prefix = "VS";
+
+message Erc20ApprovePayload {
+  string amount = 1;
+  string spender = 2;
+}
