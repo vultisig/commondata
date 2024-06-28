@@ -20,96 +20,96 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-struct VSOneInchTransaction {
+public struct VSOneInchTransaction {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var from: String = String()
+  public var from: String = String()
 
-  var to: String = String()
+  public var to: String = String()
 
-  var data: String = String()
+  public var data: String = String()
 
-  var value: String = String()
+  public var value: String = String()
 
-  var gasPrice: String = String()
+  public var gasPrice: String = String()
 
-  var gas: Int64 = 0
+  public var gas: Int64 = 0
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
-struct VSOneInchQuote {
+public struct VSOneInchQuote {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var dstAmount: String = String()
+  public var dstAmount: String = String()
 
-  var tx: VSOneInchTransaction {
+  public var tx: VSOneInchTransaction {
     get {return _tx ?? VSOneInchTransaction()}
     set {_tx = newValue}
   }
   /// Returns true if `tx` has been explicitly set.
-  var hasTx: Bool {return self._tx != nil}
+  public var hasTx: Bool {return self._tx != nil}
   /// Clears the value of `tx`. Subsequent reads from it will return its default value.
-  mutating func clearTx() {self._tx = nil}
+  public mutating func clearTx() {self._tx = nil}
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 
   fileprivate var _tx: VSOneInchTransaction? = nil
 }
 
-struct VSOneInchSwapPayload {
+public struct VSOneInchSwapPayload {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var fromCoin: VSCoin {
+  public var fromCoin: VSCoin {
     get {return _storage._fromCoin ?? VSCoin()}
     set {_uniqueStorage()._fromCoin = newValue}
   }
   /// Returns true if `fromCoin` has been explicitly set.
-  var hasFromCoin: Bool {return _storage._fromCoin != nil}
+  public var hasFromCoin: Bool {return _storage._fromCoin != nil}
   /// Clears the value of `fromCoin`. Subsequent reads from it will return its default value.
-  mutating func clearFromCoin() {_uniqueStorage()._fromCoin = nil}
+  public mutating func clearFromCoin() {_uniqueStorage()._fromCoin = nil}
 
-  var toCoin: VSCoin {
+  public var toCoin: VSCoin {
     get {return _storage._toCoin ?? VSCoin()}
     set {_uniqueStorage()._toCoin = newValue}
   }
   /// Returns true if `toCoin` has been explicitly set.
-  var hasToCoin: Bool {return _storage._toCoin != nil}
+  public var hasToCoin: Bool {return _storage._toCoin != nil}
   /// Clears the value of `toCoin`. Subsequent reads from it will return its default value.
-  mutating func clearToCoin() {_uniqueStorage()._toCoin = nil}
+  public mutating func clearToCoin() {_uniqueStorage()._toCoin = nil}
 
-  var fromAmount: Data {
+  public var fromAmount: String {
     get {return _storage._fromAmount}
     set {_uniqueStorage()._fromAmount = newValue}
   }
 
-  var toAmountDecimal: String {
+  public var toAmountDecimal: String {
     get {return _storage._toAmountDecimal}
     set {_uniqueStorage()._toAmountDecimal = newValue}
   }
 
-  var quote: VSOneInchQuote {
+  public var quote: VSOneInchQuote {
     get {return _storage._quote ?? VSOneInchQuote()}
     set {_uniqueStorage()._quote = newValue}
   }
   /// Returns true if `quote` has been explicitly set.
-  var hasQuote: Bool {return _storage._quote != nil}
+  public var hasQuote: Bool {return _storage._quote != nil}
   /// Clears the value of `quote`. Subsequent reads from it will return its default value.
-  mutating func clearQuote() {_uniqueStorage()._quote = nil}
+  public mutating func clearQuote() {_uniqueStorage()._quote = nil}
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 
   fileprivate var _storage = _StorageClass.defaultInstance
 }
@@ -125,8 +125,8 @@ extension VSOneInchSwapPayload: @unchecked Sendable {}
 fileprivate let _protobuf_package = "vultisig.keysign.proto"
 
 extension VSOneInchTransaction: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".OneInchTransaction"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".OneInchTransaction"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "from"),
     2: .same(proto: "to"),
     3: .same(proto: "data"),
@@ -135,7 +135,7 @@ extension VSOneInchTransaction: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     6: .same(proto: "gas"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       // The use of inline closures is to circumvent an issue where the compiler
       // allocates stack space for every case branch when no optimizations are
@@ -152,7 +152,7 @@ extension VSOneInchTransaction: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.from.isEmpty {
       try visitor.visitSingularStringField(value: self.from, fieldNumber: 1)
     }
@@ -174,7 +174,7 @@ extension VSOneInchTransaction: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: VSOneInchTransaction, rhs: VSOneInchTransaction) -> Bool {
+  public static func ==(lhs: VSOneInchTransaction, rhs: VSOneInchTransaction) -> Bool {
     if lhs.from != rhs.from {return false}
     if lhs.to != rhs.to {return false}
     if lhs.data != rhs.data {return false}
@@ -187,13 +187,13 @@ extension VSOneInchTransaction: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
 }
 
 extension VSOneInchQuote: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".OneInchQuote"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".OneInchQuote"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "dst_amount"),
     2: .same(proto: "tx"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       // The use of inline closures is to circumvent an issue where the compiler
       // allocates stack space for every case branch when no optimizations are
@@ -206,7 +206,7 @@ extension VSOneInchQuote: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     // The use of inline closures is to circumvent an issue where the compiler
     // allocates stack space for every if/case branch local when no optimizations
     // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
@@ -220,7 +220,7 @@ extension VSOneInchQuote: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: VSOneInchQuote, rhs: VSOneInchQuote) -> Bool {
+  public static func ==(lhs: VSOneInchQuote, rhs: VSOneInchQuote) -> Bool {
     if lhs.dstAmount != rhs.dstAmount {return false}
     if lhs._tx != rhs._tx {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
@@ -229,8 +229,8 @@ extension VSOneInchQuote: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
 }
 
 extension VSOneInchSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".OneInchSwapPayload"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".OneInchSwapPayload"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "from_coin"),
     2: .standard(proto: "to_coin"),
     3: .standard(proto: "from_amount"),
@@ -241,7 +241,7 @@ extension VSOneInchSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
   fileprivate class _StorageClass {
     var _fromCoin: VSCoin? = nil
     var _toCoin: VSCoin? = nil
-    var _fromAmount: Data = Data()
+    var _fromAmount: String = String()
     var _toAmountDecimal: String = String()
     var _quote: VSOneInchQuote? = nil
 
@@ -273,7 +273,7 @@ extension VSOneInchSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     return _storage
   }
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     _ = _uniqueStorage()
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       while let fieldNumber = try decoder.nextFieldNumber() {
@@ -283,7 +283,7 @@ extension VSOneInchSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
         switch fieldNumber {
         case 1: try { try decoder.decodeSingularMessageField(value: &_storage._fromCoin) }()
         case 2: try { try decoder.decodeSingularMessageField(value: &_storage._toCoin) }()
-        case 3: try { try decoder.decodeSingularBytesField(value: &_storage._fromAmount) }()
+        case 3: try { try decoder.decodeSingularStringField(value: &_storage._fromAmount) }()
         case 4: try { try decoder.decodeSingularStringField(value: &_storage._toAmountDecimal) }()
         case 5: try { try decoder.decodeSingularMessageField(value: &_storage._quote) }()
         default: break
@@ -292,7 +292,7 @@ extension VSOneInchSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       // The use of inline closures is to circumvent an issue where the compiler
       // allocates stack space for every if/case branch local when no optimizations
@@ -305,7 +305,7 @@ extension VSOneInchSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
         try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
       } }()
       if !_storage._fromAmount.isEmpty {
-        try visitor.visitSingularBytesField(value: _storage._fromAmount, fieldNumber: 3)
+        try visitor.visitSingularStringField(value: _storage._fromAmount, fieldNumber: 3)
       }
       if !_storage._toAmountDecimal.isEmpty {
         try visitor.visitSingularStringField(value: _storage._toAmountDecimal, fieldNumber: 4)
@@ -317,7 +317,7 @@ extension VSOneInchSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: VSOneInchSwapPayload, rhs: VSOneInchSwapPayload) -> Bool {
+  public static func ==(lhs: VSOneInchSwapPayload, rhs: VSOneInchSwapPayload) -> Bool {
     if lhs._storage !== rhs._storage {
       let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
         let _storage = _args.0

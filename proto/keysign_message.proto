@@ -8,7 +8,6 @@ import "blockchain_specific.proto";
 import "1inch_swap_payload.proto";
 import "thorchain_swap_payload.proto";
 
-
 option java_package = "vultisig.keysign.proto";
 option swift_prefix = "VS";
 

@@ -20,86 +20,86 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-struct VSTHORChainSwapPayload {
+public struct VSTHORChainSwapPayload {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var fromAddress: String {
+  public var fromAddress: String {
     get {return _storage._fromAddress}
     set {_uniqueStorage()._fromAddress = newValue}
   }
 
-  var fromCoin: VSCoin {
+  public var fromCoin: VSCoin {
     get {return _storage._fromCoin ?? VSCoin()}
     set {_uniqueStorage()._fromCoin = newValue}
   }
   /// Returns true if `fromCoin` has been explicitly set.
-  var hasFromCoin: Bool {return _storage._fromCoin != nil}
+  public var hasFromCoin: Bool {return _storage._fromCoin != nil}
   /// Clears the value of `fromCoin`. Subsequent reads from it will return its default value.
-  mutating func clearFromCoin() {_uniqueStorage()._fromCoin = nil}
+  public mutating func clearFromCoin() {_uniqueStorage()._fromCoin = nil}
 
-  var toCoin: VSCoin {
+  public var toCoin: VSCoin {
     get {return _storage._toCoin ?? VSCoin()}
     set {_uniqueStorage()._toCoin = newValue}
   }
   /// Returns true if `toCoin` has been explicitly set.
-  var hasToCoin: Bool {return _storage._toCoin != nil}
+  public var hasToCoin: Bool {return _storage._toCoin != nil}
   /// Clears the value of `toCoin`. Subsequent reads from it will return its default value.
-  mutating func clearToCoin() {_uniqueStorage()._toCoin = nil}
+  public mutating func clearToCoin() {_uniqueStorage()._toCoin = nil}
 
-  var vaultAddress: String {
+  public var vaultAddress: String {
     get {return _storage._vaultAddress}
     set {_uniqueStorage()._vaultAddress = newValue}
   }
 
-  var routerAddress: String {
+  public var routerAddress: String {
     get {return _storage._routerAddress ?? String()}
     set {_uniqueStorage()._routerAddress = newValue}
   }
   /// Returns true if `routerAddress` has been explicitly set.
-  var hasRouterAddress: Bool {return _storage._routerAddress != nil}
+  public var hasRouterAddress: Bool {return _storage._routerAddress != nil}
   /// Clears the value of `routerAddress`. Subsequent reads from it will return its default value.
-  mutating func clearRouterAddress() {_uniqueStorage()._routerAddress = nil}
+  public mutating func clearRouterAddress() {_uniqueStorage()._routerAddress = nil}
 
-  var fromAmount: String {
+  public var fromAmount: String {
     get {return _storage._fromAmount}
     set {_uniqueStorage()._fromAmount = newValue}
   }
 
-  var toAmountDecimal: String {
+  public var toAmountDecimal: String {
     get {return _storage._toAmountDecimal}
     set {_uniqueStorage()._toAmountDecimal = newValue}
   }
 
-  var toAmountLimit: String {
+  public var toAmountLimit: String {
     get {return _storage._toAmountLimit}
     set {_uniqueStorage()._toAmountLimit = newValue}
   }
 
-  var streamingInterval: String {
+  public var streamingInterval: String {
     get {return _storage._streamingInterval}
     set {_uniqueStorage()._streamingInterval = newValue}
   }
 
-  var streamingQuantity: String {
+  public var streamingQuantity: String {
     get {return _storage._streamingQuantity}
     set {_uniqueStorage()._streamingQuantity = newValue}
   }
 
-  var expirationTime: UInt64 {
+  public var expirationTime: UInt64 {
     get {return _storage._expirationTime}
     set {_uniqueStorage()._expirationTime = newValue}
   }
 
-  var isAffiliate: Bool {
+  public var isAffiliate: Bool {
     get {return _storage._isAffiliate}
     set {_uniqueStorage()._isAffiliate = newValue}
   }
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 
   fileprivate var _storage = _StorageClass.defaultInstance
 }
@@ -113,8 +113,8 @@ extension VSTHORChainSwapPayload: @unchecked Sendable {}
 fileprivate let _protobuf_package = "vultisig.keysign.proto"
 
 extension VSTHORChainSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".THORChainSwapPayload"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".THORChainSwapPayload"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "from_address"),
     2: .standard(proto: "from_coin"),
     3: .standard(proto: "to_coin"),
@@ -178,7 +178,7 @@ extension VSTHORChainSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     return _storage
   }
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     _ = _uniqueStorage()
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       while let fieldNumber = try decoder.nextFieldNumber() {
@@ -204,7 +204,7 @@ extension VSTHORChainSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       // The use of inline closures is to circumvent an issue where the compiler
       // allocates stack space for every if/case branch local when no optimizations
@@ -250,7 +250,7 @@ extension VSTHORChainSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: VSTHORChainSwapPayload, rhs: VSTHORChainSwapPayload) -> Bool {
+  public static func ==(lhs: VSTHORChainSwapPayload, rhs: VSTHORChainSwapPayload) -> Bool {
     if lhs._storage !== rhs._storage {
       let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
         let _storage = _args.0

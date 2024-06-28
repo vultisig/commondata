@@ -20,65 +20,65 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-struct VSKeysignMessage {
+public struct VSKeysignMessage {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var sessionID: String = String()
+  public var sessionID: String = String()
 
-  var serviceName: String = String()
+  public var serviceName: String = String()
 
-  var encryptionKeyHex: String = String()
+  public var encryptionKeyHex: String = String()
 
-  var keysignPayload: VSKeysignPayload {
+  public var keysignPayload: VSKeysignPayload {
     get {return _keysignPayload ?? VSKeysignPayload()}
     set {_keysignPayload = newValue}
   }
   /// Returns true if `keysignPayload` has been explicitly set.
-  var hasKeysignPayload: Bool {return self._keysignPayload != nil}
+  public var hasKeysignPayload: Bool {return self._keysignPayload != nil}
   /// Clears the value of `keysignPayload`. Subsequent reads from it will return its default value.
-  mutating func clearKeysignPayload() {self._keysignPayload = nil}
+  public mutating func clearKeysignPayload() {self._keysignPayload = nil}
 
-  var useVultisigRelay: Bool = false
+  public var useVultisigRelay: Bool = false
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 
   fileprivate var _keysignPayload: VSKeysignPayload? = nil
 }
 
-struct VSKeysignPayload {
+public struct VSKeysignPayload {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var coin: VSCoin {
+  public var coin: VSCoin {
     get {return _storage._coin ?? VSCoin()}
     set {_uniqueStorage()._coin = newValue}
   }
   /// Returns true if `coin` has been explicitly set.
-  var hasCoin: Bool {return _storage._coin != nil}
+  public var hasCoin: Bool {return _storage._coin != nil}
   /// Clears the value of `coin`. Subsequent reads from it will return its default value.
-  mutating func clearCoin() {_uniqueStorage()._coin = nil}
+  public mutating func clearCoin() {_uniqueStorage()._coin = nil}
 
-  var toAddress: String {
+  public var toAddress: String {
     get {return _storage._toAddress}
     set {_uniqueStorage()._toAddress = newValue}
   }
 
-  var toAmount: String {
+  public var toAmount: String {
     get {return _storage._toAmount}
     set {_uniqueStorage()._toAmount = newValue}
   }
 
-  var blockchainSpecific: OneOf_BlockchainSpecific? {
+  public var blockchainSpecific: OneOf_BlockchainSpecific? {
     get {return _storage._blockchainSpecific}
     set {_uniqueStorage()._blockchainSpecific = newValue}
   }
 
-  var utxoSpecific: VSUTXOSpecific {
+  public var utxoSpecific: VSUTXOSpecific {
     get {
       if case .utxoSpecific(let v)? = _storage._blockchainSpecific {return v}
       return VSUTXOSpecific()
@@ -86,7 +86,7 @@ struct VSKeysignPayload {
     set {_uniqueStorage()._blockchainSpecific = .utxoSpecific(newValue)}
   }
 
-  var ethereumSpecific: VSEthereumSpecific {
+  public var ethereumSpecific: VSEthereumSpecific {
     get {
       if case .ethereumSpecific(let v)? = _storage._blockchainSpecific {return v}
       return VSEthereumSpecific()
@@ -94,7 +94,7 @@ struct VSKeysignPayload {
     set {_uniqueStorage()._blockchainSpecific = .ethereumSpecific(newValue)}
   }
 
-  var thorchainSpecific: VSTHORChainSpecific {
+  public var thorchainSpecific: VSTHORChainSpecific {
     get {
       if case .thorchainSpecific(let v)? = _storage._blockchainSpecific {return v}
       return VSTHORChainSpecific()
@@ -102,7 +102,7 @@ struct VSKeysignPayload {
     set {_uniqueStorage()._blockchainSpecific = .thorchainSpecific(newValue)}
   }
 
-  var mayaSpecific: VSMAYAChainSpecific {
+  public var mayaSpecific: VSMAYAChainSpecific {
     get {
       if case .mayaSpecific(let v)? = _storage._blockchainSpecific {return v}
       return VSMAYAChainSpecific()
@@ -110,7 +110,7 @@ struct VSKeysignPayload {
     set {_uniqueStorage()._blockchainSpecific = .mayaSpecific(newValue)}
   }
 
-  var cosmosSpecific: VSCosmosSpecific {
+  public var cosmosSpecific: VSCosmosSpecific {
     get {
       if case .cosmosSpecific(let v)? = _storage._blockchainSpecific {return v}
       return VSCosmosSpecific()
@@ -118,7 +118,7 @@ struct VSKeysignPayload {
     set {_uniqueStorage()._blockchainSpecific = .cosmosSpecific(newValue)}
   }
 
-  var solanaSpecific: VSSolanaSpecific {
+  public var solanaSpecific: VSSolanaSpecific {
     get {
       if case .solanaSpecific(let v)? = _storage._blockchainSpecific {return v}
       return VSSolanaSpecific()
@@ -126,7 +126,7 @@ struct VSKeysignPayload {
     set {_uniqueStorage()._blockchainSpecific = .solanaSpecific(newValue)}
   }
 
-  var polkadotSpecific: VSPolkadotSpecific {
+  public var polkadotSpecific: VSPolkadotSpecific {
     get {
       if case .polkadotSpecific(let v)? = _storage._blockchainSpecific {return v}
       return VSPolkadotSpecific()
@@ -134,7 +134,7 @@ struct VSKeysignPayload {
     set {_uniqueStorage()._blockchainSpecific = .polkadotSpecific(newValue)}
   }
 
-  var suicheSpecific: VSSuiSpecific {
+  public var suicheSpecific: VSSuiSpecific {
     get {
       if case .suicheSpecific(let v)? = _storage._blockchainSpecific {return v}
       return VSSuiSpecific()
@@ -142,26 +142,26 @@ struct VSKeysignPayload {
     set {_uniqueStorage()._blockchainSpecific = .suicheSpecific(newValue)}
   }
 
-  var utxoInfo: [VSUtxoInfo] {
+  public var utxoInfo: [VSUtxoInfo] {
     get {return _storage._utxoInfo}
     set {_uniqueStorage()._utxoInfo = newValue}
   }
 
-  var memo: String {
+  public var memo: String {
     get {return _storage._memo ?? String()}
     set {_uniqueStorage()._memo = newValue}
   }
   /// Returns true if `memo` has been explicitly set.
-  var hasMemo: Bool {return _storage._memo != nil}
+  public var hasMemo: Bool {return _storage._memo != nil}
   /// Clears the value of `memo`. Subsequent reads from it will return its default value.
-  mutating func clearMemo() {_uniqueStorage()._memo = nil}
+  public mutating func clearMemo() {_uniqueStorage()._memo = nil}
 
-  var swapPayload: OneOf_SwapPayload? {
+  public var swapPayload: OneOf_SwapPayload? {
     get {return _storage._swapPayload}
     set {_uniqueStorage()._swapPayload = newValue}
   }
 
-  var thorchainSwapPayload: VSTHORChainSwapPayload {
+  public var thorchainSwapPayload: VSTHORChainSwapPayload {
     get {
       if case .thorchainSwapPayload(let v)? = _storage._swapPayload {return v}
       return VSTHORChainSwapPayload()
@@ -169,7 +169,7 @@ struct VSKeysignPayload {
     set {_uniqueStorage()._swapPayload = .thorchainSwapPayload(newValue)}
   }
 
-  var mayachainSwapPayload: VSTHORChainSwapPayload {
+  public var mayachainSwapPayload: VSTHORChainSwapPayload {
     get {
       if case .mayachainSwapPayload(let v)? = _storage._swapPayload {return v}
       return VSTHORChainSwapPayload()
@@ -177,7 +177,7 @@ struct VSKeysignPayload {
     set {_uniqueStorage()._swapPayload = .mayachainSwapPayload(newValue)}
   }
 
-  var oneinchSwapPayload: VSOneInchSwapPayload {
+  public var oneinchSwapPayload: VSOneInchSwapPayload {
     get {
       if case .oneinchSwapPayload(let v)? = _storage._swapPayload {return v}
       return VSOneInchSwapPayload()
@@ -185,28 +185,28 @@ struct VSKeysignPayload {
     set {_uniqueStorage()._swapPayload = .oneinchSwapPayload(newValue)}
   }
 
-  var erc20ApprovePayload: VSerc20_approve_payload {
+  public var erc20ApprovePayload: VSerc20_approve_payload {
     get {return _storage._erc20ApprovePayload ?? VSerc20_approve_payload()}
     set {_uniqueStorage()._erc20ApprovePayload = newValue}
   }
   /// Returns true if `erc20ApprovePayload` has been explicitly set.
-  var hasErc20ApprovePayload: Bool {return _storage._erc20ApprovePayload != nil}
+  public var hasErc20ApprovePayload: Bool {return _storage._erc20ApprovePayload != nil}
   /// Clears the value of `erc20ApprovePayload`. Subsequent reads from it will return its default value.
-  mutating func clearErc20ApprovePayload() {_uniqueStorage()._erc20ApprovePayload = nil}
+  public mutating func clearErc20ApprovePayload() {_uniqueStorage()._erc20ApprovePayload = nil}
 
-  var vaultPublicKeyEcdsa: String {
+  public var vaultPublicKeyEcdsa: String {
     get {return _storage._vaultPublicKeyEcdsa}
     set {_uniqueStorage()._vaultPublicKeyEcdsa = newValue}
   }
 
-  var vaultLocalPartyID: String {
+  public var vaultLocalPartyID: String {
     get {return _storage._vaultLocalPartyID}
     set {_uniqueStorage()._vaultLocalPartyID = newValue}
   }
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  enum OneOf_BlockchainSpecific: Equatable {
+  public enum OneOf_BlockchainSpecific: Equatable {
     case utxoSpecific(VSUTXOSpecific)
     case ethereumSpecific(VSEthereumSpecific)
     case thorchainSpecific(VSTHORChainSpecific)
@@ -217,7 +217,7 @@ struct VSKeysignPayload {
     case suicheSpecific(VSSuiSpecific)
 
   #if !swift(>=4.1)
-    static func ==(lhs: VSKeysignPayload.OneOf_BlockchainSpecific, rhs: VSKeysignPayload.OneOf_BlockchainSpecific) -> Bool {
+    public static func ==(lhs: VSKeysignPayload.OneOf_BlockchainSpecific, rhs: VSKeysignPayload.OneOf_BlockchainSpecific) -> Bool {
       // The use of inline closures is to circumvent an issue where the compiler
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
@@ -260,13 +260,13 @@ struct VSKeysignPayload {
   #endif
   }
 
-  enum OneOf_SwapPayload: Equatable {
+  public enum OneOf_SwapPayload: Equatable {
     case thorchainSwapPayload(VSTHORChainSwapPayload)
     case mayachainSwapPayload(VSTHORChainSwapPayload)
     case oneinchSwapPayload(VSOneInchSwapPayload)
 
   #if !swift(>=4.1)
-    static func ==(lhs: VSKeysignPayload.OneOf_SwapPayload, rhs: VSKeysignPayload.OneOf_SwapPayload) -> Bool {
+    public static func ==(lhs: VSKeysignPayload.OneOf_SwapPayload, rhs: VSKeysignPayload.OneOf_SwapPayload) -> Bool {
       // The use of inline closures is to circumvent an issue where the compiler
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
@@ -289,7 +289,7 @@ struct VSKeysignPayload {
   #endif
   }
 
-  init() {}
+  public init() {}
 
   fileprivate var _storage = _StorageClass.defaultInstance
 }
@@ -306,8 +306,8 @@ extension VSKeysignPayload.OneOf_SwapPayload: @unchecked Sendable {}
 fileprivate let _protobuf_package = "vultisig.keysign.proto"
 
 extension VSKeysignMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".KeysignMessage"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".KeysignMessage"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "session_id"),
     2: .standard(proto: "service_name"),
     4: .standard(proto: "encryption_key_hex"),
@@ -315,7 +315,7 @@ extension VSKeysignMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     6: .standard(proto: "use_vultisig_relay"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       // The use of inline closures is to circumvent an issue where the compiler
       // allocates stack space for every case branch when no optimizations are
@@ -331,7 +331,7 @@ extension VSKeysignMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     // The use of inline closures is to circumvent an issue where the compiler
     // allocates stack space for every if/case branch local when no optimizations
     // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
@@ -354,7 +354,7 @@ extension VSKeysignMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: VSKeysignMessage, rhs: VSKeysignMessage) -> Bool {
+  public static func ==(lhs: VSKeysignMessage, rhs: VSKeysignMessage) -> Bool {
     if lhs.sessionID != rhs.sessionID {return false}
     if lhs.serviceName != rhs.serviceName {return false}
     if lhs.encryptionKeyHex != rhs.encryptionKeyHex {return false}
@@ -366,8 +366,8 @@ extension VSKeysignMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
 }
 
 extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".KeysignPayload"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".KeysignPayload"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "coin"),
     2: .standard(proto: "to_address"),
     3: .standard(proto: "to_amount"),
@@ -434,7 +434,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     return _storage
   }
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     _ = _uniqueStorage()
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       while let fieldNumber = try decoder.nextFieldNumber() {
@@ -599,7 +599,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
       // The use of inline closures is to circumvent an issue where the compiler
       // allocates stack space for every if/case branch local when no optimizations
@@ -683,7 +683,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: VSKeysignPayload, rhs: VSKeysignPayload) -> Bool {
+  public static func ==(lhs: VSKeysignPayload, rhs: VSKeysignPayload) -> Bool {
     if lhs._storage !== rhs._storage {
       let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
         let _storage = _args.0

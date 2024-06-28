@@ -20,18 +20,18 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-struct VSerc20_approve_payload {
+public struct VSerc20_approve_payload {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var amount: Data = Data()
+  public var amount: String = String()
 
-  var spender: String = String()
+  public var spender: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
 #if swift(>=5.5) && canImport(_Concurrency)
@@ -43,28 +43,28 @@ extension VSerc20_approve_payload: @unchecked Sendable {}
 fileprivate let _protobuf_package = "vultisig.keysign.proto"
 
 extension VSerc20_approve_payload: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".erc20_approve_payload"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".erc20_approve_payload"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "amount"),
     2: .same(proto: "spender"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       // The use of inline closures is to circumvent an issue where the compiler
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularBytesField(value: &self.amount) }()
+      case 1: try { try decoder.decodeSingularStringField(value: &self.amount) }()
       case 2: try { try decoder.decodeSingularStringField(value: &self.spender) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.amount.isEmpty {
-      try visitor.visitSingularBytesField(value: self.amount, fieldNumber: 1)
+      try visitor.visitSingularStringField(value: self.amount, fieldNumber: 1)
     }
     if !self.spender.isEmpty {
       try visitor.visitSingularStringField(value: self.spender, fieldNumber: 2)
@@ -72,7 +72,7 @@ extension VSerc20_approve_payload: SwiftProtobuf.Message, SwiftProtobuf._Message
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: VSerc20_approve_payload, rhs: VSerc20_approve_payload) -> Bool {
+  public static func ==(lhs: VSerc20_approve_payload, rhs: VSerc20_approve_payload) -> Bool {
     if lhs.amount != rhs.amount {return false}
     if lhs.spender != rhs.spender {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}

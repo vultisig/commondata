@@ -20,146 +20,146 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-struct VSUTXOSpecific {
+public struct VSUTXOSpecific {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var byteFee: String = String()
+  public var byteFee: String = String()
 
-  var sendMaxAmount: Bool = false
+  public var sendMaxAmount: Bool = false
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
-struct VSEthereumSpecific {
+public struct VSEthereumSpecific {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var maxFeePerGasWei: String = String()
+  public var maxFeePerGasWei: String = String()
 
-  var priorityFee: String = String()
+  public var priorityFee: String = String()
 
-  var nonce: Int64 = 0
+  public var nonce: Int64 = 0
 
-  var gasLimit: String = String()
+  public var gasLimit: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
-struct VSTHORChainSpecific {
+public struct VSTHORChainSpecific {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var accountNumber: UInt64 = 0
+  public var accountNumber: UInt64 = 0
 
-  var sequence: UInt64 = 0
+  public var sequence: UInt64 = 0
 
-  var fee: UInt64 = 0
+  public var fee: UInt64 = 0
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
-struct VSMAYAChainSpecific {
+public struct VSMAYAChainSpecific {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var accountNumber: UInt64 = 0
+  public var accountNumber: UInt64 = 0
 
-  var sequence: UInt64 = 0
+  public var sequence: UInt64 = 0
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
-struct VSCosmosSpecific {
+public struct VSCosmosSpecific {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var accountNumber: UInt64 = 0
+  public var accountNumber: UInt64 = 0
 
-  var sequence: UInt64 = 0
+  public var sequence: UInt64 = 0
 
-  var gas: UInt64 = 0
+  public var gas: UInt64 = 0
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
-struct VSSolanaSpecific {
+public struct VSSolanaSpecific {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var recentBlockHash: String = String()
+  public var recentBlockHash: String = String()
 
-  var priorityFee: String = String()
+  public var priorityFee: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
-struct VSPolkadotSpecific {
+public struct VSPolkadotSpecific {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var recentBlockHash: String = String()
+  public var recentBlockHash: String = String()
 
-  var nonce: UInt64 = 0
+  public var nonce: UInt64 = 0
 
-  var currentBlockNumber: String = String()
+  public var currentBlockNumber: String = String()
 
-  var specVersion: UInt32 = 0
+  public var specVersion: UInt32 = 0
 
-  var transactionVersion: UInt32 = 0
+  public var transactionVersion: UInt32 = 0
 
-  var genesisHash: String = String()
+  public var genesisHash: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
-struct VSCoinKeyValuePair {
+public struct VSCoinKeyValuePair {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var key: String = String()
+  public var key: String = String()
 
-  var value: String = String()
+  public var value: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
-struct VSSuiSpecific {
+public struct VSSuiSpecific {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var referenceGasPrice: String = String()
+  public var referenceGasPrice: String = String()
 
-  var coinKeyValuePairs: [VSCoinKeyValuePair] = []
+  public var coinKeyValuePairs: [VSCoinKeyValuePair] = []
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
 #if swift(>=5.5) && canImport(_Concurrency)
@@ -179,13 +179,13 @@ extension VSSuiSpecific: @unchecked Sendable {}
 fileprivate let _protobuf_package = "vultisig.keysign.proto"
 
 extension VSUTXOSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".UTXOSpecific"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".UTXOSpecific"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "byte_fee"),
     2: .standard(proto: "send_max_amount"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       // The use of inline closures is to circumvent an issue where the compiler
       // allocates stack space for every case branch when no optimizations are
@@ -198,7 +198,7 @@ extension VSUTXOSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.byteFee.isEmpty {
       try visitor.visitSingularStringField(value: self.byteFee, fieldNumber: 1)
     }
@@ -208,7 +208,7 @@ extension VSUTXOSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: VSUTXOSpecific, rhs: VSUTXOSpecific) -> Bool {
+  public static func ==(lhs: VSUTXOSpecific, rhs: VSUTXOSpecific) -> Bool {
     if lhs.byteFee != rhs.byteFee {return false}
     if lhs.sendMaxAmount != rhs.sendMaxAmount {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
@@ -217,15 +217,15 @@ extension VSUTXOSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
 }
 
 extension VSEthereumSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".EthereumSpecific"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".EthereumSpecific"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "max_fee_per_gas_wei"),
     2: .standard(proto: "priority_fee"),
     3: .same(proto: "nonce"),
     4: .standard(proto: "gas_limit"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       // The use of inline closures is to circumvent an issue where the compiler
       // allocates stack space for every case branch when no optimizations are
@@ -240,7 +240,7 @@ extension VSEthereumSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.maxFeePerGasWei.isEmpty {
       try visitor.visitSingularStringField(value: self.maxFeePerGasWei, fieldNumber: 1)
     }
@@ -256,7 +256,7 @@ extension VSEthereumSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: VSEthereumSpecific, rhs: VSEthereumSpecific) -> Bool {
+  public static func ==(lhs: VSEthereumSpecific, rhs: VSEthereumSpecific) -> Bool {
     if lhs.maxFeePerGasWei != rhs.maxFeePerGasWei {return false}
     if lhs.priorityFee != rhs.priorityFee {return false}
     if lhs.nonce != rhs.nonce {return false}
@@ -267,14 +267,14 @@ extension VSEthereumSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
 }
 
 extension VSTHORChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".THORChainSpecific"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".THORChainSpecific"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "account_number"),
     2: .same(proto: "sequence"),
     3: .same(proto: "fee"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       // The use of inline closures is to circumvent an issue where the compiler
       // allocates stack space for every case branch when no optimizations are
@@ -288,7 +288,7 @@ extension VSTHORChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if self.accountNumber != 0 {
       try visitor.visitSingularUInt64Field(value: self.accountNumber, fieldNumber: 1)
     }
@@ -301,7 +301,7 @@ extension VSTHORChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: VSTHORChainSpecific, rhs: VSTHORChainSpecific) -> Bool {
+  public static func ==(lhs: VSTHORChainSpecific, rhs: VSTHORChainSpecific) -> Bool {
     if lhs.accountNumber != rhs.accountNumber {return false}
     if lhs.sequence != rhs.sequence {return false}
     if lhs.fee != rhs.fee {return false}
@@ -311,13 +311,13 @@ extension VSTHORChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
 }
 
 extension VSMAYAChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".MAYAChainSpecific"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".MAYAChainSpecific"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "account_number"),
     2: .same(proto: "sequence"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       // The use of inline closures is to circumvent an issue where the compiler
       // allocates stack space for every case branch when no optimizations are
@@ -330,7 +330,7 @@ extension VSMAYAChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if self.accountNumber != 0 {
       try visitor.visitSingularUInt64Field(value: self.accountNumber, fieldNumber: 1)
     }
@@ -340,7 +340,7 @@ extension VSMAYAChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: VSMAYAChainSpecific, rhs: VSMAYAChainSpecific) -> Bool {
+  public static func ==(lhs: VSMAYAChainSpecific, rhs: VSMAYAChainSpecific) -> Bool {
     if lhs.accountNumber != rhs.accountNumber {return false}
     if lhs.sequence != rhs.sequence {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
@@ -349,14 +349,14 @@ extension VSMAYAChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
 }
 
 extension VSCosmosSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".CosmosSpecific"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".CosmosSpecific"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "account_number"),
     2: .same(proto: "sequence"),
     3: .same(proto: "gas"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       // The use of inline closures is to circumvent an issue where the compiler
       // allocates stack space for every case branch when no optimizations are
@@ -370,7 +370,7 @@ extension VSCosmosSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if self.accountNumber != 0 {
       try visitor.visitSingularUInt64Field(value: self.accountNumber, fieldNumber: 1)
     }
@@ -383,7 +383,7 @@ extension VSCosmosSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: VSCosmosSpecific, rhs: VSCosmosSpecific) -> Bool {
+  public static func ==(lhs: VSCosmosSpecific, rhs: VSCosmosSpecific) -> Bool {
     if lhs.accountNumber != rhs.accountNumber {return false}
     if lhs.sequence != rhs.sequence {return false}
     if lhs.gas != rhs.gas {return false}
@@ -393,13 +393,13 @@ extension VSCosmosSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
 }
 
 extension VSSolanaSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".SolanaSpecific"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".SolanaSpecific"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "recent_block_hash"),
     2: .standard(proto: "priority_fee"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       // The use of inline closures is to circumvent an issue where the compiler
       // allocates stack space for every case branch when no optimizations are
@@ -412,7 +412,7 @@ extension VSSolanaSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.recentBlockHash.isEmpty {
       try visitor.visitSingularStringField(value: self.recentBlockHash, fieldNumber: 1)
     }
@@ -422,7 +422,7 @@ extension VSSolanaSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: VSSolanaSpecific, rhs: VSSolanaSpecific) -> Bool {
+  public static func ==(lhs: VSSolanaSpecific, rhs: VSSolanaSpecific) -> Bool {
     if lhs.recentBlockHash != rhs.recentBlockHash {return false}
     if lhs.priorityFee != rhs.priorityFee {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
@@ -431,8 +431,8 @@ extension VSSolanaSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
 }
 
 extension VSPolkadotSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".PolkadotSpecific"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".PolkadotSpecific"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "recent_block_hash"),
     2: .same(proto: "nonce"),
     3: .standard(proto: "current_block_number"),
@@ -441,7 +441,7 @@ extension VSPolkadotSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     6: .standard(proto: "genesis_hash"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       // The use of inline closures is to circumvent an issue where the compiler
       // allocates stack space for every case branch when no optimizations are
@@ -458,7 +458,7 @@ extension VSPolkadotSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.recentBlockHash.isEmpty {
       try visitor.visitSingularStringField(value: self.recentBlockHash, fieldNumber: 1)
     }
@@ -480,7 +480,7 @@ extension VSPolkadotSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: VSPolkadotSpecific, rhs: VSPolkadotSpecific) -> Bool {
+  public static func ==(lhs: VSPolkadotSpecific, rhs: VSPolkadotSpecific) -> Bool {
     if lhs.recentBlockHash != rhs.recentBlockHash {return false}
     if lhs.nonce != rhs.nonce {return false}
     if lhs.currentBlockNumber != rhs.currentBlockNumber {return false}
@@ -493,13 +493,13 @@ extension VSPolkadotSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
 }
 
 extension VSCoinKeyValuePair: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".CoinKeyValuePair"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".CoinKeyValuePair"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "key"),
     2: .same(proto: "value"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       // The use of inline closures is to circumvent an issue where the compiler
       // allocates stack space for every case branch when no optimizations are
@@ -512,7 +512,7 @@ extension VSCoinKeyValuePair: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.key.isEmpty {
       try visitor.visitSingularStringField(value: self.key, fieldNumber: 1)
     }
@@ -522,7 +522,7 @@ extension VSCoinKeyValuePair: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: VSCoinKeyValuePair, rhs: VSCoinKeyValuePair) -> Bool {
+  public static func ==(lhs: VSCoinKeyValuePair, rhs: VSCoinKeyValuePair) -> Bool {
     if lhs.key != rhs.key {return false}
     if lhs.value != rhs.value {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
@@ -531,13 +531,13 @@ extension VSCoinKeyValuePair: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
 }
 
 extension VSSuiSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".SuiSpecific"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".SuiSpecific"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "reference_gas_price"),
     2: .standard(proto: "coin_key_value_pairs"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       // The use of inline closures is to circumvent an issue where the compiler
       // allocates stack space for every case branch when no optimizations are
@@ -550,7 +550,7 @@ extension VSSuiSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.referenceGasPrice.isEmpty {
       try visitor.visitSingularStringField(value: self.referenceGasPrice, fieldNumber: 1)
     }
@@ -560,7 +560,7 @@ extension VSSuiSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: VSSuiSpecific, rhs: VSSuiSpecific) -> Bool {
+  public static func ==(lhs: VSSuiSpecific, rhs: VSSuiSpecific) -> Bool {
     if lhs.referenceGasPrice != rhs.referenceGasPrice {return false}
     if lhs.coinKeyValuePairs != rhs.coinKeyValuePairs {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}

@@ -6,6 +6,7 @@ import "coin.proto";
 option java_package = "vultisig.keysign.proto";
 option swift_prefix = "VS";
 
+
 message OneInchTransaction {
     string from = 1;
     string to = 2;
@@ -22,7 +23,7 @@ message OneInchQuote {
 message OneInchSwapPayload {
     Coin from_coin = 1;
     Coin to_coin = 2;
-    bytes from_amount = 3;
+    string from_amount = 3;
     string to_amount_decimal = 4;
     OneInchQuote quote = 5;
 }

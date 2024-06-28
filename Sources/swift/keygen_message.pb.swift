@@ -20,26 +20,26 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-struct VSKeygenMessage {
+public struct VSKeygenMessage {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var sessionID: String = String()
+  public var sessionID: String = String()
 
-  var hexChainCode: String = String()
+  public var hexChainCode: String = String()
 
-  var serviceName: String = String()
+  public var serviceName: String = String()
 
-  var encryptionKeyHex: String = String()
+  public var encryptionKeyHex: String = String()
 
-  var useVultisigRelay: Bool = false
+  public var useVultisigRelay: Bool = false
 
-  var vaultName: String = String()
+  public var vaultName: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
 #if swift(>=5.5) && canImport(_Concurrency)
@@ -51,8 +51,8 @@ extension VSKeygenMessage: @unchecked Sendable {}
 fileprivate let _protobuf_package = "vultisig.keygen.proto"
 
 extension VSKeygenMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".KeygenMessage"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".KeygenMessage"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "session_id"),
     2: .standard(proto: "hex_chain_code"),
     3: .standard(proto: "service_name"),
@@ -61,7 +61,7 @@ extension VSKeygenMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
     6: .standard(proto: "vault_name"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       // The use of inline closures is to circumvent an issue where the compiler
       // allocates stack space for every case branch when no optimizations are
@@ -78,7 +78,7 @@ extension VSKeygenMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.sessionID.isEmpty {
       try visitor.visitSingularStringField(value: self.sessionID, fieldNumber: 1)
     }
@@ -100,7 +100,7 @@ extension VSKeygenMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: VSKeygenMessage, rhs: VSKeygenMessage) -> Bool {
+  public static func ==(lhs: VSKeygenMessage, rhs: VSKeygenMessage) -> Bool {
     if lhs.sessionID != rhs.sessionID {return false}
     if lhs.hexChainCode != rhs.hexChainCode {return false}
     if lhs.serviceName != rhs.serviceName {return false}

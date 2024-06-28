@@ -20,32 +20,32 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-struct VSReshareMessage {
+public struct VSReshareMessage {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var sessionID: String = String()
+  public var sessionID: String = String()
 
-  var hexChainCode: String = String()
+  public var hexChainCode: String = String()
 
-  var serviceName: String = String()
+  public var serviceName: String = String()
 
-  var publicKeyEcdsa: String = String()
+  public var publicKeyEcdsa: String = String()
 
-  var oldParties: [String] = []
+  public var oldParties: [String] = []
 
-  var encryptionKeyHex: String = String()
+  public var encryptionKeyHex: String = String()
 
-  var useVultisigRelay: Bool = false
+  public var useVultisigRelay: Bool = false
 
-  var oldResharePrefix: String = String()
+  public var oldResharePrefix: String = String()
 
-  var vaultName: String = String()
+  public var vaultName: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
 #if swift(>=5.5) && canImport(_Concurrency)
@@ -57,8 +57,8 @@ extension VSReshareMessage: @unchecked Sendable {}
 fileprivate let _protobuf_package = "vultisig.keygen.proto"
 
 extension VSReshareMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".ReshareMessage"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".ReshareMessage"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "session_id"),
     2: .standard(proto: "hex_chain_code"),
     3: .standard(proto: "service_name"),
@@ -70,7 +70,7 @@ extension VSReshareMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     9: .standard(proto: "vault_name"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       // The use of inline closures is to circumvent an issue where the compiler
       // allocates stack space for every case branch when no optimizations are
@@ -90,7 +90,7 @@ extension VSReshareMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.sessionID.isEmpty {
       try visitor.visitSingularStringField(value: self.sessionID, fieldNumber: 1)
     }
@@ -121,7 +121,7 @@ extension VSReshareMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: VSReshareMessage, rhs: VSReshareMessage) -> Bool {
+  public static func ==(lhs: VSReshareMessage, rhs: VSReshareMessage) -> Bool {
     if lhs.sessionID != rhs.sessionID {return false}
     if lhs.hexChainCode != rhs.hexChainCode {return false}
     if lhs.serviceName != rhs.serviceName {return false}

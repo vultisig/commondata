@@ -21,22 +21,22 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
 }
 
 /// Coin only contains information that the app can use it to identify the relevant coin in the vault
-struct VSCoin {
+public struct VSCoin {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var chain: String = String()
+  public var chain: String = String()
 
-  var ticker: String = String()
+  public var ticker: String = String()
 
-  var address: String = String()
+  public var address: String = String()
 
-  var contractAddress: String = String()
+  public var contractAddress: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
 #if swift(>=5.5) && canImport(_Concurrency)
@@ -48,15 +48,15 @@ extension VSCoin: @unchecked Sendable {}
 fileprivate let _protobuf_package = "vultisig.keysign.proto"
 
 extension VSCoin: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".Coin"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".Coin"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "chain"),
     2: .same(proto: "ticker"),
     3: .same(proto: "address"),
     4: .standard(proto: "contract_address"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       // The use of inline closures is to circumvent an issue where the compiler
       // allocates stack space for every case branch when no optimizations are
@@ -71,7 +71,7 @@ extension VSCoin: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBas
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.chain.isEmpty {
       try visitor.visitSingularStringField(value: self.chain, fieldNumber: 1)
     }
@@ -87,7 +87,7 @@ extension VSCoin: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBas
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: VSCoin, rhs: VSCoin) -> Bool {
+  public static func ==(lhs: VSCoin, rhs: VSCoin) -> Bool {
     if lhs.chain != rhs.chain {return false}
     if lhs.ticker != rhs.ticker {return false}
     if lhs.address != rhs.address {return false}
