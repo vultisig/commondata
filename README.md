@@ -27,3 +27,8 @@ buf lint && buf buil
 ```bash
 buf generate
 ```
+
+## Generate code using docker
+```bash
+make
+```
