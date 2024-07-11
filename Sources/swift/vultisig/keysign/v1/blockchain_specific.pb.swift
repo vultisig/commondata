@@ -107,13 +107,30 @@ public struct VSSolanaSpecific {
 
   public var priorityFee: String = String()
 
-  public var fromTokenAssociatedAddress: String = String()
+  public var fromTokenAssociatedAddress: String {
+    get {return _fromTokenAssociatedAddress ?? String()}
+    set {_fromTokenAssociatedAddress = newValue}
+  }
+  /// Returns true if `fromTokenAssociatedAddress` has been explicitly set.
+  public var hasFromTokenAssociatedAddress: Bool {return self._fromTokenAssociatedAddress != nil}
+  /// Clears the value of `fromTokenAssociatedAddress`. Subsequent reads from it will return its default value.
+  public mutating func clearFromTokenAssociatedAddress() {self._fromTokenAssociatedAddress = nil}
 
-  public var toTokenAssociatedAddress: String = String()
+  public var toTokenAssociatedAddress: String {
+    get {return _toTokenAssociatedAddress ?? String()}
+    set {_toTokenAssociatedAddress = newValue}
+  }
+  /// Returns true if `toTokenAssociatedAddress` has been explicitly set.
+  public var hasToTokenAssociatedAddress: Bool {return self._toTokenAssociatedAddress != nil}
+  /// Clears the value of `toTokenAssociatedAddress`. Subsequent reads from it will return its default value.
+  public mutating func clearToTokenAssociatedAddress() {self._toTokenAssociatedAddress = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
+
+  fileprivate var _fromTokenAssociatedAddress: String? = nil
+  fileprivate var _toTokenAssociatedAddress: String? = nil
 }
 
 public struct VSPolkadotSpecific {
@@ -413,34 +430,38 @@ extension VSSolanaSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularStringField(value: &self.recentBlockHash) }()
       case 2: try { try decoder.decodeSingularStringField(value: &self.priorityFee) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.fromTokenAssociatedAddress) }()
-      case 4: try { try decoder.decodeSingularStringField(value: &self.toTokenAssociatedAddress) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self._fromTokenAssociatedAddress) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self._toTokenAssociatedAddress) }()
       default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
     if !self.recentBlockHash.isEmpty {
       try visitor.visitSingularStringField(value: self.recentBlockHash, fieldNumber: 1)
     }
     if !self.priorityFee.isEmpty {
       try visitor.visitSingularStringField(value: self.priorityFee, fieldNumber: 2)
     }
-    if !self.fromTokenAssociatedAddress.isEmpty {
-      try visitor.visitSingularStringField(value: self.fromTokenAssociatedAddress, fieldNumber: 3)
-    }
-    if !self.toTokenAssociatedAddress.isEmpty {
-      try visitor.visitSingularStringField(value: self.toTokenAssociatedAddress, fieldNumber: 4)
-    }
+    try { if let v = self._fromTokenAssociatedAddress {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 3)
+    } }()
+    try { if let v = self._toTokenAssociatedAddress {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 4)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: VSSolanaSpecific, rhs: VSSolanaSpecific) -> Bool {
     if lhs.recentBlockHash != rhs.recentBlockHash {return false}
     if lhs.priorityFee != rhs.priorityFee {return false}
-    if lhs.fromTokenAssociatedAddress != rhs.fromTokenAssociatedAddress {return false}
-    if lhs.toTokenAssociatedAddress != rhs.toTokenAssociatedAddress {return false}
+    if lhs._fromTokenAssociatedAddress != rhs._fromTokenAssociatedAddress {return false}
+    if lhs._toTokenAssociatedAddress != rhs._toTokenAssociatedAddress {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

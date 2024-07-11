@@ -63,7 +63,7 @@ public object SolanaSpecificKt {
     }
 
     /**
-     * `string from_token_associated_address = 3 [json_name = "fromTokenAssociatedAddress"];`
+     * `optional string from_token_associated_address = 3 [json_name = "fromTokenAssociatedAddress"];`
      */
     public var fromTokenAssociatedAddress: kotlin.String
       @JvmName("getFromTokenAssociatedAddress")
@@ -73,14 +73,21 @@ public object SolanaSpecificKt {
         _builder.setFromTokenAssociatedAddress(value)
       }
     /**
-     * `string from_token_associated_address = 3 [json_name = "fromTokenAssociatedAddress"];`
+     * `optional string from_token_associated_address = 3 [json_name = "fromTokenAssociatedAddress"];`
      */
     public fun clearFromTokenAssociatedAddress() {
       _builder.clearFromTokenAssociatedAddress()
     }
+    /**
+     * `optional string from_token_associated_address = 3 [json_name = "fromTokenAssociatedAddress"];`
+     * @return Whether the fromTokenAssociatedAddress field is set.
+     */
+    public fun hasFromTokenAssociatedAddress(): kotlin.Boolean {
+      return _builder.hasFromTokenAssociatedAddress()
+    }
 
     /**
-     * `string to_token_associated_address = 4 [json_name = "toTokenAssociatedAddress"];`
+     * `optional string to_token_associated_address = 4 [json_name = "toTokenAssociatedAddress"];`
      */
     public var toTokenAssociatedAddress: kotlin.String
       @JvmName("getToTokenAssociatedAddress")
@@ -90,10 +97,17 @@ public object SolanaSpecificKt {
         _builder.setToTokenAssociatedAddress(value)
       }
     /**
-     * `string to_token_associated_address = 4 [json_name = "toTokenAssociatedAddress"];`
+     * `optional string to_token_associated_address = 4 [json_name = "toTokenAssociatedAddress"];`
      */
     public fun clearToTokenAssociatedAddress() {
       _builder.clearToTokenAssociatedAddress()
+    }
+    /**
+     * `optional string to_token_associated_address = 4 [json_name = "toTokenAssociatedAddress"];`
+     * @return Whether the toTokenAssociatedAddress field is set.
+     */
+    public fun hasToTokenAssociatedAddress(): kotlin.Boolean {
+      return _builder.hasToTokenAssociatedAddress()
     }
   }
 }
