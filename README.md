@@ -19,7 +19,7 @@ buf format --write
 2. lint proto files
 
 ```bash
-buf lint && buf buil
+buf lint && buf build
 ```
 
 3. generate swift/kotlin files
