@@ -36,6 +36,8 @@ message CosmosSpecific {
 message SolanaSpecific {
   string recent_block_hash = 1;
   string priority_fee = 2;
+  string from_token_associated_address = 3;
+  string to_token_associated_address = 4;
 }
 
 message PolkadotSpecific {

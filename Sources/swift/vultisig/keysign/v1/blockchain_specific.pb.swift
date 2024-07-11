@@ -107,6 +107,10 @@ public struct VSSolanaSpecific {
 
   public var priorityFee: String = String()
 
+  public var fromTokenAssociatedAddress: String = String()
+
+  public var toTokenAssociatedAddress: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -397,6 +401,8 @@ extension VSSolanaSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "recent_block_hash"),
     2: .standard(proto: "priority_fee"),
+    3: .standard(proto: "from_token_associated_address"),
+    4: .standard(proto: "to_token_associated_address"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -407,6 +413,8 @@ extension VSSolanaSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularStringField(value: &self.recentBlockHash) }()
       case 2: try { try decoder.decodeSingularStringField(value: &self.priorityFee) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.fromTokenAssociatedAddress) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.toTokenAssociatedAddress) }()
       default: break
       }
     }
@@ -419,12 +427,20 @@ extension VSSolanaSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if !self.priorityFee.isEmpty {
       try visitor.visitSingularStringField(value: self.priorityFee, fieldNumber: 2)
     }
+    if !self.fromTokenAssociatedAddress.isEmpty {
+      try visitor.visitSingularStringField(value: self.fromTokenAssociatedAddress, fieldNumber: 3)
+    }
+    if !self.toTokenAssociatedAddress.isEmpty {
+      try visitor.visitSingularStringField(value: self.toTokenAssociatedAddress, fieldNumber: 4)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: VSSolanaSpecific, rhs: VSSolanaSpecific) -> Bool {
     if lhs.recentBlockHash != rhs.recentBlockHash {return false}
     if lhs.priorityFee != rhs.priorityFee {return false}
+    if lhs.fromTokenAssociatedAddress != rhs.fromTokenAssociatedAddress {return false}
+    if lhs.toTokenAssociatedAddress != rhs.toTokenAssociatedAddress {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

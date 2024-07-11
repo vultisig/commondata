@@ -61,6 +61,40 @@ public object SolanaSpecificKt {
     public fun clearPriorityFee() {
       _builder.clearPriorityFee()
     }
+
+    /**
+     * `string from_token_associated_address = 3 [json_name = "fromTokenAssociatedAddress"];`
+     */
+    public var fromTokenAssociatedAddress: kotlin.String
+      @JvmName("getFromTokenAssociatedAddress")
+      get() = _builder.getFromTokenAssociatedAddress()
+      @JvmName("setFromTokenAssociatedAddress")
+      set(value) {
+        _builder.setFromTokenAssociatedAddress(value)
+      }
+    /**
+     * `string from_token_associated_address = 3 [json_name = "fromTokenAssociatedAddress"];`
+     */
+    public fun clearFromTokenAssociatedAddress() {
+      _builder.clearFromTokenAssociatedAddress()
+    }
+
+    /**
+     * `string to_token_associated_address = 4 [json_name = "toTokenAssociatedAddress"];`
+     */
+    public var toTokenAssociatedAddress: kotlin.String
+      @JvmName("getToTokenAssociatedAddress")
+      get() = _builder.getToTokenAssociatedAddress()
+      @JvmName("setToTokenAssociatedAddress")
+      set(value) {
+        _builder.setToTokenAssociatedAddress(value)
+      }
+    /**
+     * `string to_token_associated_address = 4 [json_name = "toTokenAssociatedAddress"];`
+     */
+    public fun clearToTokenAssociatedAddress() {
+      _builder.clearToTokenAssociatedAddress()
+    }
   }
 }
 @kotlin.jvm.JvmSynthetic
