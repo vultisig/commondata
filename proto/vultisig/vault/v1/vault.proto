@@ -13,7 +13,7 @@ message Vault {
 
   message VaultDetail {
     string name = 1;
-    string publikc_key_ecdsa = 2;
+    string public_key_ecdsa = 2;
     string public_key_eddsa = 3;
     repeated string signers = 4;
     google.protobuf.Timestamp created_at = 5;
@@ -21,7 +21,6 @@ message Vault {
     repeated KeyShare key_shares = 7;
     string local_party_id = 8;
     string reshare_prefix = 9;
-    int64 order = 10;
   }
 
   message KeyShare {
