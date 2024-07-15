@@ -25,59 +25,32 @@ public struct VSVault {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var version: String = String()
+  public var name: String = String()
 
-  public var vault: VSVault.VaultDetail {
-    get {return _vault ?? VSVault.VaultDetail()}
-    set {_vault = newValue}
+  public var publicKeyEcdsa: String = String()
+
+  public var publicKeyEddsa: String = String()
+
+  public var signers: [String] = []
+
+  public var createdAt: SwiftProtobuf.Google_Protobuf_Timestamp {
+    get {return _createdAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_createdAt = newValue}
   }
-  /// Returns true if `vault` has been explicitly set.
-  public var hasVault: Bool {return self._vault != nil}
-  /// Clears the value of `vault`. Subsequent reads from it will return its default value.
-  public mutating func clearVault() {self._vault = nil}
+  /// Returns true if `createdAt` has been explicitly set.
+  public var hasCreatedAt: Bool {return self._createdAt != nil}
+  /// Clears the value of `createdAt`. Subsequent reads from it will return its default value.
+  public mutating func clearCreatedAt() {self._createdAt = nil}
 
-  public var passwordProtected: Bool = false
+  public var hexChainCode: String = String()
+
+  public var keyShares: [VSVault.KeyShare] = []
+
+  public var localPartyID: String = String()
+
+  public var resharePrefix: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public struct VaultDetail {
-    // SwiftProtobuf.Message conformance is added in an extension below. See the
-    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-    // methods supported on all messages.
-
-    public var name: String = String()
-
-    public var publikcKeyEcdsa: String = String()
-
-    public var publicKeyEddsa: String = String()
-
-    public var signers: [String] = []
-
-    public var createdAt: SwiftProtobuf.Google_Protobuf_Timestamp {
-      get {return _createdAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
-      set {_createdAt = newValue}
-    }
-    /// Returns true if `createdAt` has been explicitly set.
-    public var hasCreatedAt: Bool {return self._createdAt != nil}
-    /// Clears the value of `createdAt`. Subsequent reads from it will return its default value.
-    public mutating func clearCreatedAt() {self._createdAt = nil}
-
-    public var hexChainCode: String = String()
-
-    public var keyShares: [VSVault.KeyShare] = []
-
-    public var localPartyID: String = String()
-
-    public var resharePrefix: String = String()
-
-    public var order: Int64 = 0
-
-    public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-    public init() {}
-
-    fileprivate var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
-  }
 
   public struct KeyShare {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -95,12 +68,11 @@ public struct VSVault {
 
   public init() {}
 
-  fileprivate var _vault: VSVault.VaultDetail? = nil
+  fileprivate var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
 }
 
 #if swift(>=5.5) && canImport(_Concurrency)
 extension VSVault: @unchecked Sendable {}
-extension VSVault.VaultDetail: @unchecked Sendable {}
 extension VSVault.KeyShare: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
@@ -111,56 +83,8 @@ fileprivate let _protobuf_package = "vultisig.vault.v1"
 extension VSVault: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Vault"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "version"),
-    2: .same(proto: "vault"),
-    3: .standard(proto: "password_protected"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.version) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._vault) }()
-      case 3: try { try decoder.decodeSingularBoolField(value: &self.passwordProtected) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    if !self.version.isEmpty {
-      try visitor.visitSingularStringField(value: self.version, fieldNumber: 1)
-    }
-    try { if let v = self._vault {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
-    } }()
-    if self.passwordProtected != false {
-      try visitor.visitSingularBoolField(value: self.passwordProtected, fieldNumber: 3)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: VSVault, rhs: VSVault) -> Bool {
-    if lhs.version != rhs.version {return false}
-    if lhs._vault != rhs._vault {return false}
-    if lhs.passwordProtected != rhs.passwordProtected {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension VSVault.VaultDetail: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = VSVault.protoMessageName + ".VaultDetail"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "name"),
-    2: .standard(proto: "publikc_key_ecdsa"),
+    2: .standard(proto: "public_key_ecdsa"),
     3: .standard(proto: "public_key_eddsa"),
     4: .same(proto: "signers"),
     5: .standard(proto: "created_at"),
@@ -168,7 +92,6 @@ extension VSVault.VaultDetail: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     7: .standard(proto: "key_shares"),
     8: .standard(proto: "local_party_id"),
     9: .standard(proto: "reshare_prefix"),
-    10: .same(proto: "order"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -178,7 +101,7 @@ extension VSVault.VaultDetail: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularStringField(value: &self.name) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.publikcKeyEcdsa) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.publicKeyEcdsa) }()
       case 3: try { try decoder.decodeSingularStringField(value: &self.publicKeyEddsa) }()
       case 4: try { try decoder.decodeRepeatedStringField(value: &self.signers) }()
       case 5: try { try decoder.decodeSingularMessageField(value: &self._createdAt) }()
@@ -186,7 +109,6 @@ extension VSVault.VaultDetail: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
       case 7: try { try decoder.decodeRepeatedMessageField(value: &self.keyShares) }()
       case 8: try { try decoder.decodeSingularStringField(value: &self.localPartyID) }()
       case 9: try { try decoder.decodeSingularStringField(value: &self.resharePrefix) }()
-      case 10: try { try decoder.decodeSingularInt64Field(value: &self.order) }()
       default: break
       }
     }
@@ -200,8 +122,8 @@ extension VSVault.VaultDetail: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     if !self.name.isEmpty {
       try visitor.visitSingularStringField(value: self.name, fieldNumber: 1)
     }
-    if !self.publikcKeyEcdsa.isEmpty {
-      try visitor.visitSingularStringField(value: self.publikcKeyEcdsa, fieldNumber: 2)
+    if !self.publicKeyEcdsa.isEmpty {
+      try visitor.visitSingularStringField(value: self.publicKeyEcdsa, fieldNumber: 2)
     }
     if !self.publicKeyEddsa.isEmpty {
       try visitor.visitSingularStringField(value: self.publicKeyEddsa, fieldNumber: 3)
@@ -224,15 +146,12 @@ extension VSVault.VaultDetail: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     if !self.resharePrefix.isEmpty {
       try visitor.visitSingularStringField(value: self.resharePrefix, fieldNumber: 9)
     }
-    if self.order != 0 {
-      try visitor.visitSingularInt64Field(value: self.order, fieldNumber: 10)
-    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  public static func ==(lhs: VSVault.VaultDetail, rhs: VSVault.VaultDetail) -> Bool {
+  public static func ==(lhs: VSVault, rhs: VSVault) -> Bool {
     if lhs.name != rhs.name {return false}
-    if lhs.publikcKeyEcdsa != rhs.publikcKeyEcdsa {return false}
+    if lhs.publicKeyEcdsa != rhs.publicKeyEcdsa {return false}
     if lhs.publicKeyEddsa != rhs.publicKeyEddsa {return false}
     if lhs.signers != rhs.signers {return false}
     if lhs._createdAt != rhs._createdAt {return false}
@@ -240,7 +159,6 @@ extension VSVault.VaultDetail: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     if lhs.keyShares != rhs.keyShares {return false}
     if lhs.localPartyID != rhs.localPartyID {return false}
     if lhs.resharePrefix != rhs.resharePrefix {return false}
-    if lhs.order != rhs.order {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

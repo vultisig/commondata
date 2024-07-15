@@ -29,373 +29,273 @@ public object VaultKt {
     internal fun _build(): vultisig.vault.v1.VaultOuterClass.Vault = _builder.build()
 
     /**
-     * `string version = 1 [json_name = "version"];`
+     * `string name = 1 [json_name = "name"];`
      */
-    public var version: kotlin.String
-      @JvmName("getVersion")
-      get() = _builder.getVersion()
-      @JvmName("setVersion")
+    public var name: kotlin.String
+      @JvmName("getName")
+      get() = _builder.getName()
+      @JvmName("setName")
       set(value) {
-        _builder.setVersion(value)
+        _builder.setName(value)
       }
     /**
-     * `string version = 1 [json_name = "version"];`
+     * `string name = 1 [json_name = "name"];`
      */
-    public fun clearVersion() {
-      _builder.clearVersion()
+    public fun clearName() {
+      _builder.clearName()
     }
 
     /**
-     * `.vultisig.vault.v1.Vault.VaultDetail vault = 2 [json_name = "vault"];`
+     * `string public_key_ecdsa = 2 [json_name = "publicKeyEcdsa"];`
      */
-    public var vault: vultisig.vault.v1.VaultOuterClass.Vault.VaultDetail
-      @JvmName("getVault")
-      get() = _builder.getVault()
-      @JvmName("setVault")
+    public var publicKeyEcdsa: kotlin.String
+      @JvmName("getPublicKeyEcdsa")
+      get() = _builder.getPublicKeyEcdsa()
+      @JvmName("setPublicKeyEcdsa")
       set(value) {
-        _builder.setVault(value)
+        _builder.setPublicKeyEcdsa(value)
       }
     /**
-     * `.vultisig.vault.v1.Vault.VaultDetail vault = 2 [json_name = "vault"];`
+     * `string public_key_ecdsa = 2 [json_name = "publicKeyEcdsa"];`
      */
-    public fun clearVault() {
-      _builder.clearVault()
+    public fun clearPublicKeyEcdsa() {
+      _builder.clearPublicKeyEcdsa()
     }
-    /**
-     * `.vultisig.vault.v1.Vault.VaultDetail vault = 2 [json_name = "vault"];`
-     * @return Whether the vault field is set.
-     */
-    public fun hasVault(): kotlin.Boolean {
-      return _builder.hasVault()
-    }
-    public val VaultKt.Dsl.vaultOrNull: vultisig.vault.v1.VaultOuterClass.Vault.VaultDetail?
-      get() = _builder.vaultOrNull
 
     /**
-     * `bool password_protected = 3 [json_name = "passwordProtected"];`
+     * `string public_key_eddsa = 3 [json_name = "publicKeyEddsa"];`
      */
-    public var passwordProtected: kotlin.Boolean
-      @JvmName("getPasswordProtected")
-      get() = _builder.getPasswordProtected()
-      @JvmName("setPasswordProtected")
+    public var publicKeyEddsa: kotlin.String
+      @JvmName("getPublicKeyEddsa")
+      get() = _builder.getPublicKeyEddsa()
+      @JvmName("setPublicKeyEddsa")
       set(value) {
-        _builder.setPasswordProtected(value)
+        _builder.setPublicKeyEddsa(value)
       }
     /**
-     * `bool password_protected = 3 [json_name = "passwordProtected"];`
+     * `string public_key_eddsa = 3 [json_name = "publicKeyEddsa"];`
      */
-    public fun clearPasswordProtected() {
-      _builder.clearPasswordProtected()
+    public fun clearPublicKeyEddsa() {
+      _builder.clearPublicKeyEddsa()
     }
-  }
-  @kotlin.jvm.JvmName("-initializevaultDetail")
-  public inline fun vaultDetail(block: vultisig.vault.v1.VaultKt.VaultDetailKt.Dsl.() -> kotlin.Unit): vultisig.vault.v1.VaultOuterClass.Vault.VaultDetail =
-    vultisig.vault.v1.VaultKt.VaultDetailKt.Dsl._create(vultisig.vault.v1.VaultOuterClass.Vault.VaultDetail.newBuilder()).apply { block() }._build()
-  /**
-   * Protobuf type `vultisig.vault.v1.Vault.VaultDetail`
-   */
-  public object VaultDetailKt {
+
+    /**
+     * An uninstantiable, behaviorless type to represent the field in
+     * generics.
+     */
     @kotlin.OptIn(com.google.protobuf.kotlin.OnlyForUseByGeneratedProtoCode::class)
-    @com.google.protobuf.kotlin.ProtoDslMarker
-    public class Dsl private constructor(
-      private val _builder: vultisig.vault.v1.VaultOuterClass.Vault.VaultDetail.Builder
-    ) {
-      public companion object {
-        @kotlin.jvm.JvmSynthetic
-        @kotlin.PublishedApi
-        internal fun _create(builder: vultisig.vault.v1.VaultOuterClass.Vault.VaultDetail.Builder): Dsl = Dsl(builder)
+    public class SignersProxy private constructor() : com.google.protobuf.kotlin.DslProxy()
+    /**
+     * `repeated string signers = 4 [json_name = "signers"];`
+     * @return A list containing the signers.
+     */
+    public val signers: com.google.protobuf.kotlin.DslList<kotlin.String, SignersProxy>
+      @kotlin.jvm.JvmSynthetic
+      get() = com.google.protobuf.kotlin.DslList(
+        _builder.getSignersList()
+      )
+    /**
+     * `repeated string signers = 4 [json_name = "signers"];`
+     * @param value The signers to add.
+     */
+    @kotlin.jvm.JvmSynthetic
+    @kotlin.jvm.JvmName("addSigners")
+    public fun com.google.protobuf.kotlin.DslList<kotlin.String, SignersProxy>.add(value: kotlin.String) {
+      _builder.addSigners(value)
+    }
+    /**
+     * `repeated string signers = 4 [json_name = "signers"];`
+     * @param value The signers to add.
+     */
+    @kotlin.jvm.JvmSynthetic
+    @kotlin.jvm.JvmName("plusAssignSigners")
+    @Suppress("NOTHING_TO_INLINE")
+    public inline operator fun com.google.protobuf.kotlin.DslList<kotlin.String, SignersProxy>.plusAssign(value: kotlin.String) {
+      add(value)
+    }
+    /**
+     * `repeated string signers = 4 [json_name = "signers"];`
+     * @param values The signers to add.
+     */
+    @kotlin.jvm.JvmSynthetic
+    @kotlin.jvm.JvmName("addAllSigners")
+    public fun com.google.protobuf.kotlin.DslList<kotlin.String, SignersProxy>.addAll(values: kotlin.collections.Iterable<kotlin.String>) {
+      _builder.addAllSigners(values)
+    }
+    /**
+     * `repeated string signers = 4 [json_name = "signers"];`
+     * @param values The signers to add.
+     */
+    @kotlin.jvm.JvmSynthetic
+    @kotlin.jvm.JvmName("plusAssignAllSigners")
+    @Suppress("NOTHING_TO_INLINE")
+    public inline operator fun com.google.protobuf.kotlin.DslList<kotlin.String, SignersProxy>.plusAssign(values: kotlin.collections.Iterable<kotlin.String>) {
+      addAll(values)
+    }
+    /**
+     * `repeated string signers = 4 [json_name = "signers"];`
+     * @param index The index to set the value at.
+     * @param value The signers to set.
+     */
+    @kotlin.jvm.JvmSynthetic
+    @kotlin.jvm.JvmName("setSigners")
+    public operator fun com.google.protobuf.kotlin.DslList<kotlin.String, SignersProxy>.set(index: kotlin.Int, value: kotlin.String) {
+      _builder.setSigners(index, value)
+    }/**
+     * `repeated string signers = 4 [json_name = "signers"];`
+     */
+    @kotlin.jvm.JvmSynthetic
+    @kotlin.jvm.JvmName("clearSigners")
+    public fun com.google.protobuf.kotlin.DslList<kotlin.String, SignersProxy>.clear() {
+      _builder.clearSigners()
+    }
+    /**
+     * `.google.protobuf.Timestamp created_at = 5 [json_name = "createdAt"];`
+     */
+    public var createdAt: com.google.protobuf.Timestamp
+      @JvmName("getCreatedAt")
+      get() = _builder.getCreatedAt()
+      @JvmName("setCreatedAt")
+      set(value) {
+        _builder.setCreatedAt(value)
       }
+    /**
+     * `.google.protobuf.Timestamp created_at = 5 [json_name = "createdAt"];`
+     */
+    public fun clearCreatedAt() {
+      _builder.clearCreatedAt()
+    }
+    /**
+     * `.google.protobuf.Timestamp created_at = 5 [json_name = "createdAt"];`
+     * @return Whether the createdAt field is set.
+     */
+    public fun hasCreatedAt(): kotlin.Boolean {
+      return _builder.hasCreatedAt()
+    }
+    public val VaultKt.Dsl.createdAtOrNull: com.google.protobuf.Timestamp?
+      get() = _builder.createdAtOrNull
 
-      @kotlin.jvm.JvmSynthetic
-      @kotlin.PublishedApi
-      internal fun _build(): vultisig.vault.v1.VaultOuterClass.Vault.VaultDetail = _builder.build()
+    /**
+     * `string hex_chain_code = 6 [json_name = "hexChainCode"];`
+     */
+    public var hexChainCode: kotlin.String
+      @JvmName("getHexChainCode")
+      get() = _builder.getHexChainCode()
+      @JvmName("setHexChainCode")
+      set(value) {
+        _builder.setHexChainCode(value)
+      }
+    /**
+     * `string hex_chain_code = 6 [json_name = "hexChainCode"];`
+     */
+    public fun clearHexChainCode() {
+      _builder.clearHexChainCode()
+    }
 
-      /**
-       * `string name = 1 [json_name = "name"];`
-       */
-      public var name: kotlin.String
-        @JvmName("getName")
-        get() = _builder.getName()
-        @JvmName("setName")
-        set(value) {
-          _builder.setName(value)
-        }
-      /**
-       * `string name = 1 [json_name = "name"];`
-       */
-      public fun clearName() {
-        _builder.clearName()
-      }
-
-      /**
-       * `string publikc_key_ecdsa = 2 [json_name = "publikcKeyEcdsa"];`
-       */
-      public var publikcKeyEcdsa: kotlin.String
-        @JvmName("getPublikcKeyEcdsa")
-        get() = _builder.getPublikcKeyEcdsa()
-        @JvmName("setPublikcKeyEcdsa")
-        set(value) {
-          _builder.setPublikcKeyEcdsa(value)
-        }
-      /**
-       * `string publikc_key_ecdsa = 2 [json_name = "publikcKeyEcdsa"];`
-       */
-      public fun clearPublikcKeyEcdsa() {
-        _builder.clearPublikcKeyEcdsa()
-      }
-
-      /**
-       * `string public_key_eddsa = 3 [json_name = "publicKeyEddsa"];`
-       */
-      public var publicKeyEddsa: kotlin.String
-        @JvmName("getPublicKeyEddsa")
-        get() = _builder.getPublicKeyEddsa()
-        @JvmName("setPublicKeyEddsa")
-        set(value) {
-          _builder.setPublicKeyEddsa(value)
-        }
-      /**
-       * `string public_key_eddsa = 3 [json_name = "publicKeyEddsa"];`
-       */
-      public fun clearPublicKeyEddsa() {
-        _builder.clearPublicKeyEddsa()
-      }
-
-      /**
-       * An uninstantiable, behaviorless type to represent the field in
-       * generics.
-       */
-      @kotlin.OptIn(com.google.protobuf.kotlin.OnlyForUseByGeneratedProtoCode::class)
-      public class SignersProxy private constructor() : com.google.protobuf.kotlin.DslProxy()
-      /**
-       * `repeated string signers = 4 [json_name = "signers"];`
-       * @return A list containing the signers.
-       */
-      public val signers: com.google.protobuf.kotlin.DslList<kotlin.String, SignersProxy>
-        @kotlin.jvm.JvmSynthetic
-        get() = com.google.protobuf.kotlin.DslList(
-          _builder.getSignersList()
-        )
-      /**
-       * `repeated string signers = 4 [json_name = "signers"];`
-       * @param value The signers to add.
-       */
+    /**
+     * An uninstantiable, behaviorless type to represent the field in
+     * generics.
+     */
+    @kotlin.OptIn(com.google.protobuf.kotlin.OnlyForUseByGeneratedProtoCode::class)
+    public class KeySharesProxy private constructor() : com.google.protobuf.kotlin.DslProxy()
+    /**
+     * `repeated .vultisig.vault.v1.Vault.KeyShare key_shares = 7 [json_name = "keyShares"];`
+     */
+     public val keyShares: com.google.protobuf.kotlin.DslList<vultisig.vault.v1.VaultOuterClass.Vault.KeyShare, KeySharesProxy>
       @kotlin.jvm.JvmSynthetic
-      @kotlin.jvm.JvmName("addSigners")
-      public fun com.google.protobuf.kotlin.DslList<kotlin.String, SignersProxy>.add(value: kotlin.String) {
-        _builder.addSigners(value)
-      }
-      /**
-       * `repeated string signers = 4 [json_name = "signers"];`
-       * @param value The signers to add.
-       */
-      @kotlin.jvm.JvmSynthetic
-      @kotlin.jvm.JvmName("plusAssignSigners")
-      @Suppress("NOTHING_TO_INLINE")
-      public inline operator fun com.google.protobuf.kotlin.DslList<kotlin.String, SignersProxy>.plusAssign(value: kotlin.String) {
-        add(value)
-      }
-      /**
-       * `repeated string signers = 4 [json_name = "signers"];`
-       * @param values The signers to add.
-       */
-      @kotlin.jvm.JvmSynthetic
-      @kotlin.jvm.JvmName("addAllSigners")
-      public fun com.google.protobuf.kotlin.DslList<kotlin.String, SignersProxy>.addAll(values: kotlin.collections.Iterable<kotlin.String>) {
-        _builder.addAllSigners(values)
-      }
-      /**
-       * `repeated string signers = 4 [json_name = "signers"];`
-       * @param values The signers to add.
-       */
-      @kotlin.jvm.JvmSynthetic
-      @kotlin.jvm.JvmName("plusAssignAllSigners")
-      @Suppress("NOTHING_TO_INLINE")
-      public inline operator fun com.google.protobuf.kotlin.DslList<kotlin.String, SignersProxy>.plusAssign(values: kotlin.collections.Iterable<kotlin.String>) {
-        addAll(values)
-      }
-      /**
-       * `repeated string signers = 4 [json_name = "signers"];`
-       * @param index The index to set the value at.
-       * @param value The signers to set.
-       */
-      @kotlin.jvm.JvmSynthetic
-      @kotlin.jvm.JvmName("setSigners")
-      public operator fun com.google.protobuf.kotlin.DslList<kotlin.String, SignersProxy>.set(index: kotlin.Int, value: kotlin.String) {
-        _builder.setSigners(index, value)
-      }/**
-       * `repeated string signers = 4 [json_name = "signers"];`
-       */
-      @kotlin.jvm.JvmSynthetic
-      @kotlin.jvm.JvmName("clearSigners")
-      public fun com.google.protobuf.kotlin.DslList<kotlin.String, SignersProxy>.clear() {
-        _builder.clearSigners()
-      }
-      /**
-       * `.google.protobuf.Timestamp created_at = 5 [json_name = "createdAt"];`
-       */
-      public var createdAt: com.google.protobuf.Timestamp
-        @JvmName("getCreatedAt")
-        get() = _builder.getCreatedAt()
-        @JvmName("setCreatedAt")
-        set(value) {
-          _builder.setCreatedAt(value)
-        }
-      /**
-       * `.google.protobuf.Timestamp created_at = 5 [json_name = "createdAt"];`
-       */
-      public fun clearCreatedAt() {
-        _builder.clearCreatedAt()
-      }
-      /**
-       * `.google.protobuf.Timestamp created_at = 5 [json_name = "createdAt"];`
-       * @return Whether the createdAt field is set.
-       */
-      public fun hasCreatedAt(): kotlin.Boolean {
-        return _builder.hasCreatedAt()
-      }
-      public val VaultDetailKt.Dsl.createdAtOrNull: com.google.protobuf.Timestamp?
-        get() = _builder.createdAtOrNull
-
-      /**
-       * `string hex_chain_code = 6 [json_name = "hexChainCode"];`
-       */
-      public var hexChainCode: kotlin.String
-        @JvmName("getHexChainCode")
-        get() = _builder.getHexChainCode()
-        @JvmName("setHexChainCode")
-        set(value) {
-          _builder.setHexChainCode(value)
-        }
-      /**
-       * `string hex_chain_code = 6 [json_name = "hexChainCode"];`
-       */
-      public fun clearHexChainCode() {
-        _builder.clearHexChainCode()
-      }
-
-      /**
-       * An uninstantiable, behaviorless type to represent the field in
-       * generics.
-       */
-      @kotlin.OptIn(com.google.protobuf.kotlin.OnlyForUseByGeneratedProtoCode::class)
-      public class KeySharesProxy private constructor() : com.google.protobuf.kotlin.DslProxy()
-      /**
-       * `repeated .vultisig.vault.v1.Vault.KeyShare key_shares = 7 [json_name = "keyShares"];`
-       */
-       public val keyShares: com.google.protobuf.kotlin.DslList<vultisig.vault.v1.VaultOuterClass.Vault.KeyShare, KeySharesProxy>
-        @kotlin.jvm.JvmSynthetic
-        get() = com.google.protobuf.kotlin.DslList(
-          _builder.getKeySharesList()
-        )
-      /**
-       * `repeated .vultisig.vault.v1.Vault.KeyShare key_shares = 7 [json_name = "keyShares"];`
-       * @param value The keyShares to add.
-       */
-      @kotlin.jvm.JvmSynthetic
-      @kotlin.jvm.JvmName("addKeyShares")
-      public fun com.google.protobuf.kotlin.DslList<vultisig.vault.v1.VaultOuterClass.Vault.KeyShare, KeySharesProxy>.add(value: vultisig.vault.v1.VaultOuterClass.Vault.KeyShare) {
-        _builder.addKeyShares(value)
-      }
-      /**
-       * `repeated .vultisig.vault.v1.Vault.KeyShare key_shares = 7 [json_name = "keyShares"];`
-       * @param value The keyShares to add.
-       */
-      @kotlin.jvm.JvmSynthetic
-      @kotlin.jvm.JvmName("plusAssignKeyShares")
-      @Suppress("NOTHING_TO_INLINE")
-      public inline operator fun com.google.protobuf.kotlin.DslList<vultisig.vault.v1.VaultOuterClass.Vault.KeyShare, KeySharesProxy>.plusAssign(value: vultisig.vault.v1.VaultOuterClass.Vault.KeyShare) {
-        add(value)
-      }
-      /**
-       * `repeated .vultisig.vault.v1.Vault.KeyShare key_shares = 7 [json_name = "keyShares"];`
-       * @param values The keyShares to add.
-       */
-      @kotlin.jvm.JvmSynthetic
-      @kotlin.jvm.JvmName("addAllKeyShares")
-      public fun com.google.protobuf.kotlin.DslList<vultisig.vault.v1.VaultOuterClass.Vault.KeyShare, KeySharesProxy>.addAll(values: kotlin.collections.Iterable<vultisig.vault.v1.VaultOuterClass.Vault.KeyShare>) {
-        _builder.addAllKeyShares(values)
-      }
-      /**
-       * `repeated .vultisig.vault.v1.Vault.KeyShare key_shares = 7 [json_name = "keyShares"];`
-       * @param values The keyShares to add.
-       */
-      @kotlin.jvm.JvmSynthetic
-      @kotlin.jvm.JvmName("plusAssignAllKeyShares")
-      @Suppress("NOTHING_TO_INLINE")
-      public inline operator fun com.google.protobuf.kotlin.DslList<vultisig.vault.v1.VaultOuterClass.Vault.KeyShare, KeySharesProxy>.plusAssign(values: kotlin.collections.Iterable<vultisig.vault.v1.VaultOuterClass.Vault.KeyShare>) {
-        addAll(values)
-      }
-      /**
-       * `repeated .vultisig.vault.v1.Vault.KeyShare key_shares = 7 [json_name = "keyShares"];`
-       * @param index The index to set the value at.
-       * @param value The keyShares to set.
-       */
-      @kotlin.jvm.JvmSynthetic
-      @kotlin.jvm.JvmName("setKeyShares")
-      public operator fun com.google.protobuf.kotlin.DslList<vultisig.vault.v1.VaultOuterClass.Vault.KeyShare, KeySharesProxy>.set(index: kotlin.Int, value: vultisig.vault.v1.VaultOuterClass.Vault.KeyShare) {
-        _builder.setKeyShares(index, value)
-      }
-      /**
-       * `repeated .vultisig.vault.v1.Vault.KeyShare key_shares = 7 [json_name = "keyShares"];`
-       */
-      @kotlin.jvm.JvmSynthetic
-      @kotlin.jvm.JvmName("clearKeyShares")
-      public fun com.google.protobuf.kotlin.DslList<vultisig.vault.v1.VaultOuterClass.Vault.KeyShare, KeySharesProxy>.clear() {
-        _builder.clearKeyShares()
-      }
+      get() = com.google.protobuf.kotlin.DslList(
+        _builder.getKeySharesList()
+      )
+    /**
+     * `repeated .vultisig.vault.v1.Vault.KeyShare key_shares = 7 [json_name = "keyShares"];`
+     * @param value The keyShares to add.
+     */
+    @kotlin.jvm.JvmSynthetic
+    @kotlin.jvm.JvmName("addKeyShares")
+    public fun com.google.protobuf.kotlin.DslList<vultisig.vault.v1.VaultOuterClass.Vault.KeyShare, KeySharesProxy>.add(value: vultisig.vault.v1.VaultOuterClass.Vault.KeyShare) {
+      _builder.addKeyShares(value)
+    }
+    /**
+     * `repeated .vultisig.vault.v1.Vault.KeyShare key_shares = 7 [json_name = "keyShares"];`
+     * @param value The keyShares to add.
+     */
+    @kotlin.jvm.JvmSynthetic
+    @kotlin.jvm.JvmName("plusAssignKeyShares")
+    @Suppress("NOTHING_TO_INLINE")
+    public inline operator fun com.google.protobuf.kotlin.DslList<vultisig.vault.v1.VaultOuterClass.Vault.KeyShare, KeySharesProxy>.plusAssign(value: vultisig.vault.v1.VaultOuterClass.Vault.KeyShare) {
+      add(value)
+    }
+    /**
+     * `repeated .vultisig.vault.v1.Vault.KeyShare key_shares = 7 [json_name = "keyShares"];`
+     * @param values The keyShares to add.
+     */
+    @kotlin.jvm.JvmSynthetic
+    @kotlin.jvm.JvmName("addAllKeyShares")
+    public fun com.google.protobuf.kotlin.DslList<vultisig.vault.v1.VaultOuterClass.Vault.KeyShare, KeySharesProxy>.addAll(values: kotlin.collections.Iterable<vultisig.vault.v1.VaultOuterClass.Vault.KeyShare>) {
+      _builder.addAllKeyShares(values)
+    }
+    /**
+     * `repeated .vultisig.vault.v1.Vault.KeyShare key_shares = 7 [json_name = "keyShares"];`
+     * @param values The keyShares to add.
+     */
+    @kotlin.jvm.JvmSynthetic
+    @kotlin.jvm.JvmName("plusAssignAllKeyShares")
+    @Suppress("NOTHING_TO_INLINE")
+    public inline operator fun com.google.protobuf.kotlin.DslList<vultisig.vault.v1.VaultOuterClass.Vault.KeyShare, KeySharesProxy>.plusAssign(values: kotlin.collections.Iterable<vultisig.vault.v1.VaultOuterClass.Vault.KeyShare>) {
+      addAll(values)
+    }
+    /**
+     * `repeated .vultisig.vault.v1.Vault.KeyShare key_shares = 7 [json_name = "keyShares"];`
+     * @param index The index to set the value at.
+     * @param value The keyShares to set.
+     */
+    @kotlin.jvm.JvmSynthetic
+    @kotlin.jvm.JvmName("setKeyShares")
+    public operator fun com.google.protobuf.kotlin.DslList<vultisig.vault.v1.VaultOuterClass.Vault.KeyShare, KeySharesProxy>.set(index: kotlin.Int, value: vultisig.vault.v1.VaultOuterClass.Vault.KeyShare) {
+      _builder.setKeyShares(index, value)
+    }
+    /**
+     * `repeated .vultisig.vault.v1.Vault.KeyShare key_shares = 7 [json_name = "keyShares"];`
+     */
+    @kotlin.jvm.JvmSynthetic
+    @kotlin.jvm.JvmName("clearKeyShares")
+    public fun com.google.protobuf.kotlin.DslList<vultisig.vault.v1.VaultOuterClass.Vault.KeyShare, KeySharesProxy>.clear() {
+      _builder.clearKeyShares()
+    }
 
 
-      /**
-       * `string local_party_id = 8 [json_name = "localPartyId"];`
-       */
-      public var localPartyId: kotlin.String
-        @JvmName("getLocalPartyId")
-        get() = _builder.getLocalPartyId()
-        @JvmName("setLocalPartyId")
-        set(value) {
-          _builder.setLocalPartyId(value)
-        }
-      /**
-       * `string local_party_id = 8 [json_name = "localPartyId"];`
-       */
-      public fun clearLocalPartyId() {
-        _builder.clearLocalPartyId()
+    /**
+     * `string local_party_id = 8 [json_name = "localPartyId"];`
+     */
+    public var localPartyId: kotlin.String
+      @JvmName("getLocalPartyId")
+      get() = _builder.getLocalPartyId()
+      @JvmName("setLocalPartyId")
+      set(value) {
+        _builder.setLocalPartyId(value)
       }
+    /**
+     * `string local_party_id = 8 [json_name = "localPartyId"];`
+     */
+    public fun clearLocalPartyId() {
+      _builder.clearLocalPartyId()
+    }
 
-      /**
-       * `string reshare_prefix = 9 [json_name = "resharePrefix"];`
-       */
-      public var resharePrefix: kotlin.String
-        @JvmName("getResharePrefix")
-        get() = _builder.getResharePrefix()
-        @JvmName("setResharePrefix")
-        set(value) {
-          _builder.setResharePrefix(value)
-        }
-      /**
-       * `string reshare_prefix = 9 [json_name = "resharePrefix"];`
-       */
-      public fun clearResharePrefix() {
-        _builder.clearResharePrefix()
+    /**
+     * `string reshare_prefix = 9 [json_name = "resharePrefix"];`
+     */
+    public var resharePrefix: kotlin.String
+      @JvmName("getResharePrefix")
+      get() = _builder.getResharePrefix()
+      @JvmName("setResharePrefix")
+      set(value) {
+        _builder.setResharePrefix(value)
       }
-
-      /**
-       * `int64 order = 10 [json_name = "order"];`
-       */
-      public var order: kotlin.Long
-        @JvmName("getOrder")
-        get() = _builder.getOrder()
-        @JvmName("setOrder")
-        set(value) {
-          _builder.setOrder(value)
-        }
-      /**
-       * `int64 order = 10 [json_name = "order"];`
-       */
-      public fun clearOrder() {
-        _builder.clearOrder()
-      }
+    /**
+     * `string reshare_prefix = 9 [json_name = "resharePrefix"];`
+     */
+    public fun clearResharePrefix() {
+      _builder.clearResharePrefix()
     }
   }
   @kotlin.jvm.JvmName("-initializekeyShare")
@@ -461,16 +361,9 @@ public inline fun vultisig.vault.v1.VaultOuterClass.Vault.copy(block: `vultisig.
   `vultisig.vault.v1`.VaultKt.Dsl._create(this.toBuilder()).apply { block() }._build()
 
 @kotlin.jvm.JvmSynthetic
-public inline fun vultisig.vault.v1.VaultOuterClass.Vault.VaultDetail.copy(block: `vultisig.vault.v1`.VaultKt.VaultDetailKt.Dsl.() -> kotlin.Unit): vultisig.vault.v1.VaultOuterClass.Vault.VaultDetail =
-  `vultisig.vault.v1`.VaultKt.VaultDetailKt.Dsl._create(this.toBuilder()).apply { block() }._build()
-
-public val vultisig.vault.v1.VaultOuterClass.Vault.VaultDetailOrBuilder.createdAtOrNull: com.google.protobuf.Timestamp?
-  get() = if (hasCreatedAt()) getCreatedAt() else null
-
-@kotlin.jvm.JvmSynthetic
 public inline fun vultisig.vault.v1.VaultOuterClass.Vault.KeyShare.copy(block: `vultisig.vault.v1`.VaultKt.KeyShareKt.Dsl.() -> kotlin.Unit): vultisig.vault.v1.VaultOuterClass.Vault.KeyShare =
   `vultisig.vault.v1`.VaultKt.KeyShareKt.Dsl._create(this.toBuilder()).apply { block() }._build()
 
-public val vultisig.vault.v1.VaultOuterClass.VaultOrBuilder.vaultOrNull: vultisig.vault.v1.VaultOuterClass.Vault.VaultDetail?
-  get() = if (hasVault()) getVault() else null
+public val vultisig.vault.v1.VaultOuterClass.VaultOrBuilder.createdAtOrNull: com.google.protobuf.Timestamp?
+  get() = if (hasCreatedAt()) getCreatedAt() else null
 
