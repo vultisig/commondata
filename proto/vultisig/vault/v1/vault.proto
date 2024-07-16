@@ -3,6 +3,7 @@ package vultisig.vault.v1;
 
 import "google/protobuf/timestamp.proto";
 
+option go_package = "vultisig/vault/v1";
 option java_package = "vultisig.vault.v1";
 option swift_prefix = "VS";
 
