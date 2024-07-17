@@ -42,6 +42,8 @@ public struct VSCoin {
 
   public var hexPublicKey: String = String()
 
+  public var logo: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -66,6 +68,7 @@ extension VSCoin: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBas
     6: .standard(proto: "price_provider_id"),
     7: .standard(proto: "is_native_token"),
     8: .standard(proto: "hex_public_key"),
+    9: .same(proto: "logo"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -82,6 +85,7 @@ extension VSCoin: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBas
       case 6: try { try decoder.decodeSingularStringField(value: &self.priceProviderID) }()
       case 7: try { try decoder.decodeSingularBoolField(value: &self.isNativeToken) }()
       case 8: try { try decoder.decodeSingularStringField(value: &self.hexPublicKey) }()
+      case 9: try { try decoder.decodeSingularStringField(value: &self.logo) }()
       default: break
       }
     }
@@ -112,6 +116,9 @@ extension VSCoin: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBas
     if !self.hexPublicKey.isEmpty {
       try visitor.visitSingularStringField(value: self.hexPublicKey, fieldNumber: 8)
     }
+    if !self.logo.isEmpty {
+      try visitor.visitSingularStringField(value: self.logo, fieldNumber: 9)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -124,6 +131,7 @@ extension VSCoin: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBas
     if lhs.priceProviderID != rhs.priceProviderID {return false}
     if lhs.isNativeToken != rhs.isNativeToken {return false}
     if lhs.hexPublicKey != rhs.hexPublicKey {return false}
+    if lhs.logo != rhs.logo {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
