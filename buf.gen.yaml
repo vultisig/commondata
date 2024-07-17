@@ -3,7 +3,5 @@ plugins:
   - remote: buf.build/apple/swift:v1.26.0
     out: Sources/swift
     opt: Visibility=Public
-  - remote: buf.build/protocolbuffers/kotlin:v27.2
-    out: kotlin/src/main/kotlin
   - remote: buf.build/protocolbuffers/go:v1.34.2
     out: go

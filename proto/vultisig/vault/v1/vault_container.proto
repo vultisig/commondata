@@ -7,7 +7,7 @@ option swift_prefix = "VS";
 
 message VaultContainer {
   // version of data format
-  string version = 1;
+  uint64 version = 1;
   // vault contained the container
   string vault = 2;
   // is vault encrypted with password
