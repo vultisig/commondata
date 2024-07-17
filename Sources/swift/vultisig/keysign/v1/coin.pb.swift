@@ -34,6 +34,14 @@ public struct VSCoin {
 
   public var contractAddress: String = String()
 
+  public var decimals: Int32 = 0
+
+  public var priceProviderID: String = String()
+
+  public var isNativeToken: Bool = false
+
+  public var hexPublicKey: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -54,6 +62,10 @@ extension VSCoin: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBas
     2: .same(proto: "ticker"),
     3: .same(proto: "address"),
     4: .standard(proto: "contract_address"),
+    5: .same(proto: "decimals"),
+    6: .standard(proto: "price_provider_id"),
+    7: .standard(proto: "is_native_token"),
+    8: .standard(proto: "hex_public_key"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -66,6 +78,10 @@ extension VSCoin: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBas
       case 2: try { try decoder.decodeSingularStringField(value: &self.ticker) }()
       case 3: try { try decoder.decodeSingularStringField(value: &self.address) }()
       case 4: try { try decoder.decodeSingularStringField(value: &self.contractAddress) }()
+      case 5: try { try decoder.decodeSingularInt32Field(value: &self.decimals) }()
+      case 6: try { try decoder.decodeSingularStringField(value: &self.priceProviderID) }()
+      case 7: try { try decoder.decodeSingularBoolField(value: &self.isNativeToken) }()
+      case 8: try { try decoder.decodeSingularStringField(value: &self.hexPublicKey) }()
       default: break
       }
     }
@@ -84,6 +100,18 @@ extension VSCoin: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBas
     if !self.contractAddress.isEmpty {
       try visitor.visitSingularStringField(value: self.contractAddress, fieldNumber: 4)
     }
+    if self.decimals != 0 {
+      try visitor.visitSingularInt32Field(value: self.decimals, fieldNumber: 5)
+    }
+    if !self.priceProviderID.isEmpty {
+      try visitor.visitSingularStringField(value: self.priceProviderID, fieldNumber: 6)
+    }
+    if self.isNativeToken != false {
+      try visitor.visitSingularBoolField(value: self.isNativeToken, fieldNumber: 7)
+    }
+    if !self.hexPublicKey.isEmpty {
+      try visitor.visitSingularStringField(value: self.hexPublicKey, fieldNumber: 8)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -92,6 +120,10 @@ extension VSCoin: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBas
     if lhs.ticker != rhs.ticker {return false}
     if lhs.address != rhs.address {return false}
     if lhs.contractAddress != rhs.contractAddress {return false}
+    if lhs.decimals != rhs.decimals {return false}
+    if lhs.priceProviderID != rhs.priceProviderID {return false}
+    if lhs.isNativeToken != rhs.isNativeToken {return false}
+    if lhs.hexPublicKey != rhs.hexPublicKey {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
