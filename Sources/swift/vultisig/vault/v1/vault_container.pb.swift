@@ -26,7 +26,7 @@ public struct VSVaultContainer {
   // methods supported on all messages.
 
   /// version of data format
-  public var version: String = String()
+  public var version: UInt64 = 0
 
   /// vault contained the container
   public var vault: String = String()
@@ -61,7 +61,7 @@ extension VSVaultContainer: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.version) }()
+      case 1: try { try decoder.decodeSingularUInt64Field(value: &self.version) }()
       case 2: try { try decoder.decodeSingularStringField(value: &self.vault) }()
       case 3: try { try decoder.decodeSingularBoolField(value: &self.isEncrypted) }()
       default: break
@@ -70,8 +70,8 @@ extension VSVaultContainer: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.version.isEmpty {
-      try visitor.visitSingularStringField(value: self.version, fieldNumber: 1)
+    if self.version != 0 {
+      try visitor.visitSingularUInt64Field(value: self.version, fieldNumber: 1)
     }
     if !self.vault.isEmpty {
       try visitor.visitSingularStringField(value: self.vault, fieldNumber: 2)

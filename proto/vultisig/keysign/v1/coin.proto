@@ -11,4 +11,9 @@ message Coin {
   string ticker = 2;
   string address = 3;
   string contract_address = 4;
+  int32 decimals = 5;
+  string price_provider_id = 6;
+  bool is_native_token = 7;
+  string hex_public_key = 8;
+  string logo = 9;
 }
