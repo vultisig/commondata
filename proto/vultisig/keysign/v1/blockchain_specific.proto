@@ -21,17 +21,20 @@ message THORChainSpecific {
   uint64 account_number = 1;
   uint64 sequence = 2;
   uint64 fee = 3;
+  bool is_deposit = 4;
 }
 
 message MAYAChainSpecific {
   uint64 account_number = 1;
   uint64 sequence = 2;
+  bool is_deposit = 3;
 }
 
 message CosmosSpecific {
   uint64 account_number = 1;
   uint64 sequence = 2;
   uint64 gas = 3;
+  bool is_deposit = 4;
 }
 
 message SolanaSpecific {

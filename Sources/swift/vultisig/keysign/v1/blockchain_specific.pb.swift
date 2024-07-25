@@ -63,6 +63,8 @@ public struct VSTHORChainSpecific {
 
   public var fee: UInt64 = 0
 
+  public var isDeposit: Bool = false
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -76,6 +78,8 @@ public struct VSMAYAChainSpecific {
   public var accountNumber: UInt64 = 0
 
   public var sequence: UInt64 = 0
+
+  public var isDeposit: Bool = false
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -92,6 +96,8 @@ public struct VSCosmosSpecific {
   public var sequence: UInt64 = 0
 
   public var gas: UInt64 = 0
+
+  public var isDeposit: Bool = false
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -293,6 +299,7 @@ extension VSTHORChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     1: .standard(proto: "account_number"),
     2: .same(proto: "sequence"),
     3: .same(proto: "fee"),
+    4: .standard(proto: "is_deposit"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -304,6 +311,7 @@ extension VSTHORChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
       case 1: try { try decoder.decodeSingularUInt64Field(value: &self.accountNumber) }()
       case 2: try { try decoder.decodeSingularUInt64Field(value: &self.sequence) }()
       case 3: try { try decoder.decodeSingularUInt64Field(value: &self.fee) }()
+      case 4: try { try decoder.decodeSingularBoolField(value: &self.isDeposit) }()
       default: break
       }
     }
@@ -319,6 +327,9 @@ extension VSTHORChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     if self.fee != 0 {
       try visitor.visitSingularUInt64Field(value: self.fee, fieldNumber: 3)
     }
+    if self.isDeposit != false {
+      try visitor.visitSingularBoolField(value: self.isDeposit, fieldNumber: 4)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -326,6 +337,7 @@ extension VSTHORChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     if lhs.accountNumber != rhs.accountNumber {return false}
     if lhs.sequence != rhs.sequence {return false}
     if lhs.fee != rhs.fee {return false}
+    if lhs.isDeposit != rhs.isDeposit {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -336,6 +348,7 @@ extension VSMAYAChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "account_number"),
     2: .same(proto: "sequence"),
+    3: .standard(proto: "is_deposit"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -346,6 +359,7 @@ extension VSMAYAChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularUInt64Field(value: &self.accountNumber) }()
       case 2: try { try decoder.decodeSingularUInt64Field(value: &self.sequence) }()
+      case 3: try { try decoder.decodeSingularBoolField(value: &self.isDeposit) }()
       default: break
       }
     }
@@ -358,12 +372,16 @@ extension VSMAYAChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     if self.sequence != 0 {
       try visitor.visitSingularUInt64Field(value: self.sequence, fieldNumber: 2)
     }
+    if self.isDeposit != false {
+      try visitor.visitSingularBoolField(value: self.isDeposit, fieldNumber: 3)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: VSMAYAChainSpecific, rhs: VSMAYAChainSpecific) -> Bool {
     if lhs.accountNumber != rhs.accountNumber {return false}
     if lhs.sequence != rhs.sequence {return false}
+    if lhs.isDeposit != rhs.isDeposit {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -375,6 +393,7 @@ extension VSCosmosSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     1: .standard(proto: "account_number"),
     2: .same(proto: "sequence"),
     3: .same(proto: "gas"),
+    4: .standard(proto: "is_deposit"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -386,6 +405,7 @@ extension VSCosmosSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case 1: try { try decoder.decodeSingularUInt64Field(value: &self.accountNumber) }()
       case 2: try { try decoder.decodeSingularUInt64Field(value: &self.sequence) }()
       case 3: try { try decoder.decodeSingularUInt64Field(value: &self.gas) }()
+      case 4: try { try decoder.decodeSingularBoolField(value: &self.isDeposit) }()
       default: break
       }
     }
@@ -401,6 +421,9 @@ extension VSCosmosSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if self.gas != 0 {
       try visitor.visitSingularUInt64Field(value: self.gas, fieldNumber: 3)
     }
+    if self.isDeposit != false {
+      try visitor.visitSingularBoolField(value: self.isDeposit, fieldNumber: 4)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -408,6 +431,7 @@ extension VSCosmosSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if lhs.accountNumber != rhs.accountNumber {return false}
     if lhs.sequence != rhs.sequence {return false}
     if lhs.gas != rhs.gas {return false}
+    if lhs.isDeposit != rhs.isDeposit {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
