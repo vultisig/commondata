@@ -20,6 +20,50 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
+public enum VSTransactionType: SwiftProtobuf.Enum {
+  public typealias RawValue = Int
+  case unspecified // = 0
+  case vote // = 1
+  case proposal // = 2
+  case UNRECOGNIZED(Int)
+
+  public init() {
+    self = .unspecified
+  }
+
+  public init?(rawValue: Int) {
+    switch rawValue {
+    case 0: self = .unspecified
+    case 1: self = .vote
+    case 2: self = .proposal
+    default: self = .UNRECOGNIZED(rawValue)
+    }
+  }
+
+  public var rawValue: Int {
+    switch self {
+    case .unspecified: return 0
+    case .vote: return 1
+    case .proposal: return 2
+    case .UNRECOGNIZED(let i): return i
+    }
+  }
+
+}
+
+#if swift(>=4.2)
+
+extension VSTransactionType: CaseIterable {
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  public static let allCases: [VSTransactionType] = [
+    .unspecified,
+    .vote,
+    .proposal,
+  ]
+}
+
+#endif  // swift(>=4.2)
+
 public struct VSUTXOSpecific {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -97,7 +141,7 @@ public struct VSCosmosSpecific {
 
   public var gas: UInt64 = 0
 
-  public var isDeposit: Bool = false
+  public var transactionType: VSTransactionType = .unspecified
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -190,6 +234,7 @@ public struct VSSuiSpecific {
 }
 
 #if swift(>=5.5) && canImport(_Concurrency)
+extension VSTransactionType: @unchecked Sendable {}
 extension VSUTXOSpecific: @unchecked Sendable {}
 extension VSEthereumSpecific: @unchecked Sendable {}
 extension VSTHORChainSpecific: @unchecked Sendable {}
@@ -204,6 +249,14 @@ extension VSSuiSpecific: @unchecked Sendable {}
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
 fileprivate let _protobuf_package = "vultisig.keysign.v1"
+
+extension VSTransactionType: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "TRANSACTION_TYPE_UNSPECIFIED"),
+    1: .same(proto: "TRANSACTION_TYPE_VOTE"),
+    2: .same(proto: "TRANSACTION_TYPE_PROPOSAL"),
+  ]
+}
 
 extension VSUTXOSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".UTXOSpecific"
@@ -393,7 +446,7 @@ extension VSCosmosSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     1: .standard(proto: "account_number"),
     2: .same(proto: "sequence"),
     3: .same(proto: "gas"),
-    4: .standard(proto: "is_deposit"),
+    4: .standard(proto: "transaction_type"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -405,7 +458,7 @@ extension VSCosmosSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case 1: try { try decoder.decodeSingularUInt64Field(value: &self.accountNumber) }()
       case 2: try { try decoder.decodeSingularUInt64Field(value: &self.sequence) }()
       case 3: try { try decoder.decodeSingularUInt64Field(value: &self.gas) }()
-      case 4: try { try decoder.decodeSingularBoolField(value: &self.isDeposit) }()
+      case 4: try { try decoder.decodeSingularEnumField(value: &self.transactionType) }()
       default: break
       }
     }
@@ -421,8 +474,8 @@ extension VSCosmosSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if self.gas != 0 {
       try visitor.visitSingularUInt64Field(value: self.gas, fieldNumber: 3)
     }
-    if self.isDeposit != false {
-      try visitor.visitSingularBoolField(value: self.isDeposit, fieldNumber: 4)
+    if self.transactionType != .unspecified {
+      try visitor.visitSingularEnumField(value: self.transactionType, fieldNumber: 4)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -431,7 +484,7 @@ extension VSCosmosSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if lhs.accountNumber != rhs.accountNumber {return false}
     if lhs.sequence != rhs.sequence {return false}
     if lhs.gas != rhs.gas {return false}
-    if lhs.isDeposit != rhs.isDeposit {return false}
+    if lhs.transactionType != rhs.transactionType {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

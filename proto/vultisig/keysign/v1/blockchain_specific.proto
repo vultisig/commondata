@@ -34,7 +34,13 @@ message CosmosSpecific {
   uint64 account_number = 1;
   uint64 sequence = 2;
   uint64 gas = 3;
-  bool is_deposit = 4;
+  TransactionType transaction_type = 4;
+}
+
+enum TransactionType {
+  TRANSACTION_TYPE_UNSPECIFIED = 0;
+  TRANSACTION_TYPE_VOTE = 1;
+  TRANSACTION_TYPE_PROPOSAL = 2;
 }
 
 message SolanaSpecific {
