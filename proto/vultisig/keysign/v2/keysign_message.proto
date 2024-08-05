@@ -1,0 +1,117 @@
+syntax = "proto3";
+package vultisig.keysign.v2;
+
+import "vultisig/keysign/v1/coin.proto";
+import "vultisig/keysign/v1/utxo_info.proto";
+import "vultisig/keysign/v1/erc20_approve_payload.proto";
+
+option go_package = "vultisig/keysign/v2";
+option java_package = "vultisig.keysign.v2";
+option swift_prefix = "VS";
+
+message KeysignMessage {
+  string session_id = 1;
+  string service_name = 2;
+  string encryption_key_hex = 4;
+  KeysignPayload keysign_payload = 5;
+  bool use_vultisig_relay = 6;
+}
+
+
+message EVMTransaction {
+    Coin coin = 1;
+    string to_address = 2;
+    string to_amount = 3;
+    string max_fee_per_gas_wei = 4;
+    string priority_fee = 5;
+    int64 nonce = 6;
+    string gas_limit = 7;
+    optional string memo = 8;
+    optional Erc20ApprovePayload erc20_approve_payload = 9;
+}
+
+
+message CosmosTransaction{
+    Coin coin = 1;
+    string to_address = 2;
+    string to_amount = 3;
+    uint64 account_number = 4;
+    uint64 sequence = 5;
+    uint64 gas = 6;
+    enum TransactionType {
+        TRANSACTION_TYPE_UNSPECIFIED = 0;
+        TRANSACTION_TYPE_VOTE = 1;
+        TRANSACTION_TYPE_PROPOSAL = 2;
+      }
+    TransactionType transaction_type = 7;
+}
+
+message THORChainTransaction {
+    Coin from_coin = 1;
+    string to_address = 2;
+    string to_amount = 3;
+    uint64 account_number = 4;
+    uint64 sequence = 5;
+    uint64 fee = 6;
+    string is_deposit = 7; // probably don't need it , because when `to_address` is empty , it's a deposit , still keep it to make it specific
+    string memo = 8;
+}
+
+
+message UTXOTransaction {
+    Coin coin = 1;
+    string to_address = 2;
+    string to_amount = 3;
+    string byte_fee = 4;
+    bool send_max_amount = 5;
+    optional string memo = 6;
+    repeated UtxoInfo utxo_info = 7;
+}
+
+message SolanaTransaction {
+    Coin coin = 1;
+    string to_address = 2;
+    string to_amount = 3;
+    string recent_block_hash = 4;
+    string priority_fee = 5;
+    optional string from_token_associated_address = 6;
+    optional string to_token_associated_address = 7;
+    optional string memo = 8;
+}
+
+message PolkadotTransaction{
+    Coin coin = 1;
+    string to_address = 2;
+    string to_amount = 3;
+    string recent_block_hash = 4;
+    uint64 nonce = 5;
+    string current_block_number = 6;
+    uint32 spec_version = 7;
+    uint32 transaction_version = 8;
+    string genesis_hash = 9;
+    optional string memo = 10;
+}
+// SwapInfo is mostly for display purpose
+message SwapInfo {
+    Coin to_coin = 1;
+    string provider = 2;
+    string slippage = 3;
+    string fee = 4;
+    string target_amount = 5;
+}
+message KeysignPayload{
+    oneof Transaction {
+        EVMTransaction evm_transaction = 1;
+        CosmosTransaction cosmos_transaction = 2;
+        THORChainTransaction thorchain_transaction = 3;
+        UTXOTransaction utxo_transaction = 4;
+        SolanaTransaction solana_transaction = 5;
+        PolkadotTransaction polkadot_transaction = 6;
+    }
+    // when swap_info is not empty , then the pair device shoudl treat it as a swap
+    // 1. Show swap verify screen
+    // 2. for EVM chain , need to construct a generic smart contract transaction
+    optional SwapInfo swap_info = 20;
+    string vault_public_key_ecdsa = 31;
+    string vault_local_party_id = 32;
+}
