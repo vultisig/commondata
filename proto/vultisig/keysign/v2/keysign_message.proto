@@ -45,7 +45,7 @@ message CosmosTransaction {
 }
 
 message THORChainTransaction {
-  vultisig.keysign.v1.Coin from_coin = 1;
+  vultisig.keysign.v1.Coin coin = 1;
   string to_address = 2;
   string to_amount = 3;
   uint64 account_number = 4;
