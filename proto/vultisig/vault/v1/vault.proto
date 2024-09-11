@@ -25,17 +25,28 @@ message Vault {
   }
   message SignerColor {
     string signer = 1;
-    string color = 2;
+    Color color = 2;
   }
   enum Color {
     COLOR_UNSPECIFIED = 0;
-    COLOR_GREEN = 1;
-    COLOR_BLUE = 2;
-    COLOR_RED = 3;
+    COLOR_GREEN = 1; // assign main device to green all the time
+    COLOR_BLUE = 2; // assign BLUE to vultiserver, those partyid started with "Server-" or "server-"
+    COLOR_RED = 3; // assign it to the pairing devices
     COLOR_YELLOW = 4;
     COLOR_ORANGE = 5;
     COLOR_PURPLE = 6;
     COLOR_BLACK = 7;
-    COLOR_WHITE = 8;
+    COLOR_INDIGO = 8;
+    COLOR_PINK = 9;
+    COLOR_BROWN = 10;
+    COLOR_GRAY = 11;
+    COLOR_CYAN = 12;
+    COLOR_MAGENTA = 13;
+    COLOR_LIME = 14;
+    COLOR_VIOLET = 15;
+    COLOR_GOLD = 16;
+    COLOR_SILVER = 17;
+    COLOR_TEAL = 18;
+    COLOR_NAVY = 19;
   }
 }

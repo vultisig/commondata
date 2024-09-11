@@ -57,14 +57,31 @@ public struct VSVault {
   public enum Color: SwiftProtobuf.Enum {
     public typealias RawValue = Int
     case unspecified // = 0
+
+    /// assign main device to green all the time
     case green // = 1
+
+    /// assign BLUE to vultiserver, those partyid started with "Server-" or "server-"
     case blue // = 2
+
+    /// assign it to the pairing devices
     case red // = 3
     case yellow // = 4
     case orange // = 5
     case purple // = 6
     case black // = 7
-    case white // = 8
+    case indigo // = 8
+    case pink // = 9
+    case brown // = 10
+    case gray // = 11
+    case cyan // = 12
+    case magenta // = 13
+    case lime // = 14
+    case violet // = 15
+    case gold // = 16
+    case silver // = 17
+    case teal // = 18
+    case navy // = 19
     case UNRECOGNIZED(Int)
 
     public init() {
@@ -81,7 +98,18 @@ public struct VSVault {
       case 5: self = .orange
       case 6: self = .purple
       case 7: self = .black
-      case 8: self = .white
+      case 8: self = .indigo
+      case 9: self = .pink
+      case 10: self = .brown
+      case 11: self = .gray
+      case 12: self = .cyan
+      case 13: self = .magenta
+      case 14: self = .lime
+      case 15: self = .violet
+      case 16: self = .gold
+      case 17: self = .silver
+      case 18: self = .teal
+      case 19: self = .navy
       default: self = .UNRECOGNIZED(rawValue)
       }
     }
@@ -96,7 +124,18 @@ public struct VSVault {
       case .orange: return 5
       case .purple: return 6
       case .black: return 7
-      case .white: return 8
+      case .indigo: return 8
+      case .pink: return 9
+      case .brown: return 10
+      case .gray: return 11
+      case .cyan: return 12
+      case .magenta: return 13
+      case .lime: return 14
+      case .violet: return 15
+      case .gold: return 16
+      case .silver: return 17
+      case .teal: return 18
+      case .navy: return 19
       case .UNRECOGNIZED(let i): return i
       }
     }
@@ -124,7 +163,7 @@ public struct VSVault {
 
     public var signer: String = String()
 
-    public var color: String = String()
+    public var color: VSVault.Color = .unspecified
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -149,7 +188,18 @@ extension VSVault.Color: CaseIterable {
     .orange,
     .purple,
     .black,
-    .white,
+    .indigo,
+    .pink,
+    .brown,
+    .gray,
+    .cyan,
+    .magenta,
+    .lime,
+    .violet,
+    .gold,
+    .silver,
+    .teal,
+    .navy,
   ]
 }
 
@@ -266,7 +316,18 @@ extension VSVault.Color: SwiftProtobuf._ProtoNameProviding {
     5: .same(proto: "COLOR_ORANGE"),
     6: .same(proto: "COLOR_PURPLE"),
     7: .same(proto: "COLOR_BLACK"),
-    8: .same(proto: "COLOR_WHITE"),
+    8: .same(proto: "COLOR_INDIGO"),
+    9: .same(proto: "COLOR_PINK"),
+    10: .same(proto: "COLOR_BROWN"),
+    11: .same(proto: "COLOR_GRAY"),
+    12: .same(proto: "COLOR_CYAN"),
+    13: .same(proto: "COLOR_MAGENTA"),
+    14: .same(proto: "COLOR_LIME"),
+    15: .same(proto: "COLOR_VIOLET"),
+    16: .same(proto: "COLOR_GOLD"),
+    17: .same(proto: "COLOR_SILVER"),
+    18: .same(proto: "COLOR_TEAL"),
+    19: .same(proto: "COLOR_NAVY"),
   ]
 }
 
@@ -322,7 +383,7 @@ extension VSVault.SignerColor: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularStringField(value: &self.signer) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.color) }()
+      case 2: try { try decoder.decodeSingularEnumField(value: &self.color) }()
       default: break
       }
     }
@@ -332,8 +393,8 @@ extension VSVault.SignerColor: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     if !self.signer.isEmpty {
       try visitor.visitSingularStringField(value: self.signer, fieldNumber: 1)
     }
-    if !self.color.isEmpty {
-      try visitor.visitSingularStringField(value: self.color, fieldNumber: 2)
+    if self.color != .unspecified {
+      try visitor.visitSingularEnumField(value: self.color, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
