@@ -50,7 +50,58 @@ public struct VSVault {
 
   public var resharePrefix: String = String()
 
+  public var signerColors: [VSVault.SignerColor] = []
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public enum Color: SwiftProtobuf.Enum {
+    public typealias RawValue = Int
+    case unspecified // = 0
+    case green // = 1
+    case blue // = 2
+    case red // = 3
+    case yellow // = 4
+    case orange // = 5
+    case purple // = 6
+    case black // = 7
+    case white // = 8
+    case UNRECOGNIZED(Int)
+
+    public init() {
+      self = .unspecified
+    }
+
+    public init?(rawValue: Int) {
+      switch rawValue {
+      case 0: self = .unspecified
+      case 1: self = .green
+      case 2: self = .blue
+      case 3: self = .red
+      case 4: self = .yellow
+      case 5: self = .orange
+      case 6: self = .purple
+      case 7: self = .black
+      case 8: self = .white
+      default: self = .UNRECOGNIZED(rawValue)
+      }
+    }
+
+    public var rawValue: Int {
+      switch self {
+      case .unspecified: return 0
+      case .green: return 1
+      case .blue: return 2
+      case .red: return 3
+      case .yellow: return 4
+      case .orange: return 5
+      case .purple: return 6
+      case .black: return 7
+      case .white: return 8
+      case .UNRECOGNIZED(let i): return i
+      }
+    }
+
+  }
 
   public struct KeyShare {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -66,14 +117,49 @@ public struct VSVault {
     public init() {}
   }
 
+  public struct SignerColor {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    public var signer: String = String()
+
+    public var color: String = String()
+
+    public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    public init() {}
+  }
+
   public init() {}
 
   fileprivate var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
 }
 
+#if swift(>=4.2)
+
+extension VSVault.Color: CaseIterable {
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  public static let allCases: [VSVault.Color] = [
+    .unspecified,
+    .green,
+    .blue,
+    .red,
+    .yellow,
+    .orange,
+    .purple,
+    .black,
+    .white,
+  ]
+}
+
+#endif  // swift(>=4.2)
+
 #if swift(>=5.5) && canImport(_Concurrency)
 extension VSVault: @unchecked Sendable {}
+extension VSVault.Color: @unchecked Sendable {}
 extension VSVault.KeyShare: @unchecked Sendable {}
+extension VSVault.SignerColor: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -92,6 +178,7 @@ extension VSVault: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
     7: .standard(proto: "key_shares"),
     8: .standard(proto: "local_party_id"),
     9: .standard(proto: "reshare_prefix"),
+    10: .standard(proto: "signer_colors"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -109,6 +196,7 @@ extension VSVault: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
       case 7: try { try decoder.decodeRepeatedMessageField(value: &self.keyShares) }()
       case 8: try { try decoder.decodeSingularStringField(value: &self.localPartyID) }()
       case 9: try { try decoder.decodeSingularStringField(value: &self.resharePrefix) }()
+      case 10: try { try decoder.decodeRepeatedMessageField(value: &self.signerColors) }()
       default: break
       }
     }
@@ -146,6 +234,9 @@ extension VSVault: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
     if !self.resharePrefix.isEmpty {
       try visitor.visitSingularStringField(value: self.resharePrefix, fieldNumber: 9)
     }
+    if !self.signerColors.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.signerColors, fieldNumber: 10)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -159,9 +250,24 @@ extension VSVault: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
     if lhs.keyShares != rhs.keyShares {return false}
     if lhs.localPartyID != rhs.localPartyID {return false}
     if lhs.resharePrefix != rhs.resharePrefix {return false}
+    if lhs.signerColors != rhs.signerColors {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
+}
+
+extension VSVault.Color: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "COLOR_UNSPECIFIED"),
+    1: .same(proto: "COLOR_GREEN"),
+    2: .same(proto: "COLOR_BLUE"),
+    3: .same(proto: "COLOR_RED"),
+    4: .same(proto: "COLOR_YELLOW"),
+    5: .same(proto: "COLOR_ORANGE"),
+    6: .same(proto: "COLOR_PURPLE"),
+    7: .same(proto: "COLOR_BLACK"),
+    8: .same(proto: "COLOR_WHITE"),
+  ]
 }
 
 extension VSVault.KeyShare: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
@@ -197,6 +303,44 @@ extension VSVault.KeyShare: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
   public static func ==(lhs: VSVault.KeyShare, rhs: VSVault.KeyShare) -> Bool {
     if lhs.publicKey != rhs.publicKey {return false}
     if lhs.keyshare != rhs.keyshare {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSVault.SignerColor: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = VSVault.protoMessageName + ".SignerColor"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "signer"),
+    2: .same(proto: "color"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.signer) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.color) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.signer.isEmpty {
+      try visitor.visitSingularStringField(value: self.signer, fieldNumber: 1)
+    }
+    if !self.color.isEmpty {
+      try visitor.visitSingularStringField(value: self.color, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSVault.SignerColor, rhs: VSVault.SignerColor) -> Bool {
+    if lhs.signer != rhs.signer {return false}
+    if lhs.color != rhs.color {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

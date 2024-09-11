@@ -17,9 +17,25 @@ message Vault {
   repeated KeyShare key_shares = 7;
   string local_party_id = 8;
   string reshare_prefix = 9;
+  repeated SignerColor signer_colors = 10;
 
   message KeyShare {
     string public_key = 1;
     string keyshare = 2;
+  }
+  message SignerColor {
+    string signer = 1;
+    string color = 2;
+  }
+  enum Color {
+    COLOR_UNSPECIFIED = 0;
+    COLOR_GREEN = 1;
+    COLOR_BLUE = 2;
+    COLOR_RED = 3;
+    COLOR_YELLOW = 4;
+    COLOR_ORANGE = 5;
+    COLOR_PURPLE = 6;
+    COLOR_BLACK = 7;
+    COLOR_WHITE = 8;
   }
 }
