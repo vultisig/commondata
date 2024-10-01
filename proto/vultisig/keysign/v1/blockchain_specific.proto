@@ -59,12 +59,16 @@ message PolkadotSpecific {
   string genesis_hash = 6;
 }
 
-message CoinKeyValuePair {
-  string key = 1;
-  string value = 2;
+message SuiCoin {
+  string coin_type = 1;
+  string coin_object_id = 2;
+  string version = 3;
+  string digest = 4;
+  string balance = 5;
+  string previous_transaction = 6;
 }
 
 message SuiSpecific {
   string reference_gas_price = 1;
-  repeated CoinKeyValuePair coin_key_value_pairs = 2;
+  repeated SuiCoin coins = 2;
 }
