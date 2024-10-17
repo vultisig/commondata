@@ -72,3 +72,9 @@ message SuiSpecific {
   string reference_gas_price = 1;
   repeated SuiCoin coins = 2;
 }
+
+message TonSpecific {
+  uint64 sequenceNumber = 1;
+  uint64 expireAt = 2;
+  bool bounceable = 3;
+}
