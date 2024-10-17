@@ -734,8 +734,8 @@ extension VSSuiSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
 extension VSTonSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".TonSpecific"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "sequenceNumber"),
-    2: .same(proto: "expireAt"),
+    1: .standard(proto: "sequence_number"),
+    2: .standard(proto: "expire_at"),
     3: .same(proto: "bounceable"),
   ]
 

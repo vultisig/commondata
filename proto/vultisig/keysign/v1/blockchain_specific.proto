@@ -74,7 +74,7 @@ message SuiSpecific {
 }
 
 message TonSpecific {
-  uint64 sequenceNumber = 1;
-  uint64 expireAt = 2;
+  uint64 sequence_number = 1;
+  uint64 expire_at = 2;
   bool bounceable = 3;
 }
