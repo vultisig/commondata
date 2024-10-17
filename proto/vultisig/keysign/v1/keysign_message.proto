@@ -33,6 +33,7 @@ message KeysignPayload {
     SolanaSpecific solana_specific = 9;
     PolkadotSpecific polkadot_specific = 10;
     SuiSpecific suiche_specific = 11;
+    TonSpecific ton_specific = 12;
   }
   repeated UtxoInfo utxo_info = 20;
   optional string memo = 21;
