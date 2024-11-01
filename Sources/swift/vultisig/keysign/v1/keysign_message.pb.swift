@@ -42,6 +42,8 @@ public struct VSKeysignMessage {
 
   public var useVultisigRelay: Bool = false
 
+  public var payloadID: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -326,6 +328,7 @@ extension VSKeysignMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     4: .standard(proto: "encryption_key_hex"),
     5: .standard(proto: "keysign_payload"),
     6: .standard(proto: "use_vultisig_relay"),
+    7: .standard(proto: "payload_id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -339,6 +342,7 @@ extension VSKeysignMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case 4: try { try decoder.decodeSingularStringField(value: &self.encryptionKeyHex) }()
       case 5: try { try decoder.decodeSingularMessageField(value: &self._keysignPayload) }()
       case 6: try { try decoder.decodeSingularBoolField(value: &self.useVultisigRelay) }()
+      case 7: try { try decoder.decodeSingularStringField(value: &self.payloadID) }()
       default: break
       }
     }
@@ -364,6 +368,9 @@ extension VSKeysignMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if self.useVultisigRelay != false {
       try visitor.visitSingularBoolField(value: self.useVultisigRelay, fieldNumber: 6)
     }
+    if !self.payloadID.isEmpty {
+      try visitor.visitSingularStringField(value: self.payloadID, fieldNumber: 7)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -373,6 +380,7 @@ extension VSKeysignMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if lhs.encryptionKeyHex != rhs.encryptionKeyHex {return false}
     if lhs._keysignPayload != rhs._keysignPayload {return false}
     if lhs.useVultisigRelay != rhs.useVultisigRelay {return false}
+    if lhs.payloadID != rhs.payloadID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
