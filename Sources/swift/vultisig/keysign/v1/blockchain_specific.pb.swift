@@ -175,12 +175,22 @@ public struct VSSolanaSpecific {
   /// Clears the value of `toTokenAssociatedAddress`. Subsequent reads from it will return its default value.
   public mutating func clearToTokenAssociatedAddress() {self._toTokenAssociatedAddress = nil}
 
+  public var tokenAccountExists: Bool {
+    get {return _tokenAccountExists ?? false}
+    set {_tokenAccountExists = newValue}
+  }
+  /// Returns true if `tokenAccountExists` has been explicitly set.
+  public var hasTokenAccountExists: Bool {return self._tokenAccountExists != nil}
+  /// Clears the value of `tokenAccountExists`. Subsequent reads from it will return its default value.
+  public mutating func clearTokenAccountExists() {self._tokenAccountExists = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _fromTokenAssociatedAddress: String? = nil
   fileprivate var _toTokenAssociatedAddress: String? = nil
+  fileprivate var _tokenAccountExists: Bool? = nil
 }
 
 public struct VSPolkadotSpecific {
@@ -522,6 +532,7 @@ extension VSSolanaSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     2: .standard(proto: "priority_fee"),
     3: .standard(proto: "from_token_associated_address"),
     4: .standard(proto: "to_token_associated_address"),
+    5: .standard(proto: "token_account_exists"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -534,6 +545,7 @@ extension VSSolanaSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case 2: try { try decoder.decodeSingularStringField(value: &self.priorityFee) }()
       case 3: try { try decoder.decodeSingularStringField(value: &self._fromTokenAssociatedAddress) }()
       case 4: try { try decoder.decodeSingularStringField(value: &self._toTokenAssociatedAddress) }()
+      case 5: try { try decoder.decodeSingularBoolField(value: &self._tokenAccountExists) }()
       default: break
       }
     }
@@ -556,6 +568,9 @@ extension VSSolanaSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     try { if let v = self._toTokenAssociatedAddress {
       try visitor.visitSingularStringField(value: v, fieldNumber: 4)
     } }()
+    try { if let v = self._tokenAccountExists {
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 5)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -564,6 +579,7 @@ extension VSSolanaSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if lhs.priorityFee != rhs.priorityFee {return false}
     if lhs._fromTokenAssociatedAddress != rhs._fromTokenAssociatedAddress {return false}
     if lhs._toTokenAssociatedAddress != rhs._toTokenAssociatedAddress {return false}
+    if lhs._tokenAccountExists != rhs._tokenAccountExists {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
