@@ -37,6 +37,12 @@ public struct VSKeygenMessage {
 
   public var vaultName: String = String()
 
+  /// Default to GG20
+  public var libType: VSLibType = .gg20
+
+  /// setup message is only needed for DKLS
+  public var setupMessage: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -59,6 +65,8 @@ extension VSKeygenMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
     4: .standard(proto: "encryption_key_hex"),
     5: .standard(proto: "use_vultisig_relay"),
     6: .standard(proto: "vault_name"),
+    7: .standard(proto: "lib_type"),
+    8: .standard(proto: "setup_message"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -73,6 +81,8 @@ extension VSKeygenMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
       case 4: try { try decoder.decodeSingularStringField(value: &self.encryptionKeyHex) }()
       case 5: try { try decoder.decodeSingularBoolField(value: &self.useVultisigRelay) }()
       case 6: try { try decoder.decodeSingularStringField(value: &self.vaultName) }()
+      case 7: try { try decoder.decodeSingularEnumField(value: &self.libType) }()
+      case 8: try { try decoder.decodeSingularStringField(value: &self.setupMessage) }()
       default: break
       }
     }
@@ -97,6 +107,12 @@ extension VSKeygenMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
     if !self.vaultName.isEmpty {
       try visitor.visitSingularStringField(value: self.vaultName, fieldNumber: 6)
     }
+    if self.libType != .gg20 {
+      try visitor.visitSingularEnumField(value: self.libType, fieldNumber: 7)
+    }
+    if !self.setupMessage.isEmpty {
+      try visitor.visitSingularStringField(value: self.setupMessage, fieldNumber: 8)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -107,6 +123,8 @@ extension VSKeygenMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
     if lhs.encryptionKeyHex != rhs.encryptionKeyHex {return false}
     if lhs.useVultisigRelay != rhs.useVultisigRelay {return false}
     if lhs.vaultName != rhs.vaultName {return false}
+    if lhs.libType != rhs.libType {return false}
+    if lhs.setupMessage != rhs.setupMessage {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

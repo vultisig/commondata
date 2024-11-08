@@ -2,6 +2,7 @@ syntax = "proto3";
 package vultisig.vault.v1;
 
 import "google/protobuf/timestamp.proto";
+import "vultisig/keygen/v1/lib_type_message.proto";
 
 option go_package = "vultisig/vault/v1";
 option java_package = "vultisig.vault.v1";
@@ -22,4 +23,5 @@ message Vault {
     string public_key = 1;
     string keyshare = 2;
   }
+  vultisig.keygen.v1.LibType lib_type = 10;
 }
