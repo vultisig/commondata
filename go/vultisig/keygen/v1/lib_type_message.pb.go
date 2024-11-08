@@ -20,6 +20,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// buf:lint:ignore ENUM_ZERO_VALUE_SUFFIX
 type LibType int32
 
 const (

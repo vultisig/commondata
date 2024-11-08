@@ -20,6 +20,7 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
+/// buf:lint:ignore ENUM_ZERO_VALUE_SUFFIX
 public enum VSLibType: SwiftProtobuf.Enum {
   public typealias RawValue = Int
 
