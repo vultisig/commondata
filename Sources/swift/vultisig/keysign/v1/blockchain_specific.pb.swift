@@ -143,6 +143,31 @@ public struct VSCosmosSpecific {
 
   public var transactionType: VSTransactionType = .unspecified
 
+  public var ibcDenomTraces: VSCosmosIbcDenomTrace {
+    get {return _ibcDenomTraces ?? VSCosmosIbcDenomTrace()}
+    set {_ibcDenomTraces = newValue}
+  }
+  /// Returns true if `ibcDenomTraces` has been explicitly set.
+  public var hasIbcDenomTraces: Bool {return self._ibcDenomTraces != nil}
+  /// Clears the value of `ibcDenomTraces`. Subsequent reads from it will return its default value.
+  public mutating func clearIbcDenomTraces() {self._ibcDenomTraces = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _ibcDenomTraces: VSCosmosIbcDenomTrace? = nil
+}
+
+public struct VSCosmosIbcDenomTrace {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var path: String = String()
+
+  public var baseDenom: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -264,6 +289,7 @@ extension VSEthereumSpecific: @unchecked Sendable {}
 extension VSTHORChainSpecific: @unchecked Sendable {}
 extension VSMAYAChainSpecific: @unchecked Sendable {}
 extension VSCosmosSpecific: @unchecked Sendable {}
+extension VSCosmosIbcDenomTrace: @unchecked Sendable {}
 extension VSSolanaSpecific: @unchecked Sendable {}
 extension VSPolkadotSpecific: @unchecked Sendable {}
 extension VSSuiCoin: @unchecked Sendable {}
@@ -472,6 +498,7 @@ extension VSCosmosSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     2: .same(proto: "sequence"),
     3: .same(proto: "gas"),
     4: .standard(proto: "transaction_type"),
+    5: .standard(proto: "ibc_denom_traces"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -484,12 +511,17 @@ extension VSCosmosSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case 2: try { try decoder.decodeSingularUInt64Field(value: &self.sequence) }()
       case 3: try { try decoder.decodeSingularUInt64Field(value: &self.gas) }()
       case 4: try { try decoder.decodeSingularEnumField(value: &self.transactionType) }()
+      case 5: try { try decoder.decodeSingularMessageField(value: &self._ibcDenomTraces) }()
       default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
     if self.accountNumber != 0 {
       try visitor.visitSingularUInt64Field(value: self.accountNumber, fieldNumber: 1)
     }
@@ -502,6 +534,9 @@ extension VSCosmosSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if self.transactionType != .unspecified {
       try visitor.visitSingularEnumField(value: self.transactionType, fieldNumber: 4)
     }
+    try { if let v = self._ibcDenomTraces {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -510,6 +545,45 @@ extension VSCosmosSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if lhs.sequence != rhs.sequence {return false}
     if lhs.gas != rhs.gas {return false}
     if lhs.transactionType != rhs.transactionType {return false}
+    if lhs._ibcDenomTraces != rhs._ibcDenomTraces {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSCosmosIbcDenomTrace: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".CosmosIbcDenomTrace"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "path"),
+    2: .standard(proto: "base_denom"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.path) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.baseDenom) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.path.isEmpty {
+      try visitor.visitSingularStringField(value: self.path, fieldNumber: 1)
+    }
+    if !self.baseDenom.isEmpty {
+      try visitor.visitSingularStringField(value: self.baseDenom, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSCosmosIbcDenomTrace, rhs: VSCosmosIbcDenomTrace) -> Bool {
+    if lhs.path != rhs.path {return false}
+    if lhs.baseDenom != rhs.baseDenom {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
