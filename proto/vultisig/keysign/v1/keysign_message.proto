@@ -47,4 +47,5 @@ message KeysignPayload {
   optional Erc20ApprovePayload erc20_approve_payload = 30;
   string vault_public_key_ecdsa = 31;
   string vault_local_party_id = 32;
+  optional MessageToSignPayload message_to_sign_payload = 33;
 }

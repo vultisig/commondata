@@ -1,0 +1,11 @@
+syntax = "proto3";
+package vultisig.keysign.v1;
+
+option go_package = "vultisig/keysign/v1";
+option java_package = "vultisig.keysign.v1";
+option swift_prefix = "VS";
+
+message MessageToSignPayload {
+  string method = 1;
+  string message = 2;
+}
