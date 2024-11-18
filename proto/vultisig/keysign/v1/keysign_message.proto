@@ -7,7 +7,7 @@ import "vultisig/keysign/v1/coin.proto";
 import "vultisig/keysign/v1/erc20_approve_payload.proto";
 import "vultisig/keysign/v1/thorchain_swap_payload.proto";
 import "vultisig/keysign/v1/utxo_info.proto";
-import "vultisig/keysign/v1/message_to_sign_payload.proto";
+import "vultisig/keysign/v1/custom_message_payload.proto";
 
 option go_package = "vultisig/keysign/v1";
 option java_package = "vultisig.keysign.v1";
@@ -17,9 +17,10 @@ message KeysignMessage {
   string session_id = 1;
   string service_name = 2;
   string encryption_key_hex = 4;
-  KeysignPayload keysign_payload = 5;
+  optional KeysignPayload keysign_payload = 5;
   bool use_vultisig_relay = 6;
   string payload_id = 7;
+  optional CustomMessagePayload custom_message_payload = 8;
 }
 
 message KeysignPayload {
@@ -48,5 +49,4 @@ message KeysignPayload {
   optional Erc20ApprovePayload erc20_approve_payload = 30;
   string vault_public_key_ecdsa = 31;
   string vault_local_party_id = 32;
-  optional MessageToSignPayload message_to_sign_payload = 33;
 }
