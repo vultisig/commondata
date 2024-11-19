@@ -168,6 +168,8 @@ public struct VSCosmosIbcDenomTrace {
 
   public var baseDenom: String = String()
 
+  public var latestBlock: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -556,6 +558,7 @@ extension VSCosmosIbcDenomTrace: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "path"),
     2: .standard(proto: "base_denom"),
+    3: .standard(proto: "latest_block"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -566,6 +569,7 @@ extension VSCosmosIbcDenomTrace: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularStringField(value: &self.path) }()
       case 2: try { try decoder.decodeSingularStringField(value: &self.baseDenom) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.latestBlock) }()
       default: break
       }
     }
@@ -578,12 +582,16 @@ extension VSCosmosIbcDenomTrace: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     if !self.baseDenom.isEmpty {
       try visitor.visitSingularStringField(value: self.baseDenom, fieldNumber: 2)
     }
+    if !self.latestBlock.isEmpty {
+      try visitor.visitSingularStringField(value: self.latestBlock, fieldNumber: 3)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: VSCosmosIbcDenomTrace, rhs: VSCosmosIbcDenomTrace) -> Bool {
     if lhs.path != rhs.path {return false}
     if lhs.baseDenom != rhs.baseDenom {return false}
+    if lhs.latestBlock != rhs.latestBlock {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
