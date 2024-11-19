@@ -41,6 +41,7 @@ message CosmosSpecific {
 message CosmosIbcDenomTrace {
   string path = 1;
   string base_denom = 2;
+  string latest_block = 3;
 }
 
 enum TransactionType {
