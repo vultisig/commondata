@@ -17,7 +17,7 @@ message KeysignMessage {
   string session_id = 1;
   string service_name = 2;
   string encryption_key_hex = 4;
-  optional KeysignPayload keysign_payload = 5;
+  KeysignPayload keysign_payload = 5;
   bool use_vultisig_relay = 6;
   string payload_id = 7;
   optional CustomMessagePayload custom_message_payload = 8;
