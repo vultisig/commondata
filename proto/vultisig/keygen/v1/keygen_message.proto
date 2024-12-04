@@ -15,5 +15,4 @@ message KeygenMessage {
   bool use_vultisig_relay = 5;
   string vault_name = 6;
   LibType lib_type = 7; // Default to GG20
-  string setup_message = 8; // setup message is only needed for DKLS
 }
