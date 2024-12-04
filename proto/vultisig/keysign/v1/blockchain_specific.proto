@@ -35,6 +35,13 @@ message CosmosSpecific {
   uint64 sequence = 2;
   uint64 gas = 3;
   TransactionType transaction_type = 4;
+  optional CosmosIbcDenomTrace ibc_denom_traces = 5;
+}
+
+message CosmosIbcDenomTrace {
+  string path = 1;
+  string base_denom = 2;
+  string latest_block = 3;
 }
 
 enum TransactionType {
