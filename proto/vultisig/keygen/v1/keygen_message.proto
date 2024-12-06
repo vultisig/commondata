@@ -1,6 +1,8 @@
 syntax = "proto3";
 package vultisig.keygen.v1;
 
+import "vultisig/keygen/v1/lib_type_message.proto";
+
 option go_package = "vultisig/keygen/v1";
 option java_package = "vultisig.keygen.v1";
 option swift_prefix = "VS";
@@ -12,4 +14,5 @@ message KeygenMessage {
   string encryption_key_hex = 4;
   bool use_vultisig_relay = 5;
   string vault_name = 6;
+  LibType lib_type = 7; // Default to GG20
 }

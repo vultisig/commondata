@@ -1,6 +1,8 @@
 syntax = "proto3";
 package vultisig.keygen.v1;
 
+import "vultisig/keygen/v1/lib_type_message.proto";
+
 option go_package = "vultisig/keygen/v1";
 option java_package = "vultisig.keygen.v1";
 option swift_prefix = "VS";
@@ -15,4 +17,5 @@ message ReshareMessage {
   bool use_vultisig_relay = 7;
   string old_reshare_prefix = 8;
   string vault_name = 9;
+  LibType lib_type = 20; // Default to GG20
 }

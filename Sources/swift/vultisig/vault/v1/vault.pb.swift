@@ -50,6 +50,8 @@ public struct VSVault {
 
   public var resharePrefix: String = String()
 
+  public var libType: VSLibType = .gg20
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public struct KeyShare {
@@ -92,6 +94,7 @@ extension VSVault: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
     7: .standard(proto: "key_shares"),
     8: .standard(proto: "local_party_id"),
     9: .standard(proto: "reshare_prefix"),
+    10: .standard(proto: "lib_type"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -109,6 +112,7 @@ extension VSVault: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
       case 7: try { try decoder.decodeRepeatedMessageField(value: &self.keyShares) }()
       case 8: try { try decoder.decodeSingularStringField(value: &self.localPartyID) }()
       case 9: try { try decoder.decodeSingularStringField(value: &self.resharePrefix) }()
+      case 10: try { try decoder.decodeSingularEnumField(value: &self.libType) }()
       default: break
       }
     }
@@ -146,6 +150,9 @@ extension VSVault: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
     if !self.resharePrefix.isEmpty {
       try visitor.visitSingularStringField(value: self.resharePrefix, fieldNumber: 9)
     }
+    if self.libType != .gg20 {
+      try visitor.visitSingularEnumField(value: self.libType, fieldNumber: 10)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -159,6 +166,7 @@ extension VSVault: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
     if lhs.keyShares != rhs.keyShares {return false}
     if lhs.localPartyID != rhs.localPartyID {return false}
     if lhs.resharePrefix != rhs.resharePrefix {return false}
+    if lhs.libType != rhs.libType {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
