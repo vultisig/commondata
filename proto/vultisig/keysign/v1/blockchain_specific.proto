@@ -85,3 +85,8 @@ message TonSpecific {
   uint64 expire_at = 2;
   bool bounceable = 3;
 }
+
+message RippleSpecific {
+  uint64 sequence = 1;
+  uint64 gas = 2;
+}

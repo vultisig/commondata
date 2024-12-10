@@ -152,6 +152,14 @@ public struct VSKeysignPayload {
     set {_uniqueStorage()._blockchainSpecific = .tonSpecific(newValue)}
   }
 
+  public var rippleSpecific: VSRippleSpecific {
+    get {
+      if case .rippleSpecific(let v)? = _storage._blockchainSpecific {return v}
+      return VSRippleSpecific()
+    }
+    set {_uniqueStorage()._blockchainSpecific = .rippleSpecific(newValue)}
+  }
+
   public var utxoInfo: [VSUtxoInfo] {
     get {return _storage._utxoInfo}
     set {_uniqueStorage()._utxoInfo = newValue}
@@ -226,6 +234,7 @@ public struct VSKeysignPayload {
     case polkadotSpecific(VSPolkadotSpecific)
     case suicheSpecific(VSSuiSpecific)
     case tonSpecific(VSTonSpecific)
+    case rippleSpecific(VSRippleSpecific)
 
   #if !swift(>=4.1)
     public static func ==(lhs: VSKeysignPayload.OneOf_BlockchainSpecific, rhs: VSKeysignPayload.OneOf_BlockchainSpecific) -> Bool {
@@ -267,6 +276,10 @@ public struct VSKeysignPayload {
       }()
       case (.tonSpecific, .tonSpecific): return {
         guard case .tonSpecific(let l) = lhs, case .tonSpecific(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.rippleSpecific, .rippleSpecific): return {
+        guard case .rippleSpecific(let l) = lhs, case .rippleSpecific(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
       default: return false
@@ -401,6 +414,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     10: .standard(proto: "polkadot_specific"),
     11: .standard(proto: "suiche_specific"),
     12: .standard(proto: "ton_specific"),
+    13: .standard(proto: "ripple_specific"),
     20: .standard(proto: "utxo_info"),
     21: .same(proto: "memo"),
     22: .standard(proto: "thorchain_swap_payload"),
@@ -584,6 +598,19 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
             _storage._blockchainSpecific = .tonSpecific(v)
           }
         }()
+        case 13: try {
+          var v: VSRippleSpecific?
+          var hadOneofValue = false
+          if let current = _storage._blockchainSpecific {
+            hadOneofValue = true
+            if case .rippleSpecific(let m) = current {v = m}
+          }
+          try decoder.decodeSingularMessageField(value: &v)
+          if let v = v {
+            if hadOneofValue {try decoder.handleConflictingOneOf()}
+            _storage._blockchainSpecific = .rippleSpecific(v)
+          }
+        }()
         case 20: try { try decoder.decodeRepeatedMessageField(value: &_storage._utxoInfo) }()
         case 21: try { try decoder.decodeSingularStringField(value: &_storage._memo) }()
         case 22: try {
@@ -685,6 +712,10 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case .tonSpecific?: try {
         guard case .tonSpecific(let v)? = _storage._blockchainSpecific else { preconditionFailure() }
         try visitor.visitSingularMessageField(value: v, fieldNumber: 12)
+      }()
+      case .rippleSpecific?: try {
+        guard case .rippleSpecific(let v)? = _storage._blockchainSpecific else { preconditionFailure() }
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 13)
       }()
       case nil: break
       }
