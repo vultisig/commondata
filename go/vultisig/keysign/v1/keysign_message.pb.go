@@ -126,6 +126,7 @@ type KeysignPayload struct {
 	//	*KeysignPayload_PolkadotSpecific
 	//	*KeysignPayload_SuicheSpecific
 	//	*KeysignPayload_TonSpecific
+	//	*KeysignPayload_RippleSpecific
 	BlockchainSpecific isKeysignPayload_BlockchainSpecific `protobuf_oneof:"blockchain_specific"`
 	UtxoInfo           []*UtxoInfo                         `protobuf:"bytes,20,rep,name=utxo_info,json=utxoInfo,proto3" json:"utxo_info,omitempty"`
 	Memo               *string                             `protobuf:"bytes,21,opt,name=memo,proto3,oneof" json:"memo,omitempty"`
@@ -263,6 +264,13 @@ func (x *KeysignPayload) GetTonSpecific() *TonSpecific {
 	return nil
 }
 
+func (x *KeysignPayload) GetRippleSpecific() *RippleSpecific {
+	if x, ok := x.GetBlockchainSpecific().(*KeysignPayload_RippleSpecific); ok {
+		return x.RippleSpecific
+	}
+	return nil
+}
+
 func (x *KeysignPayload) GetUtxoInfo() []*UtxoInfo {
 	if x != nil {
 		return x.UtxoInfo
@@ -366,6 +374,10 @@ type KeysignPayload_TonSpecific struct {
 	TonSpecific *TonSpecific `protobuf:"bytes,12,opt,name=ton_specific,json=tonSpecific,proto3,oneof"`
 }
 
+type KeysignPayload_RippleSpecific struct {
+	RippleSpecific *RippleSpecific `protobuf:"bytes,13,opt,name=ripple_specific,json=rippleSpecific,proto3,oneof"`
+}
+
 func (*KeysignPayload_UtxoSpecific) isKeysignPayload_BlockchainSpecific() {}
 
 func (*KeysignPayload_EthereumSpecific) isKeysignPayload_BlockchainSpecific() {}
@@ -383,6 +395,8 @@ func (*KeysignPayload_PolkadotSpecific) isKeysignPayload_BlockchainSpecific() {}
 func (*KeysignPayload_SuicheSpecific) isKeysignPayload_BlockchainSpecific() {}
 
 func (*KeysignPayload_TonSpecific) isKeysignPayload_BlockchainSpecific() {}
+
+func (*KeysignPayload_RippleSpecific) isKeysignPayload_BlockchainSpecific() {}
 
 type isKeysignPayload_SwapPayload interface {
 	isKeysignPayload_SwapPayload()
@@ -447,7 +461,7 @@ var file_vultisig_keysign_v1_keysign_message_proto_rawDesc = []byte{
 	0x28, 0x08, 0x52, 0x10, 0x75, 0x73, 0x65, 0x56, 0x75, 0x6c, 0x74, 0x69, 0x73, 0x69, 0x67, 0x52,
 	0x65, 0x6c, 0x61, 0x79, 0x12, 0x1d, 0x0a, 0x0a, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x5f,
 	0x69, 0x64, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61,
-	0x64, 0x49, 0x64, 0x22, 0xd8, 0x0b, 0x0a, 0x0e, 0x4b, 0x65, 0x79, 0x73, 0x69, 0x67, 0x6e, 0x50,
+	0x64, 0x49, 0x64, 0x22, 0xa8, 0x0c, 0x0a, 0x0e, 0x4b, 0x65, 0x79, 0x73, 0x69, 0x67, 0x6e, 0x50,
 	0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x12, 0x2d, 0x0a, 0x04, 0x63, 0x6f, 0x69, 0x6e, 0x18, 0x01,
 	0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x76, 0x75, 0x6c, 0x74, 0x69, 0x73, 0x69, 0x67, 0x2e,
 	0x6b, 0x65, 0x79, 0x73, 0x69, 0x67, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x52,
@@ -500,6 +514,11 @@ var file_vultisig_keysign_v1_keysign_message_proto_rawDesc = []byte{
 	0x28, 0x0b, 0x32, 0x20, 0x2e, 0x76, 0x75, 0x6c, 0x74, 0x69, 0x73, 0x69, 0x67, 0x2e, 0x6b, 0x65,
 	0x79, 0x73, 0x69, 0x67, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x54, 0x6f, 0x6e, 0x53, 0x70, 0x65, 0x63,
 	0x69, 0x66, 0x69, 0x63, 0x48, 0x00, 0x52, 0x0b, 0x74, 0x6f, 0x6e, 0x53, 0x70, 0x65, 0x63, 0x69,
+	0x66, 0x69, 0x63, 0x12, 0x4e, 0x0a, 0x0f, 0x72, 0x69, 0x70, 0x70, 0x6c, 0x65, 0x5f, 0x73, 0x70,
+	0x65, 0x63, 0x69, 0x66, 0x69, 0x63, 0x18, 0x0d, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x76,
+	0x75, 0x6c, 0x74, 0x69, 0x73, 0x69, 0x67, 0x2e, 0x6b, 0x65, 0x79, 0x73, 0x69, 0x67, 0x6e, 0x2e,
+	0x76, 0x31, 0x2e, 0x52, 0x69, 0x70, 0x70, 0x6c, 0x65, 0x53, 0x70, 0x65, 0x63, 0x69, 0x66, 0x69,
+	0x63, 0x48, 0x00, 0x52, 0x0e, 0x72, 0x69, 0x70, 0x70, 0x6c, 0x65, 0x53, 0x70, 0x65, 0x63, 0x69,
 	0x66, 0x69, 0x63, 0x12, 0x3a, 0x0a, 0x09, 0x75, 0x74, 0x78, 0x6f, 0x5f, 0x69, 0x6e, 0x66, 0x6f,
 	0x18, 0x14, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x76, 0x75, 0x6c, 0x74, 0x69, 0x73, 0x69,
 	0x67, 0x2e, 0x6b, 0x65, 0x79, 0x73, 0x69, 0x67, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x74, 0x78,
@@ -573,10 +592,11 @@ var file_vultisig_keysign_v1_keysign_message_proto_goTypes = []any{
 	(*PolkadotSpecific)(nil),     // 9: vultisig.keysign.v1.PolkadotSpecific
 	(*SuiSpecific)(nil),          // 10: vultisig.keysign.v1.SuiSpecific
 	(*TonSpecific)(nil),          // 11: vultisig.keysign.v1.TonSpecific
-	(*UtxoInfo)(nil),             // 12: vultisig.keysign.v1.UtxoInfo
-	(*THORChainSwapPayload)(nil), // 13: vultisig.keysign.v1.THORChainSwapPayload
-	(*OneInchSwapPayload)(nil),   // 14: vultisig.keysign.v1.OneInchSwapPayload
-	(*Erc20ApprovePayload)(nil),  // 15: vultisig.keysign.v1.Erc20ApprovePayload
+	(*RippleSpecific)(nil),       // 12: vultisig.keysign.v1.RippleSpecific
+	(*UtxoInfo)(nil),             // 13: vultisig.keysign.v1.UtxoInfo
+	(*THORChainSwapPayload)(nil), // 14: vultisig.keysign.v1.THORChainSwapPayload
+	(*OneInchSwapPayload)(nil),   // 15: vultisig.keysign.v1.OneInchSwapPayload
+	(*Erc20ApprovePayload)(nil),  // 16: vultisig.keysign.v1.Erc20ApprovePayload
 }
 var file_vultisig_keysign_v1_keysign_message_proto_depIdxs = []int32{
 	1,  // 0: vultisig.keysign.v1.KeysignMessage.keysign_payload:type_name -> vultisig.keysign.v1.KeysignPayload
@@ -590,16 +610,17 @@ var file_vultisig_keysign_v1_keysign_message_proto_depIdxs = []int32{
 	9,  // 8: vultisig.keysign.v1.KeysignPayload.polkadot_specific:type_name -> vultisig.keysign.v1.PolkadotSpecific
 	10, // 9: vultisig.keysign.v1.KeysignPayload.suiche_specific:type_name -> vultisig.keysign.v1.SuiSpecific
 	11, // 10: vultisig.keysign.v1.KeysignPayload.ton_specific:type_name -> vultisig.keysign.v1.TonSpecific
-	12, // 11: vultisig.keysign.v1.KeysignPayload.utxo_info:type_name -> vultisig.keysign.v1.UtxoInfo
-	13, // 12: vultisig.keysign.v1.KeysignPayload.thorchain_swap_payload:type_name -> vultisig.keysign.v1.THORChainSwapPayload
-	13, // 13: vultisig.keysign.v1.KeysignPayload.mayachain_swap_payload:type_name -> vultisig.keysign.v1.THORChainSwapPayload
-	14, // 14: vultisig.keysign.v1.KeysignPayload.oneinch_swap_payload:type_name -> vultisig.keysign.v1.OneInchSwapPayload
-	15, // 15: vultisig.keysign.v1.KeysignPayload.erc20_approve_payload:type_name -> vultisig.keysign.v1.Erc20ApprovePayload
-	16, // [16:16] is the sub-list for method output_type
-	16, // [16:16] is the sub-list for method input_type
-	16, // [16:16] is the sub-list for extension type_name
-	16, // [16:16] is the sub-list for extension extendee
-	0,  // [0:16] is the sub-list for field type_name
+	12, // 11: vultisig.keysign.v1.KeysignPayload.ripple_specific:type_name -> vultisig.keysign.v1.RippleSpecific
+	13, // 12: vultisig.keysign.v1.KeysignPayload.utxo_info:type_name -> vultisig.keysign.v1.UtxoInfo
+	14, // 13: vultisig.keysign.v1.KeysignPayload.thorchain_swap_payload:type_name -> vultisig.keysign.v1.THORChainSwapPayload
+	14, // 14: vultisig.keysign.v1.KeysignPayload.mayachain_swap_payload:type_name -> vultisig.keysign.v1.THORChainSwapPayload
+	15, // 15: vultisig.keysign.v1.KeysignPayload.oneinch_swap_payload:type_name -> vultisig.keysign.v1.OneInchSwapPayload
+	16, // 16: vultisig.keysign.v1.KeysignPayload.erc20_approve_payload:type_name -> vultisig.keysign.v1.Erc20ApprovePayload
+	17, // [17:17] is the sub-list for method output_type
+	17, // [17:17] is the sub-list for method input_type
+	17, // [17:17] is the sub-list for extension type_name
+	17, // [17:17] is the sub-list for extension extendee
+	0,  // [0:17] is the sub-list for field type_name
 }
 
 func init() { file_vultisig_keysign_v1_keysign_message_proto_init() }
@@ -649,6 +670,7 @@ func file_vultisig_keysign_v1_keysign_message_proto_init() {
 		(*KeysignPayload_PolkadotSpecific)(nil),
 		(*KeysignPayload_SuicheSpecific)(nil),
 		(*KeysignPayload_TonSpecific)(nil),
+		(*KeysignPayload_RippleSpecific)(nil),
 		(*KeysignPayload_ThorchainSwapPayload)(nil),
 		(*KeysignPayload_MayachainSwapPayload)(nil),
 		(*KeysignPayload_OneinchSwapPayload)(nil),
