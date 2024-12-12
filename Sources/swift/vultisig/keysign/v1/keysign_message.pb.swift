@@ -44,11 +44,21 @@ public struct VSKeysignMessage {
 
   public var payloadID: String = String()
 
+  public var customMessagePayload: VSCustomMessagePayload {
+    get {return _customMessagePayload ?? VSCustomMessagePayload()}
+    set {_customMessagePayload = newValue}
+  }
+  /// Returns true if `customMessagePayload` has been explicitly set.
+  public var hasCustomMessagePayload: Bool {return self._customMessagePayload != nil}
+  /// Clears the value of `customMessagePayload`. Subsequent reads from it will return its default value.
+  public mutating func clearCustomMessagePayload() {self._customMessagePayload = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _keysignPayload: VSKeysignPayload? = nil
+  fileprivate var _customMessagePayload: VSCustomMessagePayload? = nil
 }
 
 public struct VSKeysignPayload {
@@ -342,6 +352,7 @@ extension VSKeysignMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     5: .standard(proto: "keysign_payload"),
     6: .standard(proto: "use_vultisig_relay"),
     7: .standard(proto: "payload_id"),
+    8: .standard(proto: "custom_message_payload"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -356,6 +367,7 @@ extension VSKeysignMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case 5: try { try decoder.decodeSingularMessageField(value: &self._keysignPayload) }()
       case 6: try { try decoder.decodeSingularBoolField(value: &self.useVultisigRelay) }()
       case 7: try { try decoder.decodeSingularStringField(value: &self.payloadID) }()
+      case 8: try { try decoder.decodeSingularMessageField(value: &self._customMessagePayload) }()
       default: break
       }
     }
@@ -384,6 +396,9 @@ extension VSKeysignMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if !self.payloadID.isEmpty {
       try visitor.visitSingularStringField(value: self.payloadID, fieldNumber: 7)
     }
+    try { if let v = self._customMessagePayload {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -394,6 +409,7 @@ extension VSKeysignMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if lhs._keysignPayload != rhs._keysignPayload {return false}
     if lhs.useVultisigRelay != rhs.useVultisigRelay {return false}
     if lhs.payloadID != rhs.payloadID {return false}
+    if lhs._customMessagePayload != rhs._customMessagePayload {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
