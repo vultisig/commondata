@@ -14,6 +14,7 @@ message OneInchTransaction {
   string value = 4;
   string gas_price = 5;
   int64 gas = 6;
+  string swap_fee = 7;
 }
 message OneInchQuote {
   string dst_amount = 1;
