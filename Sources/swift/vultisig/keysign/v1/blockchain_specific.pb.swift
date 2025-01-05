@@ -298,6 +298,32 @@ public struct VSRippleSpecific {
   public init() {}
 }
 
+public struct VSTronSpecific {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var timestamp: UInt64 = 0
+
+  public var expiration: UInt64 = 0
+
+  public var blockHeaderTimestamp: UInt64 = 0
+
+  public var blockHeaderNumber: UInt64 = 0
+
+  public var blockHeaderVersion: UInt64 = 0
+
+  public var blockHeaderTxTrieRoot: String = String()
+
+  public var blockHeaderParentHash: String = String()
+
+  public var blockHeaderWitnessAddress: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 #if swift(>=5.5) && canImport(_Concurrency)
 extension VSTransactionType: @unchecked Sendable {}
 extension VSUTXOSpecific: @unchecked Sendable {}
@@ -312,6 +338,7 @@ extension VSSuiCoin: @unchecked Sendable {}
 extension VSSuiSpecific: @unchecked Sendable {}
 extension VSTonSpecific: @unchecked Sendable {}
 extension VSRippleSpecific: @unchecked Sendable {}
+extension VSTronSpecific: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -905,6 +932,80 @@ extension VSRippleSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
   public static func ==(lhs: VSRippleSpecific, rhs: VSRippleSpecific) -> Bool {
     if lhs.sequence != rhs.sequence {return false}
     if lhs.gas != rhs.gas {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSTronSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".TronSpecific"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "timestamp"),
+    2: .same(proto: "expiration"),
+    3: .standard(proto: "block_header_timestamp"),
+    4: .standard(proto: "block_header_number"),
+    5: .standard(proto: "block_header_version"),
+    6: .standard(proto: "block_header_tx_trie_root"),
+    7: .standard(proto: "block_header_parent_hash"),
+    8: .standard(proto: "block_header_witness_address"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularUInt64Field(value: &self.timestamp) }()
+      case 2: try { try decoder.decodeSingularUInt64Field(value: &self.expiration) }()
+      case 3: try { try decoder.decodeSingularUInt64Field(value: &self.blockHeaderTimestamp) }()
+      case 4: try { try decoder.decodeSingularUInt64Field(value: &self.blockHeaderNumber) }()
+      case 5: try { try decoder.decodeSingularUInt64Field(value: &self.blockHeaderVersion) }()
+      case 6: try { try decoder.decodeSingularStringField(value: &self.blockHeaderTxTrieRoot) }()
+      case 7: try { try decoder.decodeSingularStringField(value: &self.blockHeaderParentHash) }()
+      case 8: try { try decoder.decodeSingularStringField(value: &self.blockHeaderWitnessAddress) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.timestamp != 0 {
+      try visitor.visitSingularUInt64Field(value: self.timestamp, fieldNumber: 1)
+    }
+    if self.expiration != 0 {
+      try visitor.visitSingularUInt64Field(value: self.expiration, fieldNumber: 2)
+    }
+    if self.blockHeaderTimestamp != 0 {
+      try visitor.visitSingularUInt64Field(value: self.blockHeaderTimestamp, fieldNumber: 3)
+    }
+    if self.blockHeaderNumber != 0 {
+      try visitor.visitSingularUInt64Field(value: self.blockHeaderNumber, fieldNumber: 4)
+    }
+    if self.blockHeaderVersion != 0 {
+      try visitor.visitSingularUInt64Field(value: self.blockHeaderVersion, fieldNumber: 5)
+    }
+    if !self.blockHeaderTxTrieRoot.isEmpty {
+      try visitor.visitSingularStringField(value: self.blockHeaderTxTrieRoot, fieldNumber: 6)
+    }
+    if !self.blockHeaderParentHash.isEmpty {
+      try visitor.visitSingularStringField(value: self.blockHeaderParentHash, fieldNumber: 7)
+    }
+    if !self.blockHeaderWitnessAddress.isEmpty {
+      try visitor.visitSingularStringField(value: self.blockHeaderWitnessAddress, fieldNumber: 8)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSTronSpecific, rhs: VSTronSpecific) -> Bool {
+    if lhs.timestamp != rhs.timestamp {return false}
+    if lhs.expiration != rhs.expiration {return false}
+    if lhs.blockHeaderTimestamp != rhs.blockHeaderTimestamp {return false}
+    if lhs.blockHeaderNumber != rhs.blockHeaderNumber {return false}
+    if lhs.blockHeaderVersion != rhs.blockHeaderVersion {return false}
+    if lhs.blockHeaderTxTrieRoot != rhs.blockHeaderTxTrieRoot {return false}
+    if lhs.blockHeaderParentHash != rhs.blockHeaderParentHash {return false}
+    if lhs.blockHeaderWitnessAddress != rhs.blockHeaderWitnessAddress {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
