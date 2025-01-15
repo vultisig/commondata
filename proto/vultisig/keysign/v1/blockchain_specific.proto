@@ -55,6 +55,7 @@ message SolanaSpecific {
   string priority_fee = 2;
   optional string from_token_associated_address = 3;
   optional string to_token_associated_address = 4;
+  optional bool program_id = 5;
 }
 
 message PolkadotSpecific {
@@ -100,5 +101,4 @@ message TronSpecific {
   string block_header_tx_trie_root = 6;
   string block_header_parent_hash = 7;
   string block_header_witness_address = 8;
-  uint64 gas_estimation = 9;
 }
