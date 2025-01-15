@@ -55,6 +55,7 @@ message SolanaSpecific {
   string priority_fee = 2;
   optional string from_token_associated_address = 3;
   optional string to_token_associated_address = 4;
+  optional bool program_id = 5;
 }
 
 message PolkadotSpecific {
