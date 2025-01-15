@@ -202,12 +202,22 @@ public struct VSSolanaSpecific {
   /// Clears the value of `toTokenAssociatedAddress`. Subsequent reads from it will return its default value.
   public mutating func clearToTokenAssociatedAddress() {self._toTokenAssociatedAddress = nil}
 
+  public var programID: Bool {
+    get {return _programID ?? false}
+    set {_programID = newValue}
+  }
+  /// Returns true if `programID` has been explicitly set.
+  public var hasProgramID: Bool {return self._programID != nil}
+  /// Clears the value of `programID`. Subsequent reads from it will return its default value.
+  public mutating func clearProgramID() {self._programID = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _fromTokenAssociatedAddress: String? = nil
   fileprivate var _toTokenAssociatedAddress: String? = nil
+  fileprivate var _programID: Bool? = nil
 }
 
 public struct VSPolkadotSpecific {
@@ -318,6 +328,8 @@ public struct VSTronSpecific {
   public var blockHeaderParentHash: String = String()
 
   public var blockHeaderWitnessAddress: String = String()
+
+  public var gasEstimation: UInt64 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -646,6 +658,7 @@ extension VSSolanaSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     2: .standard(proto: "priority_fee"),
     3: .standard(proto: "from_token_associated_address"),
     4: .standard(proto: "to_token_associated_address"),
+    5: .standard(proto: "program_id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -658,6 +671,7 @@ extension VSSolanaSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case 2: try { try decoder.decodeSingularStringField(value: &self.priorityFee) }()
       case 3: try { try decoder.decodeSingularStringField(value: &self._fromTokenAssociatedAddress) }()
       case 4: try { try decoder.decodeSingularStringField(value: &self._toTokenAssociatedAddress) }()
+      case 5: try { try decoder.decodeSingularBoolField(value: &self._programID) }()
       default: break
       }
     }
@@ -680,6 +694,9 @@ extension VSSolanaSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     try { if let v = self._toTokenAssociatedAddress {
       try visitor.visitSingularStringField(value: v, fieldNumber: 4)
     } }()
+    try { if let v = self._programID {
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 5)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -688,6 +705,7 @@ extension VSSolanaSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if lhs.priorityFee != rhs.priorityFee {return false}
     if lhs._fromTokenAssociatedAddress != rhs._fromTokenAssociatedAddress {return false}
     if lhs._toTokenAssociatedAddress != rhs._toTokenAssociatedAddress {return false}
+    if lhs._programID != rhs._programID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -948,6 +966,7 @@ extension VSTronSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
     6: .standard(proto: "block_header_tx_trie_root"),
     7: .standard(proto: "block_header_parent_hash"),
     8: .standard(proto: "block_header_witness_address"),
+    9: .standard(proto: "gas_estimation"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -964,6 +983,7 @@ extension VSTronSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
       case 6: try { try decoder.decodeSingularStringField(value: &self.blockHeaderTxTrieRoot) }()
       case 7: try { try decoder.decodeSingularStringField(value: &self.blockHeaderParentHash) }()
       case 8: try { try decoder.decodeSingularStringField(value: &self.blockHeaderWitnessAddress) }()
+      case 9: try { try decoder.decodeSingularUInt64Field(value: &self.gasEstimation) }()
       default: break
       }
     }
@@ -994,6 +1014,9 @@ extension VSTronSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
     if !self.blockHeaderWitnessAddress.isEmpty {
       try visitor.visitSingularStringField(value: self.blockHeaderWitnessAddress, fieldNumber: 8)
     }
+    if self.gasEstimation != 0 {
+      try visitor.visitSingularUInt64Field(value: self.gasEstimation, fieldNumber: 9)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -1006,6 +1029,7 @@ extension VSTronSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
     if lhs.blockHeaderTxTrieRoot != rhs.blockHeaderTxTrieRoot {return false}
     if lhs.blockHeaderParentHash != rhs.blockHeaderParentHash {return false}
     if lhs.blockHeaderWitnessAddress != rhs.blockHeaderWitnessAddress {return false}
+    if lhs.gasEstimation != rhs.gasEstimation {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
