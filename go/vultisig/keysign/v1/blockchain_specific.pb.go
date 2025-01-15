@@ -910,6 +910,7 @@ type TronSpecific struct {
 	BlockHeaderTxTrieRoot     string `protobuf:"bytes,6,opt,name=block_header_tx_trie_root,json=blockHeaderTxTrieRoot,proto3" json:"block_header_tx_trie_root,omitempty"`
 	BlockHeaderParentHash     string `protobuf:"bytes,7,opt,name=block_header_parent_hash,json=blockHeaderParentHash,proto3" json:"block_header_parent_hash,omitempty"`
 	BlockHeaderWitnessAddress string `protobuf:"bytes,8,opt,name=block_header_witness_address,json=blockHeaderWitnessAddress,proto3" json:"block_header_witness_address,omitempty"`
+	GasEstimation             uint64 `protobuf:"varint,9,opt,name=gas_estimation,json=gasEstimation,proto3" json:"gas_estimation,omitempty"`
 }
 
 func (x *TronSpecific) Reset() {
@@ -998,6 +999,13 @@ func (x *TronSpecific) GetBlockHeaderWitnessAddress() string {
 		return x.BlockHeaderWitnessAddress
 	}
 	return ""
+}
+
+func (x *TronSpecific) GetGasEstimation() uint64 {
+	if x != nil {
+		return x.GasEstimation
+	}
+	return 0
 }
 
 var File_vultisig_keysign_v1_blockchain_specific_proto protoreflect.FileDescriptor

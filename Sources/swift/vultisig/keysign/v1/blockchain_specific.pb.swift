@@ -329,6 +329,8 @@ public struct VSTronSpecific {
 
   public var blockHeaderWitnessAddress: String = String()
 
+  public var gasEstimation: UInt64 = 0
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -964,6 +966,7 @@ extension VSTronSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
     6: .standard(proto: "block_header_tx_trie_root"),
     7: .standard(proto: "block_header_parent_hash"),
     8: .standard(proto: "block_header_witness_address"),
+    9: .standard(proto: "gas_estimation"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -980,6 +983,7 @@ extension VSTronSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
       case 6: try { try decoder.decodeSingularStringField(value: &self.blockHeaderTxTrieRoot) }()
       case 7: try { try decoder.decodeSingularStringField(value: &self.blockHeaderParentHash) }()
       case 8: try { try decoder.decodeSingularStringField(value: &self.blockHeaderWitnessAddress) }()
+      case 9: try { try decoder.decodeSingularUInt64Field(value: &self.gasEstimation) }()
       default: break
       }
     }
@@ -1010,6 +1014,9 @@ extension VSTronSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
     if !self.blockHeaderWitnessAddress.isEmpty {
       try visitor.visitSingularStringField(value: self.blockHeaderWitnessAddress, fieldNumber: 8)
     }
+    if self.gasEstimation != 0 {
+      try visitor.visitSingularUInt64Field(value: self.gasEstimation, fieldNumber: 9)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -1022,6 +1029,7 @@ extension VSTronSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
     if lhs.blockHeaderTxTrieRoot != rhs.blockHeaderTxTrieRoot {return false}
     if lhs.blockHeaderParentHash != rhs.blockHeaderParentHash {return false}
     if lhs.blockHeaderWitnessAddress != rhs.blockHeaderWitnessAddress {return false}
+    if lhs.gasEstimation != rhs.gasEstimation {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
