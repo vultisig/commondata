@@ -336,6 +336,32 @@ public struct VSTronSpecific {
   public init() {}
 }
 
+public struct VSStellarSpecific {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var account: String = String()
+
+  public var hasAccount: Bool = false
+
+  public var fee: UInt32 = 0
+
+  public var sequence: UInt64 = 0
+
+  public var passphrase: String = String()
+
+  public var memoText: String = String()
+
+  public var memoId: uint64 = 0
+
+  public var memoHash: String = String()
+
+  public var memoVoid: Bool = false
+
+  public init() {}
+}
+
 #if swift(>=5.5) && canImport(_Concurrency)
 extension VSTransactionType: @unchecked Sendable {}
 extension VSUTXOSpecific: @unchecked Sendable {}
@@ -351,6 +377,7 @@ extension VSSuiSpecific: @unchecked Sendable {}
 extension VSTonSpecific: @unchecked Sendable {}
 extension VSRippleSpecific: @unchecked Sendable {}
 extension VSTronSpecific: @unchecked Sendable {}
+extension VSStellarSpecific: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -1031,6 +1058,84 @@ extension VSTronSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
     if lhs.blockHeaderWitnessAddress != rhs.blockHeaderWitnessAddress {return false}
     if lhs.gasEstimation != rhs.gasEstimation {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSStellarSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".StellarSpecific"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "account"),
+    2: .same(proto: "has_account"),
+    3: .standard(proto: "fee"),
+    4: .standard(proto: "sequence"),
+    5: .standard(proto: "passphrase"),
+    6: .standard(proto: "memo_text"),
+    7: .standard(proto: "memo_id"),
+    8: .standard(proto: "memo_hash"),
+    9: .standard(proto: "memo_void"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.account) }()
+      case 2: try { try decoder.decodeSingularBoolField(value: &self.hasAccount) }()
+      case 3: try { try decoder.decodeSingularUInt32Field(value: &self.fee) }()
+      case 4: try { try decoder.decodeSingularUInt64Field(value: &self.sequence) }()
+      case 5: try { try decoder.decodeSingularStringField(value: &self.passphrase) }()
+      case 6: try { try decoder.decodeSingularStringField(value: &self.memoText) }()
+      case 7: try { try decoder.decodeSingularUInt64Field(value: &self.memoId) }()
+      case 8: try { try decoder.decodeSingularStringField(value: &self.memoHash) }()
+      case 9: try { try decoder.decodeSingularBoolField(value: &self.memoVoid) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.account.isEmpty {
+      try visitor.visitSingularStringField(value: self.account, fieldNumber: 1)
+    }
+    if self.hasAccount != false {
+      try visitor.visitSingularBoolField(value: self.hasAccount, fieldNumber: 2)
+    }
+    if self.fee != 0 {
+      try visitor.visitSingularUInt32Field(value: self.fee, fieldNumber: 3)
+    }
+    if self.sequence != 0 {
+      try visitor.visitSingularUInt64Field(value: self.sequence, fieldNumber: 4)
+    }
+    if !self.passphrase.isEmpty {
+      try visitor.visitSingularStringField(value: self.passphrase, fieldNumber: 5)
+    }
+    if !self.memoText.isEmpty {
+      try visitor.visitSingularStringField(value: self.memoText, fieldNumber: 6)
+    }
+    if self.memoId != 0 {
+      try visitor.visitSingularUInt64Field(value: self.memoId, fieldNumber: 7)
+    }
+    if !self.memoHash.isEmpty {
+      try visitor.visitSingularStringField(value: self.memoHash, fieldNumber: 8)
+    }
+    if self.memoVoid != false {
+      try visitor.visitSingularBoolField(value: self.memoVoid, fieldNumber: 9)
+    }
+  }
+
+  public static func ==(lhs: VSStellarSpecific, rhs: VSStellarSpecific) -> Bool {
+    if lhs.account != rhs.account {return false}
+    if lhs.hasAccount != rhs.hasAccount {return false}
+    if lhs.fee != rhs.fee {return false}
+    if lhs.sequence != rhs.sequence {return false}
+    if lhs.passphrase != rhs.passphrase {return false}
+    if lhs.memoText != rhs.memoText {return false}
+    if lhs.memoId != rhs.memoId {return false}
+    if lhs.memoHash != rhs.memoHash {return false}
+    if lhs.memoVoid != rhs.memoVoid {return false}
     return true
   }
 }

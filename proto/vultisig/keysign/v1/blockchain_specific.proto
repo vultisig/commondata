@@ -103,3 +103,15 @@ message TronSpecific {
   string block_header_witness_address = 8;
   uint64 gas_estimation = 9;
 }
+
+message StellarSpecific {
+  string account = 1;
+  bool has_account = 2;
+  uint32 fee = 3;
+  uint64 sequence = 4;
+  string passphrase = 5;
+  optional string memo_text = 6;
+  optional uint64 memo_id = 7;
+  optional string memo_hash = 8; // this should be parsed as of type 'Data'
+  optional bool memo_void = 9;
+}
