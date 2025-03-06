@@ -793,7 +793,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       }()
       case .stellarSpecific?: try {
         guard case .stellarSpecific(let v)? = _storage._blockchainSpecific else { preconditionFailure() }
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 14)
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 15)
       }()
       case nil: break
       }
