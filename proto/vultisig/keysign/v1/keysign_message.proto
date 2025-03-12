@@ -21,15 +21,9 @@ message KeysignMessage {
   bool use_vultisig_relay = 6;
   string payload_id = 7;
   optional CustomMessagePayload custom_message_payload = 8;
-  string vault_public_key_ecdsa = 9;
-  string vault_local_party_id = 10;
 }
 
 message KeysignPayload {
-  // moved to KeysignMessage
-  reserved 31, 32;
-  reserved "vault_public_key_ecdsa", "vault_local_party_id";
-
   Coin coin = 1;
   string to_address = 2;
   string to_amount = 3;
@@ -54,4 +48,6 @@ message KeysignPayload {
     OneInchSwapPayload oneinch_swap_payload = 24;
   }
   optional Erc20ApprovePayload erc20_approve_payload = 30;
+  string vault_public_key_ecdsa = 31;
+  string vault_local_party_id = 32;
 }
