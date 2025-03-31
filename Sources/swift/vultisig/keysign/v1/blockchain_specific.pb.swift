@@ -289,6 +289,8 @@ public struct VSTonSpecific {
 
   public var bounceable: Bool = false
 
+  public var sendMaxAmount: Bool = false
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -879,6 +881,7 @@ extension VSTonSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
     1: .standard(proto: "sequence_number"),
     2: .standard(proto: "expire_at"),
     3: .same(proto: "bounceable"),
+    4: .standard(proto: "send_max_amount"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -890,6 +893,7 @@ extension VSTonSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
       case 1: try { try decoder.decodeSingularUInt64Field(value: &self.sequenceNumber) }()
       case 2: try { try decoder.decodeSingularUInt64Field(value: &self.expireAt) }()
       case 3: try { try decoder.decodeSingularBoolField(value: &self.bounceable) }()
+      case 4: try { try decoder.decodeSingularBoolField(value: &self.sendMaxAmount) }()
       default: break
       }
     }
@@ -905,6 +909,9 @@ extension VSTonSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
     if self.bounceable != false {
       try visitor.visitSingularBoolField(value: self.bounceable, fieldNumber: 3)
     }
+    if self.sendMaxAmount != false {
+      try visitor.visitSingularBoolField(value: self.sendMaxAmount, fieldNumber: 4)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -912,6 +919,7 @@ extension VSTonSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
     if lhs.sequenceNumber != rhs.sequenceNumber {return false}
     if lhs.expireAt != rhs.expireAt {return false}
     if lhs.bounceable != rhs.bounceable {return false}
+    if lhs.sendMaxAmount != rhs.sendMaxAmount {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
