@@ -25,6 +25,7 @@ public enum VSTransactionType: SwiftProtobuf.Enum {
   case unspecified // = 0
   case vote // = 1
   case proposal // = 2
+  case ibcTransfer // = 3
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -36,6 +37,7 @@ public enum VSTransactionType: SwiftProtobuf.Enum {
     case 0: self = .unspecified
     case 1: self = .vote
     case 2: self = .proposal
+    case 3: self = .ibcTransfer
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -45,6 +47,7 @@ public enum VSTransactionType: SwiftProtobuf.Enum {
     case .unspecified: return 0
     case .vote: return 1
     case .proposal: return 2
+    case .ibcTransfer: return 3
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -59,6 +62,7 @@ extension VSTransactionType: CaseIterable {
     .unspecified,
     .vote,
     .proposal,
+    .ibcTransfer,
   ]
 }
 
@@ -152,11 +156,21 @@ public struct VSCosmosSpecific {
   /// Clears the value of `ibcDenomTraces`. Subsequent reads from it will return its default value.
   public mutating func clearIbcDenomTraces() {self._ibcDenomTraces = nil}
 
+  public var ibcInfo: VSCosmosIbcInfo {
+    get {return _ibcInfo ?? VSCosmosIbcInfo()}
+    set {_ibcInfo = newValue}
+  }
+  /// Returns true if `ibcInfo` has been explicitly set.
+  public var hasIbcInfo: Bool {return self._ibcInfo != nil}
+  /// Clears the value of `ibcInfo`. Subsequent reads from it will return its default value.
+  public mutating func clearIbcInfo() {self._ibcInfo = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _ibcDenomTraces: VSCosmosIbcDenomTrace? = nil
+  fileprivate var _ibcInfo: VSCosmosIbcInfo? = nil
 }
 
 public struct VSCosmosIbcDenomTrace {
@@ -169,6 +183,24 @@ public struct VSCosmosIbcDenomTrace {
   public var baseDenom: String = String()
 
   public var latestBlock: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public struct VSCosmosIbcInfo {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var sourcePort: String = String()
+
+  public var sourceChannel: String = String()
+
+  public var revisionNumber: UInt64 = 0
+
+  public var revisionHeight: UInt64 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -346,6 +378,7 @@ extension VSTHORChainSpecific: @unchecked Sendable {}
 extension VSMAYAChainSpecific: @unchecked Sendable {}
 extension VSCosmosSpecific: @unchecked Sendable {}
 extension VSCosmosIbcDenomTrace: @unchecked Sendable {}
+extension VSCosmosIbcInfo: @unchecked Sendable {}
 extension VSSolanaSpecific: @unchecked Sendable {}
 extension VSPolkadotSpecific: @unchecked Sendable {}
 extension VSSuiCoin: @unchecked Sendable {}
@@ -364,6 +397,7 @@ extension VSTransactionType: SwiftProtobuf._ProtoNameProviding {
     0: .same(proto: "TRANSACTION_TYPE_UNSPECIFIED"),
     1: .same(proto: "TRANSACTION_TYPE_VOTE"),
     2: .same(proto: "TRANSACTION_TYPE_PROPOSAL"),
+    3: .same(proto: "TRANSACTION_TYPE_IBC_TRANSFER"),
   ]
 }
 
@@ -557,6 +591,7 @@ extension VSCosmosSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     3: .same(proto: "gas"),
     4: .standard(proto: "transaction_type"),
     5: .standard(proto: "ibc_denom_traces"),
+    6: .standard(proto: "ibc_info"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -570,6 +605,7 @@ extension VSCosmosSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case 3: try { try decoder.decodeSingularUInt64Field(value: &self.gas) }()
       case 4: try { try decoder.decodeSingularEnumField(value: &self.transactionType) }()
       case 5: try { try decoder.decodeSingularMessageField(value: &self._ibcDenomTraces) }()
+      case 6: try { try decoder.decodeSingularMessageField(value: &self._ibcInfo) }()
       default: break
       }
     }
@@ -595,6 +631,9 @@ extension VSCosmosSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     try { if let v = self._ibcDenomTraces {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
     } }()
+    try { if let v = self._ibcInfo {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -604,6 +643,7 @@ extension VSCosmosSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if lhs.gas != rhs.gas {return false}
     if lhs.transactionType != rhs.transactionType {return false}
     if lhs._ibcDenomTraces != rhs._ibcDenomTraces {return false}
+    if lhs._ibcInfo != rhs._ibcInfo {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -648,6 +688,56 @@ extension VSCosmosIbcDenomTrace: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     if lhs.path != rhs.path {return false}
     if lhs.baseDenom != rhs.baseDenom {return false}
     if lhs.latestBlock != rhs.latestBlock {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSCosmosIbcInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".CosmosIbcInfo"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "source_port"),
+    2: .standard(proto: "source_channel"),
+    3: .standard(proto: "revision_number"),
+    4: .standard(proto: "revision_height"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.sourcePort) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.sourceChannel) }()
+      case 3: try { try decoder.decodeSingularUInt64Field(value: &self.revisionNumber) }()
+      case 4: try { try decoder.decodeSingularUInt64Field(value: &self.revisionHeight) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.sourcePort.isEmpty {
+      try visitor.visitSingularStringField(value: self.sourcePort, fieldNumber: 1)
+    }
+    if !self.sourceChannel.isEmpty {
+      try visitor.visitSingularStringField(value: self.sourceChannel, fieldNumber: 2)
+    }
+    if self.revisionNumber != 0 {
+      try visitor.visitSingularUInt64Field(value: self.revisionNumber, fieldNumber: 3)
+    }
+    if self.revisionHeight != 0 {
+      try visitor.visitSingularUInt64Field(value: self.revisionHeight, fieldNumber: 4)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSCosmosIbcInfo, rhs: VSCosmosIbcInfo) -> Bool {
+    if lhs.sourcePort != rhs.sourcePort {return false}
+    if lhs.sourceChannel != rhs.sourceChannel {return false}
+    if lhs.revisionNumber != rhs.revisionNumber {return false}
+    if lhs.revisionHeight != rhs.revisionHeight {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
