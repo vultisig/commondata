@@ -240,6 +240,11 @@ public struct VSKeysignPayload {
     set {_uniqueStorage()._vaultLocalPartyID = newValue}
   }
 
+  public var libType: VSLibType {
+    get {return _storage._libType}
+    set {_uniqueStorage()._libType = newValue}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum OneOf_BlockchainSpecific: Equatable {
@@ -453,6 +458,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     30: .standard(proto: "erc20_approve_payload"),
     31: .standard(proto: "vault_public_key_ecdsa"),
     32: .standard(proto: "vault_local_party_id"),
+    33: .standard(proto: "lib_type"),
   ]
 
   fileprivate class _StorageClass {
@@ -466,6 +472,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     var _erc20ApprovePayload: VSErc20ApprovePayload? = nil
     var _vaultPublicKeyEcdsa: String = String()
     var _vaultLocalPartyID: String = String()
+    var _libType: VSLibType = .gg20
 
     #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
@@ -490,6 +497,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       _erc20ApprovePayload = source._erc20ApprovePayload
       _vaultPublicKeyEcdsa = source._vaultPublicKeyEcdsa
       _vaultLocalPartyID = source._vaultLocalPartyID
+      _libType = source._libType
     }
   }
 
@@ -698,6 +706,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         case 30: try { try decoder.decodeSingularMessageField(value: &_storage._erc20ApprovePayload) }()
         case 31: try { try decoder.decodeSingularStringField(value: &_storage._vaultPublicKeyEcdsa) }()
         case 32: try { try decoder.decodeSingularStringField(value: &_storage._vaultLocalPartyID) }()
+        case 33: try { try decoder.decodeSingularEnumField(value: &_storage._libType) }()
         default: break
         }
       }
@@ -796,6 +805,9 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       if !_storage._vaultLocalPartyID.isEmpty {
         try visitor.visitSingularStringField(value: _storage._vaultLocalPartyID, fieldNumber: 32)
       }
+      if _storage._libType != .gg20 {
+        try visitor.visitSingularEnumField(value: _storage._libType, fieldNumber: 33)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -815,6 +827,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         if _storage._erc20ApprovePayload != rhs_storage._erc20ApprovePayload {return false}
         if _storage._vaultPublicKeyEcdsa != rhs_storage._vaultPublicKeyEcdsa {return false}
         if _storage._vaultLocalPartyID != rhs_storage._vaultLocalPartyID {return false}
+        if _storage._libType != rhs_storage._libType {return false}
         return true
       }
       if !storagesAreEqual {return false}
