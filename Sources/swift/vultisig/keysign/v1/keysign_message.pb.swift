@@ -240,7 +240,7 @@ public struct VSKeysignPayload {
     set {_uniqueStorage()._vaultLocalPartyID = newValue}
   }
 
-  public var libType: VSLibType {
+  public var libType: String {
     get {return _storage._libType}
     set {_uniqueStorage()._libType = newValue}
   }
@@ -472,7 +472,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     var _erc20ApprovePayload: VSErc20ApprovePayload? = nil
     var _vaultPublicKeyEcdsa: String = String()
     var _vaultLocalPartyID: String = String()
-    var _libType: VSLibType = .gg20
+    var _libType: String = String()
 
     #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
@@ -706,7 +706,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         case 30: try { try decoder.decodeSingularMessageField(value: &_storage._erc20ApprovePayload) }()
         case 31: try { try decoder.decodeSingularStringField(value: &_storage._vaultPublicKeyEcdsa) }()
         case 32: try { try decoder.decodeSingularStringField(value: &_storage._vaultLocalPartyID) }()
-        case 33: try { try decoder.decodeSingularEnumField(value: &_storage._libType) }()
+        case 33: try { try decoder.decodeSingularStringField(value: &_storage._libType) }()
         default: break
         }
       }
@@ -805,8 +805,8 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       if !_storage._vaultLocalPartyID.isEmpty {
         try visitor.visitSingularStringField(value: _storage._vaultLocalPartyID, fieldNumber: 32)
       }
-      if _storage._libType != .gg20 {
-        try visitor.visitSingularEnumField(value: _storage._libType, fieldNumber: 33)
+      if !_storage._libType.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._libType, fieldNumber: 33)
       }
     }
     try unknownFields.traverse(visitor: &visitor)
