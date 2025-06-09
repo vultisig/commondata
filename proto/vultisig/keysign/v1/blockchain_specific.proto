@@ -10,6 +10,12 @@ message UTXOSpecific {
   bool send_max_amount = 2;
 }
 
+message CardanoChainSpecific {
+  int64 byte_fee = 1;
+  bool send_max_amount = 2;
+  uint64 ttl = 3; // Add TTL parameter
+}
+
 message EthereumSpecific {
   string max_fee_per_gas_wei = 1;
   string priority_fee = 2;
