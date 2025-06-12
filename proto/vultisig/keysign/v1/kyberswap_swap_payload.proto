@@ -8,7 +8,8 @@ option java_package = "vultisig.keysign.v1";
 option swift_prefix = "VS";
 
 message KyberSwapTransaction {
-  string from = 1;
+  reserved 1; // "from" – no longer needed on the client side
+
   string to = 2;
   string data = 3;
   string value = 4;
@@ -16,28 +17,13 @@ message KyberSwapTransaction {
   int64 gas = 6;
 }
 
-message KyberSwapQuoteData {
-  string amount_in = 1;
-  string amount_in_usd = 2;
-  string amount_out = 3;
-  string amount_out_usd = 4;
-  string gas = 5;
-  string gas_usd = 6;
-  string data = 7;
-  string router_address = 8;
-  string transaction_value = 9;
-  string additional_cost_usd = 10;
-  string additional_cost_message = 11;
-  string gas_price = 12;
-}
-
 message KyberSwapQuote {
-  int32 code = 1;
-  string message = 2;
-  KyberSwapQuoteData data = 3;
-  string request_id = 4;
-  // Compatibility fields for OneInch interface
+  reserved 1, 2, 3, 4; // code, message, data, request_id
+
+  // Compatibility field that the app reads to show the expected output amount
   string dst_amount = 5;
+
+  // Encoded Transaction object actually executed by the router
   KyberSwapTransaction tx = 6;
 }
 

@@ -25,8 +25,6 @@ public struct VSKyberSwapTransaction {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var from: String = String()
-
   public var to: String = String()
 
   public var data: String = String()
@@ -42,89 +40,29 @@ public struct VSKyberSwapTransaction {
   public init() {}
 }
 
-public struct VSKyberSwapQuoteData {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  public var amountIn: String = String()
-
-  public var amountInUsd: String = String()
-
-  public var amountOut: String = String()
-
-  public var amountOutUsd: String = String()
-
-  public var gas: String = String()
-
-  public var gasUsd: String = String()
-
-  public var data: String = String()
-
-  public var routerAddress: String = String()
-
-  public var transactionValue: String = String()
-
-  public var additionalCostUsd: String = String()
-
-  public var additionalCostMessage: String = String()
-
-  public var gasPrice: String = String()
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-}
-
 public struct VSKyberSwapQuote {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var code: Int32 {
-    get {return _storage._code}
-    set {_uniqueStorage()._code = newValue}
-  }
+  /// Compatibility field that the app reads to show the expected output amount
+  public var dstAmount: String = String()
 
-  public var message: String {
-    get {return _storage._message}
-    set {_uniqueStorage()._message = newValue}
-  }
-
-  public var data: VSKyberSwapQuoteData {
-    get {return _storage._data ?? VSKyberSwapQuoteData()}
-    set {_uniqueStorage()._data = newValue}
-  }
-  /// Returns true if `data` has been explicitly set.
-  public var hasData: Bool {return _storage._data != nil}
-  /// Clears the value of `data`. Subsequent reads from it will return its default value.
-  public mutating func clearData() {_uniqueStorage()._data = nil}
-
-  public var requestID: String {
-    get {return _storage._requestID}
-    set {_uniqueStorage()._requestID = newValue}
-  }
-
-  /// Compatibility fields for OneInch interface
-  public var dstAmount: String {
-    get {return _storage._dstAmount}
-    set {_uniqueStorage()._dstAmount = newValue}
-  }
-
+  /// Encoded Transaction object actually executed by the router
   public var tx: VSKyberSwapTransaction {
-    get {return _storage._tx ?? VSKyberSwapTransaction()}
-    set {_uniqueStorage()._tx = newValue}
+    get {return _tx ?? VSKyberSwapTransaction()}
+    set {_tx = newValue}
   }
   /// Returns true if `tx` has been explicitly set.
-  public var hasTx: Bool {return _storage._tx != nil}
+  public var hasTx: Bool {return self._tx != nil}
   /// Clears the value of `tx`. Subsequent reads from it will return its default value.
-  public mutating func clearTx() {_uniqueStorage()._tx = nil}
+  public mutating func clearTx() {self._tx = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
-  fileprivate var _storage = _StorageClass.defaultInstance
+  fileprivate var _tx: VSKyberSwapTransaction? = nil
 }
 
 public struct VSKyberSwapPayload {
@@ -178,7 +116,6 @@ public struct VSKyberSwapPayload {
 
 #if swift(>=5.5) && canImport(_Concurrency)
 extension VSKyberSwapTransaction: @unchecked Sendable {}
-extension VSKyberSwapQuoteData: @unchecked Sendable {}
 extension VSKyberSwapQuote: @unchecked Sendable {}
 extension VSKyberSwapPayload: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
@@ -190,7 +127,6 @@ fileprivate let _protobuf_package = "vultisig.keysign.v1"
 extension VSKyberSwapTransaction: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".KyberSwapTransaction"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "from"),
     2: .same(proto: "to"),
     3: .same(proto: "data"),
     4: .same(proto: "value"),
@@ -204,7 +140,6 @@ extension VSKyberSwapTransaction: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.from) }()
       case 2: try { try decoder.decodeSingularStringField(value: &self.to) }()
       case 3: try { try decoder.decodeSingularStringField(value: &self.data) }()
       case 4: try { try decoder.decodeSingularStringField(value: &self.value) }()
@@ -216,9 +151,6 @@ extension VSKyberSwapTransaction: SwiftProtobuf.Message, SwiftProtobuf._MessageI
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.from.isEmpty {
-      try visitor.visitSingularStringField(value: self.from, fieldNumber: 1)
-    }
     if !self.to.isEmpty {
       try visitor.visitSingularStringField(value: self.to, fieldNumber: 2)
     }
@@ -238,7 +170,6 @@ extension VSKyberSwapTransaction: SwiftProtobuf.Message, SwiftProtobuf._MessageI
   }
 
   public static func ==(lhs: VSKyberSwapTransaction, rhs: VSKyberSwapTransaction) -> Bool {
-    if lhs.from != rhs.from {return false}
     if lhs.to != rhs.to {return false}
     if lhs.data != rhs.data {return false}
     if lhs.value != rhs.value {return false}
@@ -249,21 +180,11 @@ extension VSKyberSwapTransaction: SwiftProtobuf.Message, SwiftProtobuf._MessageI
   }
 }
 
-extension VSKyberSwapQuoteData: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".KyberSwapQuoteData"
+extension VSKyberSwapQuote: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".KyberSwapQuote"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "amount_in"),
-    2: .standard(proto: "amount_in_usd"),
-    3: .standard(proto: "amount_out"),
-    4: .standard(proto: "amount_out_usd"),
-    5: .same(proto: "gas"),
-    6: .standard(proto: "gas_usd"),
-    7: .same(proto: "data"),
-    8: .standard(proto: "router_address"),
-    9: .standard(proto: "transaction_value"),
-    10: .standard(proto: "additional_cost_usd"),
-    11: .standard(proto: "additional_cost_message"),
-    12: .standard(proto: "gas_price"),
+    5: .standard(proto: "dst_amount"),
+    6: .same(proto: "tx"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -272,192 +193,30 @@ extension VSKyberSwapQuoteData: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.amountIn) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.amountInUsd) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.amountOut) }()
-      case 4: try { try decoder.decodeSingularStringField(value: &self.amountOutUsd) }()
-      case 5: try { try decoder.decodeSingularStringField(value: &self.gas) }()
-      case 6: try { try decoder.decodeSingularStringField(value: &self.gasUsd) }()
-      case 7: try { try decoder.decodeSingularStringField(value: &self.data) }()
-      case 8: try { try decoder.decodeSingularStringField(value: &self.routerAddress) }()
-      case 9: try { try decoder.decodeSingularStringField(value: &self.transactionValue) }()
-      case 10: try { try decoder.decodeSingularStringField(value: &self.additionalCostUsd) }()
-      case 11: try { try decoder.decodeSingularStringField(value: &self.additionalCostMessage) }()
-      case 12: try { try decoder.decodeSingularStringField(value: &self.gasPrice) }()
+      case 5: try { try decoder.decodeSingularStringField(value: &self.dstAmount) }()
+      case 6: try { try decoder.decodeSingularMessageField(value: &self._tx) }()
       default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.amountIn.isEmpty {
-      try visitor.visitSingularStringField(value: self.amountIn, fieldNumber: 1)
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    if !self.dstAmount.isEmpty {
+      try visitor.visitSingularStringField(value: self.dstAmount, fieldNumber: 5)
     }
-    if !self.amountInUsd.isEmpty {
-      try visitor.visitSingularStringField(value: self.amountInUsd, fieldNumber: 2)
-    }
-    if !self.amountOut.isEmpty {
-      try visitor.visitSingularStringField(value: self.amountOut, fieldNumber: 3)
-    }
-    if !self.amountOutUsd.isEmpty {
-      try visitor.visitSingularStringField(value: self.amountOutUsd, fieldNumber: 4)
-    }
-    if !self.gas.isEmpty {
-      try visitor.visitSingularStringField(value: self.gas, fieldNumber: 5)
-    }
-    if !self.gasUsd.isEmpty {
-      try visitor.visitSingularStringField(value: self.gasUsd, fieldNumber: 6)
-    }
-    if !self.data.isEmpty {
-      try visitor.visitSingularStringField(value: self.data, fieldNumber: 7)
-    }
-    if !self.routerAddress.isEmpty {
-      try visitor.visitSingularStringField(value: self.routerAddress, fieldNumber: 8)
-    }
-    if !self.transactionValue.isEmpty {
-      try visitor.visitSingularStringField(value: self.transactionValue, fieldNumber: 9)
-    }
-    if !self.additionalCostUsd.isEmpty {
-      try visitor.visitSingularStringField(value: self.additionalCostUsd, fieldNumber: 10)
-    }
-    if !self.additionalCostMessage.isEmpty {
-      try visitor.visitSingularStringField(value: self.additionalCostMessage, fieldNumber: 11)
-    }
-    if !self.gasPrice.isEmpty {
-      try visitor.visitSingularStringField(value: self.gasPrice, fieldNumber: 12)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: VSKyberSwapQuoteData, rhs: VSKyberSwapQuoteData) -> Bool {
-    if lhs.amountIn != rhs.amountIn {return false}
-    if lhs.amountInUsd != rhs.amountInUsd {return false}
-    if lhs.amountOut != rhs.amountOut {return false}
-    if lhs.amountOutUsd != rhs.amountOutUsd {return false}
-    if lhs.gas != rhs.gas {return false}
-    if lhs.gasUsd != rhs.gasUsd {return false}
-    if lhs.data != rhs.data {return false}
-    if lhs.routerAddress != rhs.routerAddress {return false}
-    if lhs.transactionValue != rhs.transactionValue {return false}
-    if lhs.additionalCostUsd != rhs.additionalCostUsd {return false}
-    if lhs.additionalCostMessage != rhs.additionalCostMessage {return false}
-    if lhs.gasPrice != rhs.gasPrice {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension VSKyberSwapQuote: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".KyberSwapQuote"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "code"),
-    2: .same(proto: "message"),
-    3: .same(proto: "data"),
-    4: .standard(proto: "request_id"),
-    5: .standard(proto: "dst_amount"),
-    6: .same(proto: "tx"),
-  ]
-
-  fileprivate class _StorageClass {
-    var _code: Int32 = 0
-    var _message: String = String()
-    var _data: VSKyberSwapQuoteData? = nil
-    var _requestID: String = String()
-    var _dstAmount: String = String()
-    var _tx: VSKyberSwapTransaction? = nil
-
-    #if swift(>=5.10)
-      // This property is used as the initial default value for new instances of the type.
-      // The type itself is protecting the reference to its storage via CoW semantics.
-      // This will force a copy to be made of this reference when the first mutation occurs;
-      // hence, it is safe to mark this as `nonisolated(unsafe)`.
-      static nonisolated(unsafe) let defaultInstance = _StorageClass()
-    #else
-      static let defaultInstance = _StorageClass()
-    #endif
-
-    private init() {}
-
-    init(copying source: _StorageClass) {
-      _code = source._code
-      _message = source._message
-      _data = source._data
-      _requestID = source._requestID
-      _dstAmount = source._dstAmount
-      _tx = source._tx
-    }
-  }
-
-  fileprivate mutating func _uniqueStorage() -> _StorageClass {
-    if !isKnownUniquelyReferenced(&_storage) {
-      _storage = _StorageClass(copying: _storage)
-    }
-    return _storage
-  }
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    _ = _uniqueStorage()
-    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
-      while let fieldNumber = try decoder.nextFieldNumber() {
-        // The use of inline closures is to circumvent an issue where the compiler
-        // allocates stack space for every case branch when no optimizations are
-        // enabled. https://github.com/apple/swift-protobuf/issues/1034
-        switch fieldNumber {
-        case 1: try { try decoder.decodeSingularInt32Field(value: &_storage._code) }()
-        case 2: try { try decoder.decodeSingularStringField(value: &_storage._message) }()
-        case 3: try { try decoder.decodeSingularMessageField(value: &_storage._data) }()
-        case 4: try { try decoder.decodeSingularStringField(value: &_storage._requestID) }()
-        case 5: try { try decoder.decodeSingularStringField(value: &_storage._dstAmount) }()
-        case 6: try { try decoder.decodeSingularMessageField(value: &_storage._tx) }()
-        default: break
-        }
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every if/case branch local when no optimizations
-      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-      // https://github.com/apple/swift-protobuf/issues/1182
-      if _storage._code != 0 {
-        try visitor.visitSingularInt32Field(value: _storage._code, fieldNumber: 1)
-      }
-      if !_storage._message.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._message, fieldNumber: 2)
-      }
-      try { if let v = _storage._data {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
-      } }()
-      if !_storage._requestID.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._requestID, fieldNumber: 4)
-      }
-      if !_storage._dstAmount.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._dstAmount, fieldNumber: 5)
-      }
-      try { if let v = _storage._tx {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
-      } }()
-    }
+    try { if let v = self._tx {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: VSKyberSwapQuote, rhs: VSKyberSwapQuote) -> Bool {
-    if lhs._storage !== rhs._storage {
-      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
-        let _storage = _args.0
-        let rhs_storage = _args.1
-        if _storage._code != rhs_storage._code {return false}
-        if _storage._message != rhs_storage._message {return false}
-        if _storage._data != rhs_storage._data {return false}
-        if _storage._requestID != rhs_storage._requestID {return false}
-        if _storage._dstAmount != rhs_storage._dstAmount {return false}
-        if _storage._tx != rhs_storage._tx {return false}
-        return true
-      }
-      if !storagesAreEqual {return false}
-    }
+    if lhs.dstAmount != rhs.dstAmount {return false}
+    if lhs._tx != rhs._tx {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
