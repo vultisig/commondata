@@ -82,6 +82,23 @@ public struct VSUTXOSpecific {
   public init() {}
 }
 
+public struct VSCardanoChainSpecific {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var byteFee: Int64 = 0
+
+  public var sendMaxAmount: Bool = false
+
+  /// Add TTL parameter
+  public var ttl: UInt64 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 public struct VSEthereumSpecific {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -375,6 +392,7 @@ public struct VSTronSpecific {
 #if swift(>=5.5) && canImport(_Concurrency)
 extension VSTransactionType: @unchecked Sendable {}
 extension VSUTXOSpecific: @unchecked Sendable {}
+extension VSCardanoChainSpecific: @unchecked Sendable {}
 extension VSEthereumSpecific: @unchecked Sendable {}
 extension VSTHORChainSpecific: @unchecked Sendable {}
 extension VSMAYAChainSpecific: @unchecked Sendable {}
@@ -436,6 +454,50 @@ extension VSUTXOSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
   public static func ==(lhs: VSUTXOSpecific, rhs: VSUTXOSpecific) -> Bool {
     if lhs.byteFee != rhs.byteFee {return false}
     if lhs.sendMaxAmount != rhs.sendMaxAmount {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSCardanoChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".CardanoChainSpecific"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "byte_fee"),
+    2: .standard(proto: "send_max_amount"),
+    3: .same(proto: "ttl"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularInt64Field(value: &self.byteFee) }()
+      case 2: try { try decoder.decodeSingularBoolField(value: &self.sendMaxAmount) }()
+      case 3: try { try decoder.decodeSingularUInt64Field(value: &self.ttl) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.byteFee != 0 {
+      try visitor.visitSingularInt64Field(value: self.byteFee, fieldNumber: 1)
+    }
+    if self.sendMaxAmount != false {
+      try visitor.visitSingularBoolField(value: self.sendMaxAmount, fieldNumber: 2)
+    }
+    if self.ttl != 0 {
+      try visitor.visitSingularUInt64Field(value: self.ttl, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSCardanoChainSpecific, rhs: VSCardanoChainSpecific) -> Bool {
+    if lhs.byteFee != rhs.byteFee {return false}
+    if lhs.sendMaxAmount != rhs.sendMaxAmount {return false}
+    if lhs.ttl != rhs.ttl {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
