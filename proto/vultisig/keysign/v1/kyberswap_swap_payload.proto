@@ -9,12 +9,12 @@ option swift_prefix = "VS";
 
 message KyberSwapTransaction {
   reserved 1; // "from" – no longer needed on the client side
-
-  string to = 2;
-  string data = 3;
-  string value = 4;
-  string gas_price = 5;
-  int64 gas = 6;
+  string from = 2;
+  string to = 3;
+  string data = 4;
+  string value = 5;
+  string gas_price = 6;
+  int64 gas = 7;
 }
 
 message KyberSwapQuote {

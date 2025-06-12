@@ -25,6 +25,8 @@ public struct VSKyberSwapTransaction {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
+  public var from: String = String()
+
   public var to: String = String()
 
   public var data: String = String()
@@ -127,11 +129,12 @@ fileprivate let _protobuf_package = "vultisig.keysign.v1"
 extension VSKyberSwapTransaction: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".KyberSwapTransaction"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    2: .same(proto: "to"),
-    3: .same(proto: "data"),
-    4: .same(proto: "value"),
-    5: .standard(proto: "gas_price"),
-    6: .same(proto: "gas"),
+    2: .same(proto: "from"),
+    3: .same(proto: "to"),
+    4: .same(proto: "data"),
+    5: .same(proto: "value"),
+    6: .standard(proto: "gas_price"),
+    7: .same(proto: "gas"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -140,36 +143,41 @@ extension VSKyberSwapTransaction: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 2: try { try decoder.decodeSingularStringField(value: &self.to) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.data) }()
-      case 4: try { try decoder.decodeSingularStringField(value: &self.value) }()
-      case 5: try { try decoder.decodeSingularStringField(value: &self.gasPrice) }()
-      case 6: try { try decoder.decodeSingularInt64Field(value: &self.gas) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.from) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.to) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.data) }()
+      case 5: try { try decoder.decodeSingularStringField(value: &self.value) }()
+      case 6: try { try decoder.decodeSingularStringField(value: &self.gasPrice) }()
+      case 7: try { try decoder.decodeSingularInt64Field(value: &self.gas) }()
       default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.from.isEmpty {
+      try visitor.visitSingularStringField(value: self.from, fieldNumber: 2)
+    }
     if !self.to.isEmpty {
-      try visitor.visitSingularStringField(value: self.to, fieldNumber: 2)
+      try visitor.visitSingularStringField(value: self.to, fieldNumber: 3)
     }
     if !self.data.isEmpty {
-      try visitor.visitSingularStringField(value: self.data, fieldNumber: 3)
+      try visitor.visitSingularStringField(value: self.data, fieldNumber: 4)
     }
     if !self.value.isEmpty {
-      try visitor.visitSingularStringField(value: self.value, fieldNumber: 4)
+      try visitor.visitSingularStringField(value: self.value, fieldNumber: 5)
     }
     if !self.gasPrice.isEmpty {
-      try visitor.visitSingularStringField(value: self.gasPrice, fieldNumber: 5)
+      try visitor.visitSingularStringField(value: self.gasPrice, fieldNumber: 6)
     }
     if self.gas != 0 {
-      try visitor.visitSingularInt64Field(value: self.gas, fieldNumber: 6)
+      try visitor.visitSingularInt64Field(value: self.gas, fieldNumber: 7)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: VSKyberSwapTransaction, rhs: VSKyberSwapTransaction) -> Bool {
+    if lhs.from != rhs.from {return false}
     if lhs.to != rhs.to {return false}
     if lhs.data != rhs.data {return false}
     if lhs.value != rhs.value {return false}
