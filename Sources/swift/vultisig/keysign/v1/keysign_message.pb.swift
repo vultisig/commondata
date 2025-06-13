@@ -229,6 +229,14 @@ public struct VSKeysignPayload {
     set {_uniqueStorage()._swapPayload = .oneinchSwapPayload(newValue)}
   }
 
+  public var kyberswapSwapPayload: VSKyberSwapPayload {
+    get {
+      if case .kyberswapSwapPayload(let v)? = _storage._swapPayload {return v}
+      return VSKyberSwapPayload()
+    }
+    set {_uniqueStorage()._swapPayload = .kyberswapSwapPayload(newValue)}
+  }
+
   public var erc20ApprovePayload: VSErc20ApprovePayload {
     get {return _storage._erc20ApprovePayload ?? VSErc20ApprovePayload()}
     set {_uniqueStorage()._erc20ApprovePayload = newValue}
@@ -333,6 +341,7 @@ public struct VSKeysignPayload {
     case thorchainSwapPayload(VSTHORChainSwapPayload)
     case mayachainSwapPayload(VSTHORChainSwapPayload)
     case oneinchSwapPayload(VSOneInchSwapPayload)
+    case kyberswapSwapPayload(VSKyberSwapPayload)
 
   #if !swift(>=4.1)
     public static func ==(lhs: VSKeysignPayload.OneOf_SwapPayload, rhs: VSKeysignPayload.OneOf_SwapPayload) -> Bool {
@@ -350,6 +359,10 @@ public struct VSKeysignPayload {
       }()
       case (.oneinchSwapPayload, .oneinchSwapPayload): return {
         guard case .oneinchSwapPayload(let l) = lhs, case .oneinchSwapPayload(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.kyberswapSwapPayload, .kyberswapSwapPayload): return {
+        guard case .kyberswapSwapPayload(let l) = lhs, case .kyberswapSwapPayload(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
       default: return false
@@ -469,6 +482,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     22: .standard(proto: "thorchain_swap_payload"),
     23: .standard(proto: "mayachain_swap_payload"),
     24: .standard(proto: "oneinch_swap_payload"),
+    25: .standard(proto: "kyberswap_swap_payload"),
     30: .standard(proto: "erc20_approve_payload"),
     31: .standard(proto: "vault_public_key_ecdsa"),
     32: .standard(proto: "vault_local_party_id"),
@@ -730,6 +744,19 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
             _storage._swapPayload = .oneinchSwapPayload(v)
           }
         }()
+        case 25: try {
+          var v: VSKyberSwapPayload?
+          var hadOneofValue = false
+          if let current = _storage._swapPayload {
+            hadOneofValue = true
+            if case .kyberswapSwapPayload(let m) = current {v = m}
+          }
+          try decoder.decodeSingularMessageField(value: &v)
+          if let v = v {
+            if hadOneofValue {try decoder.handleConflictingOneOf()}
+            _storage._swapPayload = .kyberswapSwapPayload(v)
+          }
+        }()
         case 30: try { try decoder.decodeSingularMessageField(value: &_storage._erc20ApprovePayload) }()
         case 31: try { try decoder.decodeSingularStringField(value: &_storage._vaultPublicKeyEcdsa) }()
         case 32: try { try decoder.decodeSingularStringField(value: &_storage._vaultLocalPartyID) }()
@@ -824,6 +851,10 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case .oneinchSwapPayload?: try {
         guard case .oneinchSwapPayload(let v)? = _storage._swapPayload else { preconditionFailure() }
         try visitor.visitSingularMessageField(value: v, fieldNumber: 24)
+      }()
+      case .kyberswapSwapPayload?: try {
+        guard case .kyberswapSwapPayload(let v)? = _storage._swapPayload else { preconditionFailure() }
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 25)
       }()
       case nil: break
       }
