@@ -26,6 +26,12 @@ public enum VSTransactionType: SwiftProtobuf.Enum {
   case vote // = 1
   case proposal // = 2
   case ibcTransfer // = 3
+  case thorMerge // = 4
+  case thorUnmerge // = 5
+  case thorDeposit // = 6
+  case thorWithdraw // = 7
+  case tonDeposit // = 8
+  case tonWithdraw // = 9
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -38,6 +44,12 @@ public enum VSTransactionType: SwiftProtobuf.Enum {
     case 1: self = .vote
     case 2: self = .proposal
     case 3: self = .ibcTransfer
+    case 4: self = .thorMerge
+    case 5: self = .thorUnmerge
+    case 6: self = .thorDeposit
+    case 7: self = .thorWithdraw
+    case 8: self = .tonDeposit
+    case 9: self = .tonWithdraw
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -48,6 +60,12 @@ public enum VSTransactionType: SwiftProtobuf.Enum {
     case .vote: return 1
     case .proposal: return 2
     case .ibcTransfer: return 3
+    case .thorMerge: return 4
+    case .thorUnmerge: return 5
+    case .thorDeposit: return 6
+    case .thorWithdraw: return 7
+    case .tonDeposit: return 8
+    case .tonWithdraw: return 9
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -63,6 +81,12 @@ extension VSTransactionType: CaseIterable {
     .vote,
     .proposal,
     .ibcTransfer,
+    .thorMerge,
+    .thorUnmerge,
+    .thorDeposit,
+    .thorWithdraw,
+    .tonDeposit,
+    .tonWithdraw,
   ]
 }
 
@@ -418,6 +442,12 @@ extension VSTransactionType: SwiftProtobuf._ProtoNameProviding {
     1: .same(proto: "TRANSACTION_TYPE_VOTE"),
     2: .same(proto: "TRANSACTION_TYPE_PROPOSAL"),
     3: .same(proto: "TRANSACTION_TYPE_IBC_TRANSFER"),
+    4: .same(proto: "TRANSACTION_TYPE_THOR_MERGE"),
+    5: .same(proto: "TRANSACTION_TYPE_THOR_UNMERGE"),
+    6: .same(proto: "TRANSACTION_TYPE_THOR_DEPOSIT"),
+    7: .same(proto: "TRANSACTION_TYPE_THOR_WITHDRAW"),
+    8: .same(proto: "TRANSACTION_TYPE_TON_DEPOSIT"),
+    9: .same(proto: "TRANSACTION_TYPE_TON_WITHDRAW"),
   ]
 }
 
