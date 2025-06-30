@@ -1,0 +1,14 @@
+syntax = "proto3";
+package vultisig.keysign.v1;
+
+option go_package = "github.com/vultisig/commondata/go/vultisig/keysign/v1;v1";
+option java_package = "vultisig.keysign.v1";
+option swift_prefix = "VS";
+
+message Signature {
+  string msg = 1;
+  string r = 2;
+  string s = 3;
+  string der_signature = 4;
+  string recovery_id = 5;
+}
