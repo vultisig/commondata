@@ -26,6 +26,11 @@ public enum VSTransactionType: SwiftProtobuf.Enum {
   case vote // = 1
   case proposal // = 2
   case ibcTransfer // = 3
+  case thorMerge // = 4
+  case thorUnmerge // = 5
+  case tonDeposit // = 6
+  case tonWithdraw // = 7
+  case genericContract // = 8
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -38,6 +43,11 @@ public enum VSTransactionType: SwiftProtobuf.Enum {
     case 1: self = .vote
     case 2: self = .proposal
     case 3: self = .ibcTransfer
+    case 4: self = .thorMerge
+    case 5: self = .thorUnmerge
+    case 6: self = .tonDeposit
+    case 7: self = .tonWithdraw
+    case 8: self = .genericContract
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -48,6 +58,11 @@ public enum VSTransactionType: SwiftProtobuf.Enum {
     case .vote: return 1
     case .proposal: return 2
     case .ibcTransfer: return 3
+    case .thorMerge: return 4
+    case .thorUnmerge: return 5
+    case .tonDeposit: return 6
+    case .tonWithdraw: return 7
+    case .genericContract: return 8
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -63,6 +78,11 @@ extension VSTransactionType: CaseIterable {
     .vote,
     .proposal,
     .ibcTransfer,
+    .thorMerge,
+    .thorUnmerge,
+    .tonDeposit,
+    .tonWithdraw,
+    .genericContract,
   ]
 }
 
@@ -129,6 +149,8 @@ public struct VSTHORChainSpecific {
   public var fee: UInt64 = 0
 
   public var isDeposit: Bool = false
+
+  public var transactionType: VSTransactionType = .unspecified
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -418,6 +440,11 @@ extension VSTransactionType: SwiftProtobuf._ProtoNameProviding {
     1: .same(proto: "TRANSACTION_TYPE_VOTE"),
     2: .same(proto: "TRANSACTION_TYPE_PROPOSAL"),
     3: .same(proto: "TRANSACTION_TYPE_IBC_TRANSFER"),
+    4: .same(proto: "TRANSACTION_TYPE_THOR_MERGE"),
+    5: .same(proto: "TRANSACTION_TYPE_THOR_UNMERGE"),
+    6: .same(proto: "TRANSACTION_TYPE_TON_DEPOSIT"),
+    7: .same(proto: "TRANSACTION_TYPE_TON_WITHDRAW"),
+    8: .same(proto: "TRANSACTION_TYPE_GENERIC_CONTRACT"),
   ]
 }
 
@@ -560,6 +587,7 @@ extension VSTHORChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     2: .same(proto: "sequence"),
     3: .same(proto: "fee"),
     4: .standard(proto: "is_deposit"),
+    5: .standard(proto: "transaction_type"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -572,6 +600,7 @@ extension VSTHORChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
       case 2: try { try decoder.decodeSingularUInt64Field(value: &self.sequence) }()
       case 3: try { try decoder.decodeSingularUInt64Field(value: &self.fee) }()
       case 4: try { try decoder.decodeSingularBoolField(value: &self.isDeposit) }()
+      case 5: try { try decoder.decodeSingularEnumField(value: &self.transactionType) }()
       default: break
       }
     }
@@ -590,6 +619,9 @@ extension VSTHORChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     if self.isDeposit != false {
       try visitor.visitSingularBoolField(value: self.isDeposit, fieldNumber: 4)
     }
+    if self.transactionType != .unspecified {
+      try visitor.visitSingularEnumField(value: self.transactionType, fieldNumber: 5)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -598,6 +630,7 @@ extension VSTHORChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     if lhs.sequence != rhs.sequence {return false}
     if lhs.fee != rhs.fee {return false}
     if lhs.isDeposit != rhs.isDeposit {return false}
+    if lhs.transactionType != rhs.transactionType {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
