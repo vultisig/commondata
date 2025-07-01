@@ -154,6 +154,8 @@ public struct VSTHORChainSpecific {
 
   public var isDeposit: Bool = false
 
+  public var transactionType: VSTransactionType = .unspecified
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -590,6 +592,7 @@ extension VSTHORChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     2: .same(proto: "sequence"),
     3: .same(proto: "fee"),
     4: .standard(proto: "is_deposit"),
+    5: .standard(proto: "transaction_type"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -602,6 +605,7 @@ extension VSTHORChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
       case 2: try { try decoder.decodeSingularUInt64Field(value: &self.sequence) }()
       case 3: try { try decoder.decodeSingularUInt64Field(value: &self.fee) }()
       case 4: try { try decoder.decodeSingularBoolField(value: &self.isDeposit) }()
+      case 5: try { try decoder.decodeSingularEnumField(value: &self.transactionType) }()
       default: break
       }
     }
@@ -620,6 +624,9 @@ extension VSTHORChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     if self.isDeposit != false {
       try visitor.visitSingularBoolField(value: self.isDeposit, fieldNumber: 4)
     }
+    if self.transactionType != .unspecified {
+      try visitor.visitSingularEnumField(value: self.transactionType, fieldNumber: 5)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -628,6 +635,7 @@ extension VSTHORChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     if lhs.sequence != rhs.sequence {return false}
     if lhs.fee != rhs.fee {return false}
     if lhs.isDeposit != rhs.isDeposit {return false}
+    if lhs.transactionType != rhs.transactionType {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
