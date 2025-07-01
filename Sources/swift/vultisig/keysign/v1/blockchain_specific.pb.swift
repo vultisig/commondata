@@ -30,6 +30,7 @@ public enum VSTransactionType: SwiftProtobuf.Enum {
   case thorUnmerge // = 5
   case tonDeposit // = 6
   case tonWithdraw // = 7
+  case genericContract // = 8
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -46,6 +47,7 @@ public enum VSTransactionType: SwiftProtobuf.Enum {
     case 5: self = .thorUnmerge
     case 6: self = .tonDeposit
     case 7: self = .tonWithdraw
+    case 8: self = .genericContract
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -60,6 +62,7 @@ public enum VSTransactionType: SwiftProtobuf.Enum {
     case .thorUnmerge: return 5
     case .tonDeposit: return 6
     case .tonWithdraw: return 7
+    case .genericContract: return 8
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -79,6 +82,7 @@ extension VSTransactionType: CaseIterable {
     .thorUnmerge,
     .tonDeposit,
     .tonWithdraw,
+    .genericContract,
   ]
 }
 
@@ -440,6 +444,7 @@ extension VSTransactionType: SwiftProtobuf._ProtoNameProviding {
     5: .same(proto: "TRANSACTION_TYPE_THOR_UNMERGE"),
     6: .same(proto: "TRANSACTION_TYPE_TON_DEPOSIT"),
     7: .same(proto: "TRANSACTION_TYPE_TON_WITHDRAW"),
+    8: .same(proto: "TRANSACTION_TYPE_GENERIC_CONTRACT"),
   ]
 }
 
