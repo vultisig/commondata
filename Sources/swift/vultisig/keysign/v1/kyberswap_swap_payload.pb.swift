@@ -37,6 +37,8 @@ public struct VSKyberSwapTransaction {
 
   public var gas: Int64 = 0
 
+  public var fee: Int64 = 0
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -133,6 +135,7 @@ extension VSKyberSwapTransaction: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     4: .same(proto: "value"),
     5: .standard(proto: "gas_price"),
     6: .same(proto: "gas"),
+    7: .same(proto: "fee"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -147,6 +150,7 @@ extension VSKyberSwapTransaction: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       case 4: try { try decoder.decodeSingularStringField(value: &self.value) }()
       case 5: try { try decoder.decodeSingularStringField(value: &self.gasPrice) }()
       case 6: try { try decoder.decodeSingularInt64Field(value: &self.gas) }()
+      case 7: try { try decoder.decodeSingularInt64Field(value: &self.fee) }()
       default: break
       }
     }
@@ -171,6 +175,9 @@ extension VSKyberSwapTransaction: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     if self.gas != 0 {
       try visitor.visitSingularInt64Field(value: self.gas, fieldNumber: 6)
     }
+    if self.fee != 0 {
+      try visitor.visitSingularInt64Field(value: self.fee, fieldNumber: 7)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -181,6 +188,7 @@ extension VSKyberSwapTransaction: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     if lhs.value != rhs.value {return false}
     if lhs.gasPrice != rhs.gasPrice {return false}
     if lhs.gas != rhs.gas {return false}
+    if lhs.fee != rhs.fee {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
