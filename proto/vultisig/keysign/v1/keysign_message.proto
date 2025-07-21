@@ -51,11 +51,11 @@ message KeysignPayload {
     OneInchSwapPayload oneinch_swap_payload = 24;
     KyberSwapPayload kyberswap_swap_payload = 25;
   }
-  oneof contract_payload {
-    WasmExecuteContractPayload wasm_execute_contract_payload = 40;
-  }
   optional Erc20ApprovePayload erc20_approve_payload = 30;
   string vault_public_key_ecdsa = 31;
   string vault_local_party_id = 32;
   string lib_type = 33;
+  oneof contract_payload {
+    WasmExecuteContractPayload wasm_execute_contract_payload = 40;
+  }
 }
