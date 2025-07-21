@@ -54,4 +54,5 @@ message KeysignPayload {
   string vault_public_key_ecdsa = 31;
   string vault_local_party_id = 32;
   string lib_type = 33;
+  optional bool skip_broadcast = 34;
 }
