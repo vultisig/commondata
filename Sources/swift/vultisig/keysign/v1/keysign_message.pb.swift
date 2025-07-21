@@ -261,6 +261,15 @@ public struct VSKeysignPayload {
     set {_uniqueStorage()._libType = newValue}
   }
 
+  public var skipBroadcast: Bool {
+    get {return _storage._skipBroadcast ?? false}
+    set {_uniqueStorage()._skipBroadcast = newValue}
+  }
+  /// Returns true if `skipBroadcast` has been explicitly set.
+  public var hasSkipBroadcast: Bool {return _storage._skipBroadcast != nil}
+  /// Clears the value of `skipBroadcast`. Subsequent reads from it will return its default value.
+  public mutating func clearSkipBroadcast() {_uniqueStorage()._skipBroadcast = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum OneOf_BlockchainSpecific: Equatable {
@@ -487,6 +496,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     31: .standard(proto: "vault_public_key_ecdsa"),
     32: .standard(proto: "vault_local_party_id"),
     33: .standard(proto: "lib_type"),
+    34: .standard(proto: "skip_broadcast"),
   ]
 
   fileprivate class _StorageClass {
@@ -501,6 +511,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     var _vaultPublicKeyEcdsa: String = String()
     var _vaultLocalPartyID: String = String()
     var _libType: String = String()
+    var _skipBroadcast: Bool? = nil
 
     #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
@@ -526,6 +537,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       _vaultPublicKeyEcdsa = source._vaultPublicKeyEcdsa
       _vaultLocalPartyID = source._vaultLocalPartyID
       _libType = source._libType
+      _skipBroadcast = source._skipBroadcast
     }
   }
 
@@ -761,6 +773,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         case 31: try { try decoder.decodeSingularStringField(value: &_storage._vaultPublicKeyEcdsa) }()
         case 32: try { try decoder.decodeSingularStringField(value: &_storage._vaultLocalPartyID) }()
         case 33: try { try decoder.decodeSingularStringField(value: &_storage._libType) }()
+        case 34: try { try decoder.decodeSingularBoolField(value: &_storage._skipBroadcast) }()
         default: break
         }
       }
@@ -870,6 +883,9 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       if !_storage._libType.isEmpty {
         try visitor.visitSingularStringField(value: _storage._libType, fieldNumber: 33)
       }
+      try { if let v = _storage._skipBroadcast {
+        try visitor.visitSingularBoolField(value: v, fieldNumber: 34)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -890,6 +906,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         if _storage._vaultPublicKeyEcdsa != rhs_storage._vaultPublicKeyEcdsa {return false}
         if _storage._vaultLocalPartyID != rhs_storage._vaultLocalPartyID {return false}
         if _storage._libType != rhs_storage._libType {return false}
+        if _storage._skipBroadcast != rhs_storage._skipBroadcast {return false}
         return true
       }
       if !storagesAreEqual {return false}
