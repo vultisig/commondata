@@ -261,6 +261,15 @@ public struct VSKeysignPayload {
     set {_uniqueStorage()._libType = newValue}
   }
 
+  public var skipBroadcast: Bool {
+    get {return _storage._skipBroadcast ?? false}
+    set {_uniqueStorage()._skipBroadcast = newValue}
+  }
+  /// Returns true if `skipBroadcast` has been explicitly set.
+  public var hasSkipBroadcast: Bool {return _storage._skipBroadcast != nil}
+  /// Clears the value of `skipBroadcast`. Subsequent reads from it will return its default value.
+  public mutating func clearSkipBroadcast() {_uniqueStorage()._skipBroadcast = nil}
+
   public var contractPayload: OneOf_ContractPayload? {
     get {return _storage._contractPayload}
     set {_uniqueStorage()._contractPayload = newValue}
@@ -519,7 +528,8 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     31: .standard(proto: "vault_public_key_ecdsa"),
     32: .standard(proto: "vault_local_party_id"),
     33: .standard(proto: "lib_type"),
-    40: .standard(proto: "wasm_execute_contract_payload"),
+    34: .standard(proto: "skip_broadcast"),
+    35: .standard(proto: "wasm_execute_contract_payload"),
   ]
 
   fileprivate class _StorageClass {
@@ -534,6 +544,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     var _vaultPublicKeyEcdsa: String = String()
     var _vaultLocalPartyID: String = String()
     var _libType: String = String()
+    var _skipBroadcast: Bool? = nil
     var _contractPayload: VSKeysignPayload.OneOf_ContractPayload?
 
     #if swift(>=5.10)
@@ -560,6 +571,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       _vaultPublicKeyEcdsa = source._vaultPublicKeyEcdsa
       _vaultLocalPartyID = source._vaultLocalPartyID
       _libType = source._libType
+      _skipBroadcast = source._skipBroadcast
       _contractPayload = source._contractPayload
     }
   }
@@ -796,7 +808,8 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         case 31: try { try decoder.decodeSingularStringField(value: &_storage._vaultPublicKeyEcdsa) }()
         case 32: try { try decoder.decodeSingularStringField(value: &_storage._vaultLocalPartyID) }()
         case 33: try { try decoder.decodeSingularStringField(value: &_storage._libType) }()
-        case 40: try {
+        case 34: try { try decoder.decodeSingularBoolField(value: &_storage._skipBroadcast) }()
+        case 35: try {
           var v: VSWasmExecuteContractPayload?
           var hadOneofValue = false
           if let current = _storage._contractPayload {
@@ -918,8 +931,11 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       if !_storage._libType.isEmpty {
         try visitor.visitSingularStringField(value: _storage._libType, fieldNumber: 33)
       }
+      try { if let v = _storage._skipBroadcast {
+        try visitor.visitSingularBoolField(value: v, fieldNumber: 34)
+      } }()
       try { if case .wasmExecuteContractPayload(let v)? = _storage._contractPayload {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 40)
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 35)
       } }()
     }
     try unknownFields.traverse(visitor: &visitor)
@@ -941,6 +957,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         if _storage._vaultPublicKeyEcdsa != rhs_storage._vaultPublicKeyEcdsa {return false}
         if _storage._vaultLocalPartyID != rhs_storage._vaultLocalPartyID {return false}
         if _storage._libType != rhs_storage._libType {return false}
+        if _storage._skipBroadcast != rhs_storage._skipBroadcast {return false}
         if _storage._contractPayload != rhs_storage._contractPayload {return false}
         return true
       }
