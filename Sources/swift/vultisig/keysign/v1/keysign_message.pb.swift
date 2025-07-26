@@ -270,6 +270,19 @@ public struct VSKeysignPayload {
   /// Clears the value of `skipBroadcast`. Subsequent reads from it will return its default value.
   public mutating func clearSkipBroadcast() {_uniqueStorage()._skipBroadcast = nil}
 
+  public var contractPayload: OneOf_ContractPayload? {
+    get {return _storage._contractPayload}
+    set {_uniqueStorage()._contractPayload = newValue}
+  }
+
+  public var wasmExecuteContractPayload: VSWasmExecuteContractPayload {
+    get {
+      if case .wasmExecuteContractPayload(let v)? = _storage._contractPayload {return v}
+      return VSWasmExecuteContractPayload()
+    }
+    set {_uniqueStorage()._contractPayload = .wasmExecuteContractPayload(newValue)}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum OneOf_BlockchainSpecific: Equatable {
@@ -380,6 +393,24 @@ public struct VSKeysignPayload {
   #endif
   }
 
+  public enum OneOf_ContractPayload: Equatable {
+    case wasmExecuteContractPayload(VSWasmExecuteContractPayload)
+
+  #if !swift(>=4.1)
+    public static func ==(lhs: VSKeysignPayload.OneOf_ContractPayload, rhs: VSKeysignPayload.OneOf_ContractPayload) -> Bool {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch (lhs, rhs) {
+      case (.wasmExecuteContractPayload, .wasmExecuteContractPayload): return {
+        guard case .wasmExecuteContractPayload(let l) = lhs, case .wasmExecuteContractPayload(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      }
+    }
+  #endif
+  }
+
   public init() {}
 
   fileprivate var _storage = _StorageClass.defaultInstance
@@ -390,6 +421,7 @@ extension VSKeysignMessage: @unchecked Sendable {}
 extension VSKeysignPayload: @unchecked Sendable {}
 extension VSKeysignPayload.OneOf_BlockchainSpecific: @unchecked Sendable {}
 extension VSKeysignPayload.OneOf_SwapPayload: @unchecked Sendable {}
+extension VSKeysignPayload.OneOf_ContractPayload: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -497,6 +529,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     32: .standard(proto: "vault_local_party_id"),
     33: .standard(proto: "lib_type"),
     34: .standard(proto: "skip_broadcast"),
+    35: .standard(proto: "wasm_execute_contract_payload"),
   ]
 
   fileprivate class _StorageClass {
@@ -512,6 +545,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     var _vaultLocalPartyID: String = String()
     var _libType: String = String()
     var _skipBroadcast: Bool? = nil
+    var _contractPayload: VSKeysignPayload.OneOf_ContractPayload?
 
     #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
@@ -538,6 +572,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       _vaultLocalPartyID = source._vaultLocalPartyID
       _libType = source._libType
       _skipBroadcast = source._skipBroadcast
+      _contractPayload = source._contractPayload
     }
   }
 
@@ -774,6 +809,19 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         case 32: try { try decoder.decodeSingularStringField(value: &_storage._vaultLocalPartyID) }()
         case 33: try { try decoder.decodeSingularStringField(value: &_storage._libType) }()
         case 34: try { try decoder.decodeSingularBoolField(value: &_storage._skipBroadcast) }()
+        case 35: try {
+          var v: VSWasmExecuteContractPayload?
+          var hadOneofValue = false
+          if let current = _storage._contractPayload {
+            hadOneofValue = true
+            if case .wasmExecuteContractPayload(let m) = current {v = m}
+          }
+          try decoder.decodeSingularMessageField(value: &v)
+          if let v = v {
+            if hadOneofValue {try decoder.handleConflictingOneOf()}
+            _storage._contractPayload = .wasmExecuteContractPayload(v)
+          }
+        }()
         default: break
         }
       }
@@ -886,6 +934,9 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       try { if let v = _storage._skipBroadcast {
         try visitor.visitSingularBoolField(value: v, fieldNumber: 34)
       } }()
+      try { if case .wasmExecuteContractPayload(let v)? = _storage._contractPayload {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 35)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -907,6 +958,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         if _storage._vaultLocalPartyID != rhs_storage._vaultLocalPartyID {return false}
         if _storage._libType != rhs_storage._libType {return false}
         if _storage._skipBroadcast != rhs_storage._skipBroadcast {return false}
+        if _storage._contractPayload != rhs_storage._contractPayload {return false}
         return true
       }
       if !storagesAreEqual {return false}

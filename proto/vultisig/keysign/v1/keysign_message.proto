@@ -9,6 +9,7 @@ import "vultisig/keysign/v1/erc20_approve_payload.proto";
 import "vultisig/keysign/v1/kyberswap_swap_payload.proto";
 import "vultisig/keysign/v1/thorchain_swap_payload.proto";
 import "vultisig/keysign/v1/utxo_info.proto";
+import "vultisig/keysign/v1/wasm_execute_contract_payload.proto";
 
 option go_package = "github.com/vultisig/commondata/go/vultisig/keysign/v1;v1";
 option java_package = "vultisig.keysign.v1";
@@ -55,4 +56,7 @@ message KeysignPayload {
   string vault_local_party_id = 32;
   string lib_type = 33;
   optional bool skip_broadcast = 34;
+  oneof contract_payload {
+    WasmExecuteContractPayload wasm_execute_contract_payload = 35;
+  }
 }
