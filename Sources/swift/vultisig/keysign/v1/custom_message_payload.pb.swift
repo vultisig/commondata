@@ -33,9 +33,20 @@ public struct VSCustomMessagePayload {
 
   public var vaultLocalPartyID: String = String()
 
+  public var chain: String {
+    get {return _chain ?? String()}
+    set {_chain = newValue}
+  }
+  /// Returns true if `chain` has been explicitly set.
+  public var hasChain: Bool {return self._chain != nil}
+  /// Clears the value of `chain`. Subsequent reads from it will return its default value.
+  public mutating func clearChain() {self._chain = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
+
+  fileprivate var _chain: String? = nil
 }
 
 #if swift(>=5.5) && canImport(_Concurrency)
@@ -53,6 +64,7 @@ extension VSCustomMessagePayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     2: .same(proto: "message"),
     3: .standard(proto: "vault_public_key_ecdsa"),
     4: .standard(proto: "vault_local_party_id"),
+    5: .same(proto: "chain"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -65,12 +77,17 @@ extension VSCustomMessagePayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       case 2: try { try decoder.decodeSingularStringField(value: &self.message) }()
       case 3: try { try decoder.decodeSingularStringField(value: &self.vaultPublicKeyEcdsa) }()
       case 4: try { try decoder.decodeSingularStringField(value: &self.vaultLocalPartyID) }()
+      case 5: try { try decoder.decodeSingularStringField(value: &self._chain) }()
       default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
     if !self.method.isEmpty {
       try visitor.visitSingularStringField(value: self.method, fieldNumber: 1)
     }
@@ -83,6 +100,9 @@ extension VSCustomMessagePayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     if !self.vaultLocalPartyID.isEmpty {
       try visitor.visitSingularStringField(value: self.vaultLocalPartyID, fieldNumber: 4)
     }
+    try { if let v = self._chain {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 5)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -91,6 +111,7 @@ extension VSCustomMessagePayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     if lhs.message != rhs.message {return false}
     if lhs.vaultPublicKeyEcdsa != rhs.vaultPublicKeyEcdsa {return false}
     if lhs.vaultLocalPartyID != rhs.vaultLocalPartyID {return false}
+    if lhs._chain != rhs._chain {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
