@@ -27,4 +27,5 @@ message OneInchSwapPayload {
   string from_amount = 3;
   string to_amount_decimal = 4;
   OneInchQuote quote = 5;
+  string provider = 6; // 1inch , li.fi , kyber
 }
