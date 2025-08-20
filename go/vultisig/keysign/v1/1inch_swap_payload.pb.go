@@ -180,7 +180,7 @@ type OneInchSwapPayload struct {
 	FromAmount      string        `protobuf:"bytes,3,opt,name=from_amount,json=fromAmount,proto3" json:"from_amount,omitempty"`
 	ToAmountDecimal string        `protobuf:"bytes,4,opt,name=to_amount_decimal,json=toAmountDecimal,proto3" json:"to_amount_decimal,omitempty"`
 	Quote           *OneInchQuote `protobuf:"bytes,5,opt,name=quote,proto3" json:"quote,omitempty"`
-	Provider        string        `protobuf:"bytes,6,opt,name=provider,proto3" json:"provider,omitempty"`
+	Provider        string        `protobuf:"bytes,6,opt,name=provider,proto3" json:"provider,omitempty"` // 1inch , li.fi , kyber
 }
 
 func (x *OneInchSwapPayload) Reset() {

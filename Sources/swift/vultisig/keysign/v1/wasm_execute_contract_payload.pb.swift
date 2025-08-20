@@ -47,6 +47,9 @@ public struct VSWasmExecuteContractPayload {
 
   public var coins: [VSCosmosCoin] = []
 
+  /// [address, basis_points] format
+  public var affiliate: [String] = []
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -106,6 +109,7 @@ extension VSWasmExecuteContractPayload: SwiftProtobuf.Message, SwiftProtobuf._Me
     2: .standard(proto: "contract_address"),
     3: .standard(proto: "execute_msg"),
     4: .same(proto: "coins"),
+    5: .same(proto: "affiliate"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -118,6 +122,7 @@ extension VSWasmExecuteContractPayload: SwiftProtobuf.Message, SwiftProtobuf._Me
       case 2: try { try decoder.decodeSingularStringField(value: &self.contractAddress) }()
       case 3: try { try decoder.decodeSingularStringField(value: &self.executeMsg) }()
       case 4: try { try decoder.decodeRepeatedMessageField(value: &self.coins) }()
+      case 5: try { try decoder.decodeRepeatedStringField(value: &self.affiliate) }()
       default: break
       }
     }
@@ -136,6 +141,9 @@ extension VSWasmExecuteContractPayload: SwiftProtobuf.Message, SwiftProtobuf._Me
     if !self.coins.isEmpty {
       try visitor.visitRepeatedMessageField(value: self.coins, fieldNumber: 4)
     }
+    if !self.affiliate.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.affiliate, fieldNumber: 5)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -144,6 +152,7 @@ extension VSWasmExecuteContractPayload: SwiftProtobuf.Message, SwiftProtobuf._Me
     if lhs.contractAddress != rhs.contractAddress {return false}
     if lhs.executeMsg != rhs.executeMsg {return false}
     if lhs.coins != rhs.coins {return false}
+    if lhs.affiliate != rhs.affiliate {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

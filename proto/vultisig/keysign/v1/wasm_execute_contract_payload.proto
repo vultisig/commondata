@@ -16,4 +16,5 @@ message WasmExecuteContractPayload {
   string contract_address = 2;
   string execute_msg = 3;
   repeated CosmosCoin coins = 4;
+  repeated string affiliate = 5; // [address, basis_points] format
 }
