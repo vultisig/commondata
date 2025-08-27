@@ -107,6 +107,8 @@ message TonSpecific {
   uint64 expire_at = 2;
   bool bounceable = 3;
   bool send_max_amount = 4;
+  string jetton_address = 5;
+  bool is_active_destination = 6;
 }
 
 message RippleSpecific {

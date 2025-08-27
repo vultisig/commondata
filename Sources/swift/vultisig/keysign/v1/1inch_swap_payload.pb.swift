@@ -109,6 +109,7 @@ public struct VSOneInchSwapPayload {
   /// Clears the value of `quote`. Subsequent reads from it will return its default value.
   public mutating func clearQuote() {_uniqueStorage()._quote = nil}
 
+  /// 1inch , li.fi , kyber
   public var provider: String {
     get {return _storage._provider}
     set {_uniqueStorage()._provider = newValue}
