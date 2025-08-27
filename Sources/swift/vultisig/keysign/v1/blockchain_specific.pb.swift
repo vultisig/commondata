@@ -362,6 +362,10 @@ public struct VSTonSpecific {
 
   public var sendMaxAmount: Bool = false
 
+  public var jettonAddress: String = String()
+
+  public var isActiveDestination: Bool = false
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -1069,6 +1073,8 @@ extension VSTonSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
     2: .standard(proto: "expire_at"),
     3: .same(proto: "bounceable"),
     4: .standard(proto: "send_max_amount"),
+    5: .standard(proto: "jetton_address"),
+    6: .standard(proto: "is_active_destination"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -1081,6 +1087,8 @@ extension VSTonSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
       case 2: try { try decoder.decodeSingularUInt64Field(value: &self.expireAt) }()
       case 3: try { try decoder.decodeSingularBoolField(value: &self.bounceable) }()
       case 4: try { try decoder.decodeSingularBoolField(value: &self.sendMaxAmount) }()
+      case 5: try { try decoder.decodeSingularStringField(value: &self.jettonAddress) }()
+      case 6: try { try decoder.decodeSingularBoolField(value: &self.isActiveDestination) }()
       default: break
       }
     }
@@ -1099,6 +1107,12 @@ extension VSTonSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
     if self.sendMaxAmount != false {
       try visitor.visitSingularBoolField(value: self.sendMaxAmount, fieldNumber: 4)
     }
+    if !self.jettonAddress.isEmpty {
+      try visitor.visitSingularStringField(value: self.jettonAddress, fieldNumber: 5)
+    }
+    if self.isActiveDestination != false {
+      try visitor.visitSingularBoolField(value: self.isActiveDestination, fieldNumber: 6)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -1107,6 +1121,8 @@ extension VSTonSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
     if lhs.expireAt != rhs.expireAt {return false}
     if lhs.bounceable != rhs.bounceable {return false}
     if lhs.sendMaxAmount != rhs.sendMaxAmount {return false}
+    if lhs.jettonAddress != rhs.jettonAddress {return false}
+    if lhs.isActiveDestination != rhs.isActiveDestination {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
