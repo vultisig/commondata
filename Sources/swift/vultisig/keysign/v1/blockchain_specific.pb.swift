@@ -344,6 +344,8 @@ public struct VSSuiSpecific {
 
   public var coins: [VSSuiCoin] = []
 
+  public var gasBudget: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -1033,6 +1035,7 @@ extension VSSuiSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "reference_gas_price"),
     2: .same(proto: "coins"),
+    3: .standard(proto: "gas_budget"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -1043,6 +1046,7 @@ extension VSSuiSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularStringField(value: &self.referenceGasPrice) }()
       case 2: try { try decoder.decodeRepeatedMessageField(value: &self.coins) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.gasBudget) }()
       default: break
       }
     }
@@ -1055,12 +1059,16 @@ extension VSSuiSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
     if !self.coins.isEmpty {
       try visitor.visitRepeatedMessageField(value: self.coins, fieldNumber: 2)
     }
+    if !self.gasBudget.isEmpty {
+      try visitor.visitSingularStringField(value: self.gasBudget, fieldNumber: 3)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: VSSuiSpecific, rhs: VSSuiSpecific) -> Bool {
     if lhs.referenceGasPrice != rhs.referenceGasPrice {return false}
     if lhs.coins != rhs.coins {return false}
+    if lhs.gasBudget != rhs.gasBudget {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
