@@ -318,6 +318,8 @@ public struct VSPolkadotSpecific {
 
   public var genesisHash: String = String()
 
+  public var gas: UInt64 = 0
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -931,6 +933,7 @@ extension VSPolkadotSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     4: .standard(proto: "spec_version"),
     5: .standard(proto: "transaction_version"),
     6: .standard(proto: "genesis_hash"),
+    7: .same(proto: "gas"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -945,6 +948,7 @@ extension VSPolkadotSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
       case 4: try { try decoder.decodeSingularUInt32Field(value: &self.specVersion) }()
       case 5: try { try decoder.decodeSingularUInt32Field(value: &self.transactionVersion) }()
       case 6: try { try decoder.decodeSingularStringField(value: &self.genesisHash) }()
+      case 7: try { try decoder.decodeSingularUInt64Field(value: &self.gas) }()
       default: break
       }
     }
@@ -969,6 +973,9 @@ extension VSPolkadotSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     if !self.genesisHash.isEmpty {
       try visitor.visitSingularStringField(value: self.genesisHash, fieldNumber: 6)
     }
+    if self.gas != 0 {
+      try visitor.visitSingularUInt64Field(value: self.gas, fieldNumber: 7)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -979,6 +986,7 @@ extension VSPolkadotSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     if lhs.specVersion != rhs.specVersion {return false}
     if lhs.transactionVersion != rhs.transactionVersion {return false}
     if lhs.genesisHash != rhs.genesisHash {return false}
+    if lhs.gas != rhs.gas {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
