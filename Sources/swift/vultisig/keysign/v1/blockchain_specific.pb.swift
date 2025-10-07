@@ -293,6 +293,15 @@ public struct VSSolanaSpecific {
   /// Clears the value of `programID`. Subsequent reads from it will return its default value.
   public mutating func clearProgramID() {self._programID = nil}
 
+  public var computeLimit: String {
+    get {return _computeLimit ?? String()}
+    set {_computeLimit = newValue}
+  }
+  /// Returns true if `computeLimit` has been explicitly set.
+  public var hasComputeLimit: Bool {return self._computeLimit != nil}
+  /// Clears the value of `computeLimit`. Subsequent reads from it will return its default value.
+  public mutating func clearComputeLimit() {self._computeLimit = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -300,6 +309,7 @@ public struct VSSolanaSpecific {
   fileprivate var _fromTokenAssociatedAddress: String? = nil
   fileprivate var _toTokenAssociatedAddress: String? = nil
   fileprivate var _programID: Bool? = nil
+  fileprivate var _computeLimit: String? = nil
 }
 
 public struct VSPolkadotSpecific {
@@ -318,6 +328,8 @@ public struct VSPolkadotSpecific {
   public var transactionVersion: UInt32 = 0
 
   public var genesisHash: String = String()
+
+  public var gas: UInt64 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -354,6 +366,8 @@ public struct VSSuiSpecific {
   public var referenceGasPrice: String = String()
 
   public var coins: [VSSuiCoin] = []
+
+  public var gasBudget: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -873,6 +887,7 @@ extension VSSolanaSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     3: .standard(proto: "from_token_associated_address"),
     4: .standard(proto: "to_token_associated_address"),
     5: .standard(proto: "program_id"),
+    6: .standard(proto: "compute_limit"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -886,6 +901,7 @@ extension VSSolanaSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case 3: try { try decoder.decodeSingularStringField(value: &self._fromTokenAssociatedAddress) }()
       case 4: try { try decoder.decodeSingularStringField(value: &self._toTokenAssociatedAddress) }()
       case 5: try { try decoder.decodeSingularBoolField(value: &self._programID) }()
+      case 6: try { try decoder.decodeSingularStringField(value: &self._computeLimit) }()
       default: break
       }
     }
@@ -911,6 +927,9 @@ extension VSSolanaSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     try { if let v = self._programID {
       try visitor.visitSingularBoolField(value: v, fieldNumber: 5)
     } }()
+    try { if let v = self._computeLimit {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 6)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -920,6 +939,7 @@ extension VSSolanaSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if lhs._fromTokenAssociatedAddress != rhs._fromTokenAssociatedAddress {return false}
     if lhs._toTokenAssociatedAddress != rhs._toTokenAssociatedAddress {return false}
     if lhs._programID != rhs._programID {return false}
+    if lhs._computeLimit != rhs._computeLimit {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -934,6 +954,7 @@ extension VSPolkadotSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     4: .standard(proto: "spec_version"),
     5: .standard(proto: "transaction_version"),
     6: .standard(proto: "genesis_hash"),
+    7: .same(proto: "gas"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -948,6 +969,7 @@ extension VSPolkadotSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
       case 4: try { try decoder.decodeSingularUInt32Field(value: &self.specVersion) }()
       case 5: try { try decoder.decodeSingularUInt32Field(value: &self.transactionVersion) }()
       case 6: try { try decoder.decodeSingularStringField(value: &self.genesisHash) }()
+      case 7: try { try decoder.decodeSingularUInt64Field(value: &self.gas) }()
       default: break
       }
     }
@@ -972,6 +994,9 @@ extension VSPolkadotSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     if !self.genesisHash.isEmpty {
       try visitor.visitSingularStringField(value: self.genesisHash, fieldNumber: 6)
     }
+    if self.gas != 0 {
+      try visitor.visitSingularUInt64Field(value: self.gas, fieldNumber: 7)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -982,6 +1007,7 @@ extension VSPolkadotSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     if lhs.specVersion != rhs.specVersion {return false}
     if lhs.transactionVersion != rhs.transactionVersion {return false}
     if lhs.genesisHash != rhs.genesisHash {return false}
+    if lhs.gas != rhs.gas {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -1054,6 +1080,7 @@ extension VSSuiSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "reference_gas_price"),
     2: .same(proto: "coins"),
+    3: .standard(proto: "gas_budget"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -1064,6 +1091,7 @@ extension VSSuiSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularStringField(value: &self.referenceGasPrice) }()
       case 2: try { try decoder.decodeRepeatedMessageField(value: &self.coins) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.gasBudget) }()
       default: break
       }
     }
@@ -1076,12 +1104,16 @@ extension VSSuiSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
     if !self.coins.isEmpty {
       try visitor.visitRepeatedMessageField(value: self.coins, fieldNumber: 2)
     }
+    if !self.gasBudget.isEmpty {
+      try visitor.visitSingularStringField(value: self.gasBudget, fieldNumber: 3)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: VSSuiSpecific, rhs: VSSuiSpecific) -> Bool {
     if lhs.referenceGasPrice != rhs.referenceGasPrice {return false}
     if lhs.coins != rhs.coins {return false}
+    if lhs.gasBudget != rhs.gasBudget {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
