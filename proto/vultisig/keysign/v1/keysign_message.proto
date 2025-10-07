@@ -10,6 +10,7 @@ import "vultisig/keysign/v1/kyberswap_swap_payload.proto";
 import "vultisig/keysign/v1/thorchain_swap_payload.proto";
 import "vultisig/keysign/v1/utxo_info.proto";
 import "vultisig/keysign/v1/wasm_execute_contract_payload.proto";
+import "vultisig/keysign/v1/tron_contract_payload.proto";
 
 option go_package = "github.com/vultisig/commondata/go/vultisig/keysign/v1;v1";
 option java_package = "vultisig.keysign.v1";
@@ -58,5 +59,6 @@ message KeysignPayload {
   optional bool skip_broadcast = 34;
   oneof contract_payload {
     WasmExecuteContractPayload wasm_execute_contract_payload = 35;
+    TronTransferContractPayload tron_transfer_contract_payload = 36;
   }
 }
