@@ -97,9 +97,20 @@ public struct VSUTXOSpecific {
 
   public var sendMaxAmount: Bool = false
 
+  public var psbt: String {
+    get {return _psbt ?? String()}
+    set {_psbt = newValue}
+  }
+  /// Returns true if `psbt` has been explicitly set.
+  public var hasPsbt: Bool {return self._psbt != nil}
+  /// Clears the value of `psbt`. Subsequent reads from it will return its default value.
+  public mutating func clearPsbt() {self._psbt = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
+
+  fileprivate var _psbt: String? = nil
 }
 
 public struct VSCardanoChainSpecific {
@@ -471,6 +482,7 @@ extension VSUTXOSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "byte_fee"),
     2: .standard(proto: "send_max_amount"),
+    3: .same(proto: "psbt"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -481,24 +493,33 @@ extension VSUTXOSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularStringField(value: &self.byteFee) }()
       case 2: try { try decoder.decodeSingularBoolField(value: &self.sendMaxAmount) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self._psbt) }()
       default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
     if !self.byteFee.isEmpty {
       try visitor.visitSingularStringField(value: self.byteFee, fieldNumber: 1)
     }
     if self.sendMaxAmount != false {
       try visitor.visitSingularBoolField(value: self.sendMaxAmount, fieldNumber: 2)
     }
+    try { if let v = self._psbt {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 3)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: VSUTXOSpecific, rhs: VSUTXOSpecific) -> Bool {
     if lhs.byteFee != rhs.byteFee {return false}
     if lhs.sendMaxAmount != rhs.sendMaxAmount {return false}
+    if lhs._psbt != rhs._psbt {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
