@@ -17,6 +17,13 @@ message TronTriggerSmartContractPayload {
   string contract_address = 2;
   optional string call_value = 3;
   optional string call_token_value = 4;
-  optional uint64 token_id = 5;
+  optional int32 token_id = 5;
   optional string data = 6;
+}
+
+message TronTransferAssetContractPayload {
+  string to_address = 1;
+  string owner_address = 2;
+  string amount = 3;
+  string asset_name = 4;
 }

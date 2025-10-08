@@ -61,5 +61,6 @@ message KeysignPayload {
     WasmExecuteContractPayload wasm_execute_contract_payload = 35;
     TronTransferContractPayload tron_transfer_contract_payload = 36;
     TronTriggerSmartContractPayload tron_trigger_smart_contract_payload = 37;
+    TronTransferAssetContractPayload tron_transfer_asset_contract_payload = 38;
   }
 }

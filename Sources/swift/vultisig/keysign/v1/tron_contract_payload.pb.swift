@@ -63,7 +63,7 @@ public struct VSTronTriggerSmartContractPayload {
   /// Clears the value of `callTokenValue`. Subsequent reads from it will return its default value.
   public mutating func clearCallTokenValue() {self._callTokenValue = nil}
 
-  public var tokenID: UInt64 {
+  public var tokenID: Int32 {
     get {return _tokenID ?? 0}
     set {_tokenID = newValue}
   }
@@ -87,13 +87,32 @@ public struct VSTronTriggerSmartContractPayload {
 
   fileprivate var _callValue: String? = nil
   fileprivate var _callTokenValue: String? = nil
-  fileprivate var _tokenID: UInt64? = nil
+  fileprivate var _tokenID: Int32? = nil
   fileprivate var _data: String? = nil
+}
+
+public struct VSTronTransferAssetContractPayload {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var toAddress: String = String()
+
+  public var ownerAddress: String = String()
+
+  public var amount: String = String()
+
+  public var assetName: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
 }
 
 #if swift(>=5.5) && canImport(_Concurrency)
 extension VSTronTransferContractPayload: @unchecked Sendable {}
 extension VSTronTriggerSmartContractPayload: @unchecked Sendable {}
+extension VSTronTransferAssetContractPayload: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -165,7 +184,7 @@ extension VSTronTriggerSmartContractPayload: SwiftProtobuf.Message, SwiftProtobu
       case 2: try { try decoder.decodeSingularStringField(value: &self.contractAddress) }()
       case 3: try { try decoder.decodeSingularStringField(value: &self._callValue) }()
       case 4: try { try decoder.decodeSingularStringField(value: &self._callTokenValue) }()
-      case 5: try { try decoder.decodeSingularUInt64Field(value: &self._tokenID) }()
+      case 5: try { try decoder.decodeSingularInt32Field(value: &self._tokenID) }()
       case 6: try { try decoder.decodeSingularStringField(value: &self._data) }()
       default: break
       }
@@ -190,7 +209,7 @@ extension VSTronTriggerSmartContractPayload: SwiftProtobuf.Message, SwiftProtobu
       try visitor.visitSingularStringField(value: v, fieldNumber: 4)
     } }()
     try { if let v = self._tokenID {
-      try visitor.visitSingularUInt64Field(value: v, fieldNumber: 5)
+      try visitor.visitSingularInt32Field(value: v, fieldNumber: 5)
     } }()
     try { if let v = self._data {
       try visitor.visitSingularStringField(value: v, fieldNumber: 6)
@@ -205,6 +224,56 @@ extension VSTronTriggerSmartContractPayload: SwiftProtobuf.Message, SwiftProtobu
     if lhs._callTokenValue != rhs._callTokenValue {return false}
     if lhs._tokenID != rhs._tokenID {return false}
     if lhs._data != rhs._data {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSTronTransferAssetContractPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".TronTransferAssetContractPayload"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "to_address"),
+    2: .standard(proto: "owner_address"),
+    3: .same(proto: "amount"),
+    4: .standard(proto: "asset_name"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.toAddress) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.ownerAddress) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.amount) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.assetName) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.toAddress.isEmpty {
+      try visitor.visitSingularStringField(value: self.toAddress, fieldNumber: 1)
+    }
+    if !self.ownerAddress.isEmpty {
+      try visitor.visitSingularStringField(value: self.ownerAddress, fieldNumber: 2)
+    }
+    if !self.amount.isEmpty {
+      try visitor.visitSingularStringField(value: self.amount, fieldNumber: 3)
+    }
+    if !self.assetName.isEmpty {
+      try visitor.visitSingularStringField(value: self.assetName, fieldNumber: 4)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSTronTransferAssetContractPayload, rhs: VSTronTransferAssetContractPayload) -> Bool {
+    if lhs.toAddress != rhs.toAddress {return false}
+    if lhs.ownerAddress != rhs.ownerAddress {return false}
+    if lhs.amount != rhs.amount {return false}
+    if lhs.assetName != rhs.assetName {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

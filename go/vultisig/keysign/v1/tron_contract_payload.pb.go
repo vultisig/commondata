@@ -92,7 +92,7 @@ type TronTriggerSmartContractPayload struct {
 	ContractAddress string  `protobuf:"bytes,2,opt,name=contract_address,json=contractAddress,proto3" json:"contract_address,omitempty"`
 	CallValue       *string `protobuf:"bytes,3,opt,name=call_value,json=callValue,proto3,oneof" json:"call_value,omitempty"`
 	CallTokenValue  *string `protobuf:"bytes,4,opt,name=call_token_value,json=callTokenValue,proto3,oneof" json:"call_token_value,omitempty"`
-	TokenId         *uint64 `protobuf:"varint,5,opt,name=token_id,json=tokenId,proto3,oneof" json:"token_id,omitempty"`
+	TokenId         *int32  `protobuf:"varint,5,opt,name=token_id,json=tokenId,proto3,oneof" json:"token_id,omitempty"`
 	Data            *string `protobuf:"bytes,6,opt,name=data,proto3,oneof" json:"data,omitempty"`
 }
 
@@ -156,7 +156,7 @@ func (x *TronTriggerSmartContractPayload) GetCallTokenValue() string {
 	return ""
 }
 
-func (x *TronTriggerSmartContractPayload) GetTokenId() uint64 {
+func (x *TronTriggerSmartContractPayload) GetTokenId() int32 {
 	if x != nil && x.TokenId != nil {
 		return *x.TokenId
 	}
@@ -166,6 +166,77 @@ func (x *TronTriggerSmartContractPayload) GetTokenId() uint64 {
 func (x *TronTriggerSmartContractPayload) GetData() string {
 	if x != nil && x.Data != nil {
 		return *x.Data
+	}
+	return ""
+}
+
+type TronTransferAssetContractPayload struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ToAddress    string `protobuf:"bytes,1,opt,name=to_address,json=toAddress,proto3" json:"to_address,omitempty"`
+	OwnerAddress string `protobuf:"bytes,2,opt,name=owner_address,json=ownerAddress,proto3" json:"owner_address,omitempty"`
+	Amount       string `protobuf:"bytes,3,opt,name=amount,proto3" json:"amount,omitempty"`
+	AssetName    string `protobuf:"bytes,4,opt,name=asset_name,json=assetName,proto3" json:"asset_name,omitempty"`
+}
+
+func (x *TronTransferAssetContractPayload) Reset() {
+	*x = TronTransferAssetContractPayload{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_vultisig_keysign_v1_tron_contract_payload_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *TronTransferAssetContractPayload) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TronTransferAssetContractPayload) ProtoMessage() {}
+
+func (x *TronTransferAssetContractPayload) ProtoReflect() protoreflect.Message {
+	mi := &file_vultisig_keysign_v1_tron_contract_payload_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TronTransferAssetContractPayload.ProtoReflect.Descriptor instead.
+func (*TronTransferAssetContractPayload) Descriptor() ([]byte, []int) {
+	return file_vultisig_keysign_v1_tron_contract_payload_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *TronTransferAssetContractPayload) GetToAddress() string {
+	if x != nil {
+		return x.ToAddress
+	}
+	return ""
+}
+
+func (x *TronTransferAssetContractPayload) GetOwnerAddress() string {
+	if x != nil {
+		return x.OwnerAddress
+	}
+	return ""
+}
+
+func (x *TronTransferAssetContractPayload) GetAmount() string {
+	if x != nil {
+		return x.Amount
+	}
+	return ""
+}
+
+func (x *TronTransferAssetContractPayload) GetAssetName() string {
+	if x != nil {
+		return x.AssetName
 	}
 	return ""
 }
@@ -198,13 +269,23 @@ var file_vultisig_keysign_v1_tron_contract_payload_proto_rawDesc = []byte{
 	0x6c, 0x5f, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x5f, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x04, 0x20,
 	0x01, 0x28, 0x09, 0x48, 0x01, 0x52, 0x0e, 0x63, 0x61, 0x6c, 0x6c, 0x54, 0x6f, 0x6b, 0x65, 0x6e,
 	0x56, 0x61, 0x6c, 0x75, 0x65, 0x88, 0x01, 0x01, 0x12, 0x1e, 0x0a, 0x08, 0x74, 0x6f, 0x6b, 0x65,
-	0x6e, 0x5f, 0x69, 0x64, 0x18, 0x05, 0x20, 0x01, 0x28, 0x04, 0x48, 0x02, 0x52, 0x07, 0x74, 0x6f,
+	0x6e, 0x5f, 0x69, 0x64, 0x18, 0x05, 0x20, 0x01, 0x28, 0x05, 0x48, 0x02, 0x52, 0x07, 0x74, 0x6f,
 	0x6b, 0x65, 0x6e, 0x49, 0x64, 0x88, 0x01, 0x01, 0x12, 0x17, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61,
 	0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x48, 0x03, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x88, 0x01,
 	0x01, 0x42, 0x0d, 0x0a, 0x0b, 0x5f, 0x63, 0x61, 0x6c, 0x6c, 0x5f, 0x76, 0x61, 0x6c, 0x75, 0x65,
 	0x42, 0x13, 0x0a, 0x11, 0x5f, 0x63, 0x61, 0x6c, 0x6c, 0x5f, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x5f,
 	0x76, 0x61, 0x6c, 0x75, 0x65, 0x42, 0x0b, 0x0a, 0x09, 0x5f, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x5f,
-	0x69, 0x64, 0x42, 0x07, 0x0a, 0x05, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x42, 0x54, 0x0a, 0x13, 0x76,
+	0x69, 0x64, 0x42, 0x07, 0x0a, 0x05, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x22, 0x9d, 0x01, 0x0a, 0x20,
+	0x54, 0x72, 0x6f, 0x6e, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x66, 0x65, 0x72, 0x41, 0x73, 0x73, 0x65,
+	0x74, 0x43, 0x6f, 0x6e, 0x74, 0x72, 0x61, 0x63, 0x74, 0x50, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64,
+	0x12, 0x1d, 0x0a, 0x0a, 0x74, 0x6f, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x74, 0x6f, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12,
+	0x23, 0x0a, 0x0d, 0x6f, 0x77, 0x6e, 0x65, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x6f, 0x77, 0x6e, 0x65, 0x72, 0x41, 0x64, 0x64,
+	0x72, 0x65, 0x73, 0x73, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x1d, 0x0a, 0x0a,
+	0x61, 0x73, 0x73, 0x65, 0x74, 0x5f, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x09, 0x61, 0x73, 0x73, 0x65, 0x74, 0x4e, 0x61, 0x6d, 0x65, 0x42, 0x54, 0x0a, 0x13, 0x76,
 	0x75, 0x6c, 0x74, 0x69, 0x73, 0x69, 0x67, 0x2e, 0x6b, 0x65, 0x79, 0x73, 0x69, 0x67, 0x6e, 0x2e,
 	0x76, 0x31, 0x5a, 0x38, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x76,
 	0x75, 0x6c, 0x74, 0x69, 0x73, 0x69, 0x67, 0x2f, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x64, 0x61,
@@ -225,10 +306,11 @@ func file_vultisig_keysign_v1_tron_contract_payload_proto_rawDescGZIP() []byte {
 	return file_vultisig_keysign_v1_tron_contract_payload_proto_rawDescData
 }
 
-var file_vultisig_keysign_v1_tron_contract_payload_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_vultisig_keysign_v1_tron_contract_payload_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_vultisig_keysign_v1_tron_contract_payload_proto_goTypes = []any{
-	(*TronTransferContractPayload)(nil),     // 0: vultisig.keysign.v1.TronTransferContractPayload
-	(*TronTriggerSmartContractPayload)(nil), // 1: vultisig.keysign.v1.TronTriggerSmartContractPayload
+	(*TronTransferContractPayload)(nil),      // 0: vultisig.keysign.v1.TronTransferContractPayload
+	(*TronTriggerSmartContractPayload)(nil),  // 1: vultisig.keysign.v1.TronTriggerSmartContractPayload
+	(*TronTransferAssetContractPayload)(nil), // 2: vultisig.keysign.v1.TronTransferAssetContractPayload
 }
 var file_vultisig_keysign_v1_tron_contract_payload_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -268,6 +350,18 @@ func file_vultisig_keysign_v1_tron_contract_payload_proto_init() {
 				return nil
 			}
 		}
+		file_vultisig_keysign_v1_tron_contract_payload_proto_msgTypes[2].Exporter = func(v any, i int) any {
+			switch v := v.(*TronTransferAssetContractPayload); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	file_vultisig_keysign_v1_tron_contract_payload_proto_msgTypes[1].OneofWrappers = []any{}
 	type x struct{}
@@ -276,7 +370,7 @@ func file_vultisig_keysign_v1_tron_contract_payload_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_vultisig_keysign_v1_tron_contract_payload_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
