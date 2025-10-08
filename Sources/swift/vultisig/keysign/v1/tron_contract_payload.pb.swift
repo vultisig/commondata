@@ -36,8 +36,64 @@ public struct VSTronTransferContractPayload {
   public init() {}
 }
 
+public struct VSTronTriggerSmartContractPayload {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var ownerAddress: String = String()
+
+  public var contractAddress: String = String()
+
+  public var callValue: String {
+    get {return _callValue ?? String()}
+    set {_callValue = newValue}
+  }
+  /// Returns true if `callValue` has been explicitly set.
+  public var hasCallValue: Bool {return self._callValue != nil}
+  /// Clears the value of `callValue`. Subsequent reads from it will return its default value.
+  public mutating func clearCallValue() {self._callValue = nil}
+
+  public var callTokenValue: String {
+    get {return _callTokenValue ?? String()}
+    set {_callTokenValue = newValue}
+  }
+  /// Returns true if `callTokenValue` has been explicitly set.
+  public var hasCallTokenValue: Bool {return self._callTokenValue != nil}
+  /// Clears the value of `callTokenValue`. Subsequent reads from it will return its default value.
+  public mutating func clearCallTokenValue() {self._callTokenValue = nil}
+
+  public var tokenID: UInt64 {
+    get {return _tokenID ?? 0}
+    set {_tokenID = newValue}
+  }
+  /// Returns true if `tokenID` has been explicitly set.
+  public var hasTokenID: Bool {return self._tokenID != nil}
+  /// Clears the value of `tokenID`. Subsequent reads from it will return its default value.
+  public mutating func clearTokenID() {self._tokenID = nil}
+
+  public var data: String {
+    get {return _data ?? String()}
+    set {_data = newValue}
+  }
+  /// Returns true if `data` has been explicitly set.
+  public var hasData: Bool {return self._data != nil}
+  /// Clears the value of `data`. Subsequent reads from it will return its default value.
+  public mutating func clearData() {self._data = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _callValue: String? = nil
+  fileprivate var _callTokenValue: String? = nil
+  fileprivate var _tokenID: UInt64? = nil
+  fileprivate var _data: String? = nil
+}
+
 #if swift(>=5.5) && canImport(_Concurrency)
 extension VSTronTransferContractPayload: @unchecked Sendable {}
+extension VSTronTriggerSmartContractPayload: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -83,6 +139,72 @@ extension VSTronTransferContractPayload: SwiftProtobuf.Message, SwiftProtobuf._M
     if lhs.toAddress != rhs.toAddress {return false}
     if lhs.ownerAddress != rhs.ownerAddress {return false}
     if lhs.amount != rhs.amount {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSTronTriggerSmartContractPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".TronTriggerSmartContractPayload"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "owner_address"),
+    2: .standard(proto: "contract_address"),
+    3: .standard(proto: "call_value"),
+    4: .standard(proto: "call_token_value"),
+    5: .standard(proto: "token_id"),
+    6: .same(proto: "data"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.ownerAddress) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.contractAddress) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self._callValue) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self._callTokenValue) }()
+      case 5: try { try decoder.decodeSingularUInt64Field(value: &self._tokenID) }()
+      case 6: try { try decoder.decodeSingularStringField(value: &self._data) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    if !self.ownerAddress.isEmpty {
+      try visitor.visitSingularStringField(value: self.ownerAddress, fieldNumber: 1)
+    }
+    if !self.contractAddress.isEmpty {
+      try visitor.visitSingularStringField(value: self.contractAddress, fieldNumber: 2)
+    }
+    try { if let v = self._callValue {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 3)
+    } }()
+    try { if let v = self._callTokenValue {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 4)
+    } }()
+    try { if let v = self._tokenID {
+      try visitor.visitSingularUInt64Field(value: v, fieldNumber: 5)
+    } }()
+    try { if let v = self._data {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 6)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSTronTriggerSmartContractPayload, rhs: VSTronTriggerSmartContractPayload) -> Bool {
+    if lhs.ownerAddress != rhs.ownerAddress {return false}
+    if lhs.contractAddress != rhs.contractAddress {return false}
+    if lhs._callValue != rhs._callValue {return false}
+    if lhs._callTokenValue != rhs._callTokenValue {return false}
+    if lhs._tokenID != rhs._tokenID {return false}
+    if lhs._data != rhs._data {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
