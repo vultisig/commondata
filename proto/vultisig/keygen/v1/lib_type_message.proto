@@ -9,4 +9,5 @@ option swift_prefix = "VS";
 enum LibType {
   LIB_TYPE_GG20 = 0; // Default to GG20
   LIB_TYPE_DKLS = 1;
+  LIB_TYPE_KEYIMPORT = 2;
 }
