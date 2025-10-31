@@ -27,6 +27,7 @@ public enum VSLibType: SwiftProtobuf.Enum {
   /// Default to GG20
   case gg20 // = 0
   case dkls // = 1
+  case keyimport // = 2
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -37,6 +38,7 @@ public enum VSLibType: SwiftProtobuf.Enum {
     switch rawValue {
     case 0: self = .gg20
     case 1: self = .dkls
+    case 2: self = .keyimport
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -45,6 +47,7 @@ public enum VSLibType: SwiftProtobuf.Enum {
     switch self {
     case .gg20: return 0
     case .dkls: return 1
+    case .keyimport: return 2
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -58,6 +61,7 @@ extension VSLibType: CaseIterable {
   public static let allCases: [VSLibType] = [
     .gg20,
     .dkls,
+    .keyimport,
   ]
 }
 
@@ -73,5 +77,6 @@ extension VSLibType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     0: .same(proto: "LIB_TYPE_GG20"),
     1: .same(proto: "LIB_TYPE_DKLS"),
+    2: .same(proto: "LIB_TYPE_KEYIMPORT"),
   ]
 }
