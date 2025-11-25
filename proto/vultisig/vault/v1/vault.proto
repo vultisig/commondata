@@ -24,4 +24,10 @@ message Vault {
     string keyshare = 2;
   }
   vultisig.keygen.v1.LibType lib_type = 10;
+  message ChainPublicKey {
+    string public_key = 1;
+    string chain = 2;
+    bool is_eddsa = 3;
+  }
+  repeated ChainPublicKey chain_public_keys = 11;
 }
