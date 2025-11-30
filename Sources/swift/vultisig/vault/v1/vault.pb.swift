@@ -52,6 +52,8 @@ public struct VSVault {
 
   public var libType: VSLibType = .gg20
 
+  public var chainPublicKeys: [VSVault.ChainPublicKey] = []
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public struct KeyShare {
@@ -68,6 +70,22 @@ public struct VSVault {
     public init() {}
   }
 
+  public struct ChainPublicKey {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    public var publicKey: String = String()
+
+    public var chain: String = String()
+
+    public var isEddsa: Bool = false
+
+    public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    public init() {}
+  }
+
   public init() {}
 
   fileprivate var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
@@ -76,6 +94,7 @@ public struct VSVault {
 #if swift(>=5.5) && canImport(_Concurrency)
 extension VSVault: @unchecked Sendable {}
 extension VSVault.KeyShare: @unchecked Sendable {}
+extension VSVault.ChainPublicKey: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -95,6 +114,7 @@ extension VSVault: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
     8: .standard(proto: "local_party_id"),
     9: .standard(proto: "reshare_prefix"),
     10: .standard(proto: "lib_type"),
+    11: .standard(proto: "chain_public_keys"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -113,6 +133,7 @@ extension VSVault: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
       case 8: try { try decoder.decodeSingularStringField(value: &self.localPartyID) }()
       case 9: try { try decoder.decodeSingularStringField(value: &self.resharePrefix) }()
       case 10: try { try decoder.decodeSingularEnumField(value: &self.libType) }()
+      case 11: try { try decoder.decodeRepeatedMessageField(value: &self.chainPublicKeys) }()
       default: break
       }
     }
@@ -153,6 +174,9 @@ extension VSVault: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
     if self.libType != .gg20 {
       try visitor.visitSingularEnumField(value: self.libType, fieldNumber: 10)
     }
+    if !self.chainPublicKeys.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.chainPublicKeys, fieldNumber: 11)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -167,6 +191,7 @@ extension VSVault: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
     if lhs.localPartyID != rhs.localPartyID {return false}
     if lhs.resharePrefix != rhs.resharePrefix {return false}
     if lhs.libType != rhs.libType {return false}
+    if lhs.chainPublicKeys != rhs.chainPublicKeys {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -205,6 +230,50 @@ extension VSVault.KeyShare: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
   public static func ==(lhs: VSVault.KeyShare, rhs: VSVault.KeyShare) -> Bool {
     if lhs.publicKey != rhs.publicKey {return false}
     if lhs.keyshare != rhs.keyshare {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSVault.ChainPublicKey: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = VSVault.protoMessageName + ".ChainPublicKey"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "public_key"),
+    2: .same(proto: "chain"),
+    3: .standard(proto: "is_eddsa"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.publicKey) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.chain) }()
+      case 3: try { try decoder.decodeSingularBoolField(value: &self.isEddsa) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.publicKey.isEmpty {
+      try visitor.visitSingularStringField(value: self.publicKey, fieldNumber: 1)
+    }
+    if !self.chain.isEmpty {
+      try visitor.visitSingularStringField(value: self.chain, fieldNumber: 2)
+    }
+    if self.isEddsa != false {
+      try visitor.visitSingularBoolField(value: self.isEddsa, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSVault.ChainPublicKey, rhs: VSVault.ChainPublicKey) -> Bool {
+    if lhs.publicKey != rhs.publicKey {return false}
+    if lhs.chain != rhs.chain {return false}
+    if lhs.isEddsa != rhs.isEddsa {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
