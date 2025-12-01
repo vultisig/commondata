@@ -15,4 +15,5 @@ message KeygenMessage {
   bool use_vultisig_relay = 5;
   string vault_name = 6;
   LibType lib_type = 7; // Default to GG20
+  repeated string chains = 8; // This field only used by KeyImport
 }
