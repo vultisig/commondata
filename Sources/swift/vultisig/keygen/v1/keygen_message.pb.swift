@@ -40,6 +40,9 @@ public struct VSKeygenMessage {
   /// Default to GG20
   public var libType: VSLibType = .gg20
 
+  /// This field only used by KeyImport
+  public var chains: [String] = []
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -63,6 +66,7 @@ extension VSKeygenMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
     5: .standard(proto: "use_vultisig_relay"),
     6: .standard(proto: "vault_name"),
     7: .standard(proto: "lib_type"),
+    8: .same(proto: "chains"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -78,6 +82,7 @@ extension VSKeygenMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
       case 5: try { try decoder.decodeSingularBoolField(value: &self.useVultisigRelay) }()
       case 6: try { try decoder.decodeSingularStringField(value: &self.vaultName) }()
       case 7: try { try decoder.decodeSingularEnumField(value: &self.libType) }()
+      case 8: try { try decoder.decodeRepeatedStringField(value: &self.chains) }()
       default: break
       }
     }
@@ -105,6 +110,9 @@ extension VSKeygenMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
     if self.libType != .gg20 {
       try visitor.visitSingularEnumField(value: self.libType, fieldNumber: 7)
     }
+    if !self.chains.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.chains, fieldNumber: 8)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -116,6 +124,7 @@ extension VSKeygenMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
     if lhs.useVultisigRelay != rhs.useVultisigRelay {return false}
     if lhs.vaultName != rhs.vaultName {return false}
     if lhs.libType != rhs.libType {return false}
+    if lhs.chains != rhs.chains {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
