@@ -11,6 +11,24 @@ message CosmosCoin {
   string amount = 2;
 }
 
+message CosmosFee {
+  repeated CosmosCoin amount = 1;
+  string gas = 2;
+  optional string payer = 3;
+  optional string granter = 4;
+  optional string feePayer = 5;
+}
+
+message CosmosMsg {
+  string type = 1;
+  string value = 2;
+}
+
+message SignAmino {
+  CosmosFee fee = 40;
+  repeated CosmosMsg msgs = 41;
+}
+
 message WasmExecuteContractPayload {
   string sender_address = 1;
   string contract_address = 2;
