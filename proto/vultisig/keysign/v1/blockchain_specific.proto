@@ -8,7 +8,6 @@ option swift_prefix = "VS";
 message UTXOSpecific {
   string byte_fee = 1;
   bool send_max_amount = 2;
-  optional string psbt = 3;
 }
 
 message CardanoChainSpecific {

@@ -307,6 +307,15 @@ public struct VSKeysignPayload {
     set {_uniqueStorage()._contractPayload = .tronTransferAssetContractPayload(newValue)}
   }
 
+  public var signAmino: VSSignAmino {
+    get {return _storage._signAmino ?? VSSignAmino()}
+    set {_uniqueStorage()._signAmino = newValue}
+  }
+  /// Returns true if `signAmino` has been explicitly set.
+  public var hasSignAmino: Bool {return _storage._signAmino != nil}
+  /// Clears the value of `signAmino`. Subsequent reads from it will return its default value.
+  public mutating func clearSignAmino() {_uniqueStorage()._signAmino = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum OneOf_BlockchainSpecific: Equatable {
@@ -573,6 +582,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     36: .standard(proto: "tron_transfer_contract_payload"),
     37: .standard(proto: "tron_trigger_smart_contract_payload"),
     38: .standard(proto: "tron_transfer_asset_contract_payload"),
+    39: .same(proto: "signAmino"),
   ]
 
   fileprivate class _StorageClass {
@@ -589,6 +599,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     var _libType: String = String()
     var _skipBroadcast: Bool? = nil
     var _contractPayload: VSKeysignPayload.OneOf_ContractPayload?
+    var _signAmino: VSSignAmino? = nil
 
     #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
@@ -616,6 +627,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       _libType = source._libType
       _skipBroadcast = source._skipBroadcast
       _contractPayload = source._contractPayload
+      _signAmino = source._signAmino
     }
   }
 
@@ -904,6 +916,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
             _storage._contractPayload = .tronTransferAssetContractPayload(v)
           }
         }()
+        case 39: try { try decoder.decodeSingularMessageField(value: &_storage._signAmino) }()
         default: break
         }
       }
@@ -1035,6 +1048,9 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       }()
       case nil: break
       }
+      try { if let v = _storage._signAmino {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 39)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -1057,6 +1073,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         if _storage._libType != rhs_storage._libType {return false}
         if _storage._skipBroadcast != rhs_storage._skipBroadcast {return false}
         if _storage._contractPayload != rhs_storage._contractPayload {return false}
+        if _storage._signAmino != rhs_storage._signAmino {return false}
         return true
       }
       if !storagesAreEqual {return false}
