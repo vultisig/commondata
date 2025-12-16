@@ -283,6 +283,48 @@ public struct VSKeysignPayload {
     set {_uniqueStorage()._contractPayload = .wasmExecuteContractPayload(newValue)}
   }
 
+  public var tronTransferContractPayload: VSTronTransferContractPayload {
+    get {
+      if case .tronTransferContractPayload(let v)? = _storage._contractPayload {return v}
+      return VSTronTransferContractPayload()
+    }
+    set {_uniqueStorage()._contractPayload = .tronTransferContractPayload(newValue)}
+  }
+
+  public var tronTriggerSmartContractPayload: VSTronTriggerSmartContractPayload {
+    get {
+      if case .tronTriggerSmartContractPayload(let v)? = _storage._contractPayload {return v}
+      return VSTronTriggerSmartContractPayload()
+    }
+    set {_uniqueStorage()._contractPayload = .tronTriggerSmartContractPayload(newValue)}
+  }
+
+  public var tronTransferAssetContractPayload: VSTronTransferAssetContractPayload {
+    get {
+      if case .tronTransferAssetContractPayload(let v)? = _storage._contractPayload {return v}
+      return VSTronTransferAssetContractPayload()
+    }
+    set {_uniqueStorage()._contractPayload = .tronTransferAssetContractPayload(newValue)}
+  }
+
+  public var signAmino: VSSignAmino {
+    get {return _storage._signAmino ?? VSSignAmino()}
+    set {_uniqueStorage()._signAmino = newValue}
+  }
+  /// Returns true if `signAmino` has been explicitly set.
+  public var hasSignAmino: Bool {return _storage._signAmino != nil}
+  /// Clears the value of `signAmino`. Subsequent reads from it will return its default value.
+  public mutating func clearSignAmino() {_uniqueStorage()._signAmino = nil}
+
+  public var signDirect: VSSignDirect {
+    get {return _storage._signDirect ?? VSSignDirect()}
+    set {_uniqueStorage()._signDirect = newValue}
+  }
+  /// Returns true if `signDirect` has been explicitly set.
+  public var hasSignDirect: Bool {return _storage._signDirect != nil}
+  /// Clears the value of `signDirect`. Subsequent reads from it will return its default value.
+  public mutating func clearSignDirect() {_uniqueStorage()._signDirect = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum OneOf_BlockchainSpecific: Equatable {
@@ -395,6 +437,9 @@ public struct VSKeysignPayload {
 
   public enum OneOf_ContractPayload: Equatable {
     case wasmExecuteContractPayload(VSWasmExecuteContractPayload)
+    case tronTransferContractPayload(VSTronTransferContractPayload)
+    case tronTriggerSmartContractPayload(VSTronTriggerSmartContractPayload)
+    case tronTransferAssetContractPayload(VSTronTransferAssetContractPayload)
 
   #if !swift(>=4.1)
     public static func ==(lhs: VSKeysignPayload.OneOf_ContractPayload, rhs: VSKeysignPayload.OneOf_ContractPayload) -> Bool {
@@ -406,6 +451,19 @@ public struct VSKeysignPayload {
         guard case .wasmExecuteContractPayload(let l) = lhs, case .wasmExecuteContractPayload(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
+      case (.tronTransferContractPayload, .tronTransferContractPayload): return {
+        guard case .tronTransferContractPayload(let l) = lhs, case .tronTransferContractPayload(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.tronTriggerSmartContractPayload, .tronTriggerSmartContractPayload): return {
+        guard case .tronTriggerSmartContractPayload(let l) = lhs, case .tronTriggerSmartContractPayload(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.tronTransferAssetContractPayload, .tronTransferAssetContractPayload): return {
+        guard case .tronTransferAssetContractPayload(let l) = lhs, case .tronTransferAssetContractPayload(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      default: return false
       }
     }
   #endif
@@ -530,6 +588,11 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     33: .standard(proto: "lib_type"),
     34: .standard(proto: "skip_broadcast"),
     35: .standard(proto: "wasm_execute_contract_payload"),
+    36: .standard(proto: "tron_transfer_contract_payload"),
+    37: .standard(proto: "tron_trigger_smart_contract_payload"),
+    38: .standard(proto: "tron_transfer_asset_contract_payload"),
+    39: .standard(proto: "sign_amino"),
+    40: .standard(proto: "sign_direct"),
   ]
 
   fileprivate class _StorageClass {
@@ -546,6 +609,8 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     var _libType: String = String()
     var _skipBroadcast: Bool? = nil
     var _contractPayload: VSKeysignPayload.OneOf_ContractPayload?
+    var _signAmino: VSSignAmino? = nil
+    var _signDirect: VSSignDirect? = nil
 
     #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
@@ -573,6 +638,8 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       _libType = source._libType
       _skipBroadcast = source._skipBroadcast
       _contractPayload = source._contractPayload
+      _signAmino = source._signAmino
+      _signDirect = source._signDirect
     }
   }
 
@@ -822,6 +889,47 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
             _storage._contractPayload = .wasmExecuteContractPayload(v)
           }
         }()
+        case 36: try {
+          var v: VSTronTransferContractPayload?
+          var hadOneofValue = false
+          if let current = _storage._contractPayload {
+            hadOneofValue = true
+            if case .tronTransferContractPayload(let m) = current {v = m}
+          }
+          try decoder.decodeSingularMessageField(value: &v)
+          if let v = v {
+            if hadOneofValue {try decoder.handleConflictingOneOf()}
+            _storage._contractPayload = .tronTransferContractPayload(v)
+          }
+        }()
+        case 37: try {
+          var v: VSTronTriggerSmartContractPayload?
+          var hadOneofValue = false
+          if let current = _storage._contractPayload {
+            hadOneofValue = true
+            if case .tronTriggerSmartContractPayload(let m) = current {v = m}
+          }
+          try decoder.decodeSingularMessageField(value: &v)
+          if let v = v {
+            if hadOneofValue {try decoder.handleConflictingOneOf()}
+            _storage._contractPayload = .tronTriggerSmartContractPayload(v)
+          }
+        }()
+        case 38: try {
+          var v: VSTronTransferAssetContractPayload?
+          var hadOneofValue = false
+          if let current = _storage._contractPayload {
+            hadOneofValue = true
+            if case .tronTransferAssetContractPayload(let m) = current {v = m}
+          }
+          try decoder.decodeSingularMessageField(value: &v)
+          if let v = v {
+            if hadOneofValue {try decoder.handleConflictingOneOf()}
+            _storage._contractPayload = .tronTransferAssetContractPayload(v)
+          }
+        }()
+        case 39: try { try decoder.decodeSingularMessageField(value: &_storage._signAmino) }()
+        case 40: try { try decoder.decodeSingularMessageField(value: &_storage._signDirect) }()
         default: break
         }
       }
@@ -934,8 +1042,30 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       try { if let v = _storage._skipBroadcast {
         try visitor.visitSingularBoolField(value: v, fieldNumber: 34)
       } }()
-      try { if case .wasmExecuteContractPayload(let v)? = _storage._contractPayload {
+      switch _storage._contractPayload {
+      case .wasmExecuteContractPayload?: try {
+        guard case .wasmExecuteContractPayload(let v)? = _storage._contractPayload else { preconditionFailure() }
         try visitor.visitSingularMessageField(value: v, fieldNumber: 35)
+      }()
+      case .tronTransferContractPayload?: try {
+        guard case .tronTransferContractPayload(let v)? = _storage._contractPayload else { preconditionFailure() }
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 36)
+      }()
+      case .tronTriggerSmartContractPayload?: try {
+        guard case .tronTriggerSmartContractPayload(let v)? = _storage._contractPayload else { preconditionFailure() }
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 37)
+      }()
+      case .tronTransferAssetContractPayload?: try {
+        guard case .tronTransferAssetContractPayload(let v)? = _storage._contractPayload else { preconditionFailure() }
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 38)
+      }()
+      case nil: break
+      }
+      try { if let v = _storage._signAmino {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 39)
+      } }()
+      try { if let v = _storage._signDirect {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 40)
       } }()
     }
     try unknownFields.traverse(visitor: &visitor)
@@ -959,6 +1089,8 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         if _storage._libType != rhs_storage._libType {return false}
         if _storage._skipBroadcast != rhs_storage._skipBroadcast {return false}
         if _storage._contractPayload != rhs_storage._contractPayload {return false}
+        if _storage._signAmino != rhs_storage._signAmino {return false}
+        if _storage._signDirect != rhs_storage._signDirect {return false}
         return true
       }
       if !storagesAreEqual {return false}
