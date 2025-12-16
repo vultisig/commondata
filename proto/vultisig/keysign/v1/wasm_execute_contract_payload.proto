@@ -16,7 +16,7 @@ message CosmosFee {
   string gas = 2;
   optional string payer = 3;
   optional string granter = 4;
-  optional string feePayer = 5;
+  optional string fee_payer = 5;
 }
 
 message CosmosMsg {

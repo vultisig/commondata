@@ -116,6 +116,24 @@ public struct VSSignAmino {
   fileprivate var _fee: VSCosmosFee? = nil
 }
 
+public struct VSSignDirect {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var bodyBytes: String = String()
+
+  public var authInfoBytes: String = String()
+
+  public var chainID: String = String()
+
+  public var accountNumber: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 public struct VSWasmExecuteContractPayload {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -139,6 +157,7 @@ extension VSCosmosCoin: @unchecked Sendable {}
 extension VSCosmosFee: @unchecked Sendable {}
 extension VSCosmosMsg: @unchecked Sendable {}
 extension VSSignAmino: @unchecked Sendable {}
+extension VSSignDirect: @unchecked Sendable {}
 extension VSWasmExecuteContractPayload: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
@@ -191,7 +210,7 @@ extension VSCosmosFee: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementati
     2: .same(proto: "gas"),
     3: .same(proto: "payer"),
     4: .same(proto: "granter"),
-    5: .same(proto: "feePayer"),
+    5: .standard(proto: "fee_payer"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -319,6 +338,56 @@ extension VSSignAmino: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementati
   public static func ==(lhs: VSSignAmino, rhs: VSSignAmino) -> Bool {
     if lhs._fee != rhs._fee {return false}
     if lhs.msgs != rhs.msgs {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSSignDirect: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".SignDirect"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    42: .standard(proto: "body_bytes"),
+    43: .standard(proto: "auth_info_bytes"),
+    44: .standard(proto: "chain_id"),
+    45: .standard(proto: "account_number"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 42: try { try decoder.decodeSingularStringField(value: &self.bodyBytes) }()
+      case 43: try { try decoder.decodeSingularStringField(value: &self.authInfoBytes) }()
+      case 44: try { try decoder.decodeSingularStringField(value: &self.chainID) }()
+      case 45: try { try decoder.decodeSingularStringField(value: &self.accountNumber) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.bodyBytes.isEmpty {
+      try visitor.visitSingularStringField(value: self.bodyBytes, fieldNumber: 42)
+    }
+    if !self.authInfoBytes.isEmpty {
+      try visitor.visitSingularStringField(value: self.authInfoBytes, fieldNumber: 43)
+    }
+    if !self.chainID.isEmpty {
+      try visitor.visitSingularStringField(value: self.chainID, fieldNumber: 44)
+    }
+    if !self.accountNumber.isEmpty {
+      try visitor.visitSingularStringField(value: self.accountNumber, fieldNumber: 45)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSSignDirect, rhs: VSSignDirect) -> Bool {
+    if lhs.bodyBytes != rhs.bodyBytes {return false}
+    if lhs.authInfoBytes != rhs.authInfoBytes {return false}
+    if lhs.chainID != rhs.chainID {return false}
+    if lhs.accountNumber != rhs.accountNumber {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
