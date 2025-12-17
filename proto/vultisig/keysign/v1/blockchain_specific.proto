@@ -8,6 +8,7 @@ option swift_prefix = "VS";
 message UTXOSpecific {
   string byte_fee = 1;
   bool send_max_amount = 2;
+  bool is_deposit = 3;
 }
 
 message CardanoChainSpecific {
@@ -21,6 +22,7 @@ message EthereumSpecific {
   string priority_fee = 2;
   int64 nonce = 3;
   string gas_limit = 4;
+  bool is_deposit = 5;
 }
 
 message THORChainSpecific {
