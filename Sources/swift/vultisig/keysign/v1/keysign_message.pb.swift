@@ -307,23 +307,26 @@ public struct VSKeysignPayload {
     set {_uniqueStorage()._contractPayload = .tronTransferAssetContractPayload(newValue)}
   }
 
-  public var signAmino: VSSignAmino {
-    get {return _storage._signAmino ?? VSSignAmino()}
-    set {_uniqueStorage()._signAmino = newValue}
+  public var signMode: OneOf_SignMode? {
+    get {return _storage._signMode}
+    set {_uniqueStorage()._signMode = newValue}
   }
-  /// Returns true if `signAmino` has been explicitly set.
-  public var hasSignAmino: Bool {return _storage._signAmino != nil}
-  /// Clears the value of `signAmino`. Subsequent reads from it will return its default value.
-  public mutating func clearSignAmino() {_uniqueStorage()._signAmino = nil}
+
+  public var signAmino: VSSignAmino {
+    get {
+      if case .signAmino(let v)? = _storage._signMode {return v}
+      return VSSignAmino()
+    }
+    set {_uniqueStorage()._signMode = .signAmino(newValue)}
+  }
 
   public var signDirect: VSSignDirect {
-    get {return _storage._signDirect ?? VSSignDirect()}
-    set {_uniqueStorage()._signDirect = newValue}
+    get {
+      if case .signDirect(let v)? = _storage._signMode {return v}
+      return VSSignDirect()
+    }
+    set {_uniqueStorage()._signMode = .signDirect(newValue)}
   }
-  /// Returns true if `signDirect` has been explicitly set.
-  public var hasSignDirect: Bool {return _storage._signDirect != nil}
-  /// Clears the value of `signDirect`. Subsequent reads from it will return its default value.
-  public mutating func clearSignDirect() {_uniqueStorage()._signDirect = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -469,6 +472,30 @@ public struct VSKeysignPayload {
   #endif
   }
 
+  public enum OneOf_SignMode: Equatable {
+    case signAmino(VSSignAmino)
+    case signDirect(VSSignDirect)
+
+  #if !swift(>=4.1)
+    public static func ==(lhs: VSKeysignPayload.OneOf_SignMode, rhs: VSKeysignPayload.OneOf_SignMode) -> Bool {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch (lhs, rhs) {
+      case (.signAmino, .signAmino): return {
+        guard case .signAmino(let l) = lhs, case .signAmino(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.signDirect, .signDirect): return {
+        guard case .signDirect(let l) = lhs, case .signDirect(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      default: return false
+      }
+    }
+  #endif
+  }
+
   public init() {}
 
   fileprivate var _storage = _StorageClass.defaultInstance
@@ -480,6 +507,7 @@ extension VSKeysignPayload: @unchecked Sendable {}
 extension VSKeysignPayload.OneOf_BlockchainSpecific: @unchecked Sendable {}
 extension VSKeysignPayload.OneOf_SwapPayload: @unchecked Sendable {}
 extension VSKeysignPayload.OneOf_ContractPayload: @unchecked Sendable {}
+extension VSKeysignPayload.OneOf_SignMode: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -609,8 +637,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     var _libType: String = String()
     var _skipBroadcast: Bool? = nil
     var _contractPayload: VSKeysignPayload.OneOf_ContractPayload?
-    var _signAmino: VSSignAmino? = nil
-    var _signDirect: VSSignDirect? = nil
+    var _signMode: VSKeysignPayload.OneOf_SignMode?
 
     #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
@@ -638,8 +665,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       _libType = source._libType
       _skipBroadcast = source._skipBroadcast
       _contractPayload = source._contractPayload
-      _signAmino = source._signAmino
-      _signDirect = source._signDirect
+      _signMode = source._signMode
     }
   }
 
@@ -928,8 +954,32 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
             _storage._contractPayload = .tronTransferAssetContractPayload(v)
           }
         }()
-        case 39: try { try decoder.decodeSingularMessageField(value: &_storage._signAmino) }()
-        case 40: try { try decoder.decodeSingularMessageField(value: &_storage._signDirect) }()
+        case 39: try {
+          var v: VSSignAmino?
+          var hadOneofValue = false
+          if let current = _storage._signMode {
+            hadOneofValue = true
+            if case .signAmino(let m) = current {v = m}
+          }
+          try decoder.decodeSingularMessageField(value: &v)
+          if let v = v {
+            if hadOneofValue {try decoder.handleConflictingOneOf()}
+            _storage._signMode = .signAmino(v)
+          }
+        }()
+        case 40: try {
+          var v: VSSignDirect?
+          var hadOneofValue = false
+          if let current = _storage._signMode {
+            hadOneofValue = true
+            if case .signDirect(let m) = current {v = m}
+          }
+          try decoder.decodeSingularMessageField(value: &v)
+          if let v = v {
+            if hadOneofValue {try decoder.handleConflictingOneOf()}
+            _storage._signMode = .signDirect(v)
+          }
+        }()
         default: break
         }
       }
@@ -1061,12 +1111,17 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       }()
       case nil: break
       }
-      try { if let v = _storage._signAmino {
+      switch _storage._signMode {
+      case .signAmino?: try {
+        guard case .signAmino(let v)? = _storage._signMode else { preconditionFailure() }
         try visitor.visitSingularMessageField(value: v, fieldNumber: 39)
-      } }()
-      try { if let v = _storage._signDirect {
+      }()
+      case .signDirect?: try {
+        guard case .signDirect(let v)? = _storage._signMode else { preconditionFailure() }
         try visitor.visitSingularMessageField(value: v, fieldNumber: 40)
-      } }()
+      }()
+      case nil: break
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -1089,8 +1144,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         if _storage._libType != rhs_storage._libType {return false}
         if _storage._skipBroadcast != rhs_storage._skipBroadcast {return false}
         if _storage._contractPayload != rhs_storage._contractPayload {return false}
-        if _storage._signAmino != rhs_storage._signAmino {return false}
-        if _storage._signDirect != rhs_storage._signDirect {return false}
+        if _storage._signMode != rhs_storage._signMode {return false}
         return true
       }
       if !storagesAreEqual {return false}
