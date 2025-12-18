@@ -159,11 +159,11 @@ type KeysignPayload struct {
 	//	*KeysignPayload_TronTriggerSmartContractPayload
 	//	*KeysignPayload_TronTransferAssetContractPayload
 	ContractPayload isKeysignPayload_ContractPayload `protobuf_oneof:"contract_payload"`
-	// Types that are assignable to SignMode:
+	// Types that are assignable to SignData:
 	//
 	//	*KeysignPayload_SignAmino
 	//	*KeysignPayload_SignDirect
-	SignMode isKeysignPayload_SignMode `protobuf_oneof:"sign_mode"`
+	SignData isKeysignPayload_SignData `protobuf_oneof:"sign_data"`
 }
 
 func (x *KeysignPayload) Reset() {
@@ -429,22 +429,22 @@ func (x *KeysignPayload) GetTronTransferAssetContractPayload() *TronTransferAsse
 	return nil
 }
 
-func (m *KeysignPayload) GetSignMode() isKeysignPayload_SignMode {
+func (m *KeysignPayload) GetSignData() isKeysignPayload_SignData {
 	if m != nil {
-		return m.SignMode
+		return m.SignData
 	}
 	return nil
 }
 
 func (x *KeysignPayload) GetSignAmino() *SignAmino {
-	if x, ok := x.GetSignMode().(*KeysignPayload_SignAmino); ok {
+	if x, ok := x.GetSignData().(*KeysignPayload_SignAmino); ok {
 		return x.SignAmino
 	}
 	return nil
 }
 
 func (x *KeysignPayload) GetSignDirect() *SignDirect {
-	if x, ok := x.GetSignMode().(*KeysignPayload_SignDirect); ok {
+	if x, ok := x.GetSignData().(*KeysignPayload_SignDirect); ok {
 		return x.SignDirect
 	}
 	return nil
@@ -582,8 +582,8 @@ func (*KeysignPayload_TronTriggerSmartContractPayload) isKeysignPayload_Contract
 
 func (*KeysignPayload_TronTransferAssetContractPayload) isKeysignPayload_ContractPayload() {}
 
-type isKeysignPayload_SignMode interface {
-	isKeysignPayload_SignMode()
+type isKeysignPayload_SignData interface {
+	isKeysignPayload_SignData()
 }
 
 type KeysignPayload_SignAmino struct {
@@ -594,9 +594,9 @@ type KeysignPayload_SignDirect struct {
 	SignDirect *SignDirect `protobuf:"bytes,40,opt,name=sign_direct,json=signDirect,proto3,oneof"`
 }
 
-func (*KeysignPayload_SignAmino) isKeysignPayload_SignMode() {}
+func (*KeysignPayload_SignAmino) isKeysignPayload_SignData() {}
 
-func (*KeysignPayload_SignDirect) isKeysignPayload_SignMode() {}
+func (*KeysignPayload_SignDirect) isKeysignPayload_SignData() {}
 
 var File_vultisig_keysign_v1_keysign_message_proto protoreflect.FileDescriptor
 
@@ -818,7 +818,7 @@ var file_vultisig_keysign_v1_keysign_message_proto_rawDesc = []byte{
 	0x65, 0x63, 0x69, 0x66, 0x69, 0x63, 0x42, 0x0e, 0x0a, 0x0c, 0x73, 0x77, 0x61, 0x70, 0x5f, 0x70,
 	0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x42, 0x12, 0x0a, 0x10, 0x63, 0x6f, 0x6e, 0x74, 0x72, 0x61,
 	0x63, 0x74, 0x5f, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x42, 0x0b, 0x0a, 0x09, 0x73, 0x69,
-	0x67, 0x6e, 0x5f, 0x6d, 0x6f, 0x64, 0x65, 0x42, 0x07, 0x0a, 0x05, 0x5f, 0x6d, 0x65, 0x6d, 0x6f,
+	0x67, 0x6e, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x42, 0x07, 0x0a, 0x05, 0x5f, 0x6d, 0x65, 0x6d, 0x6f,
 	0x42, 0x18, 0x0a, 0x16, 0x5f, 0x65, 0x72, 0x63, 0x32, 0x30, 0x5f, 0x61, 0x70, 0x70, 0x72, 0x6f,
 	0x76, 0x65, 0x5f, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x42, 0x11, 0x0a, 0x0f, 0x5f, 0x73,
 	0x6b, 0x69, 0x70, 0x5f, 0x62, 0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x42, 0x54, 0x0a,

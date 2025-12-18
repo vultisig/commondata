@@ -63,7 +63,7 @@ message KeysignPayload {
     TronTriggerSmartContractPayload tron_trigger_smart_contract_payload = 37;
     TronTransferAssetContractPayload tron_transfer_asset_contract_payload = 38;
   }
-  oneof sign_mode {
+  oneof sign_data {
     SignAmino sign_amino = 39;
     SignDirect sign_direct = 40;
   }
