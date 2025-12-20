@@ -34,6 +34,106 @@ public struct VSCosmosCoin {
   public init() {}
 }
 
+public struct VSCosmosFee {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var amount: [VSCosmosCoin] = []
+
+  public var gas: String = String()
+
+  public var payer: String {
+    get {return _payer ?? String()}
+    set {_payer = newValue}
+  }
+  /// Returns true if `payer` has been explicitly set.
+  public var hasPayer: Bool {return self._payer != nil}
+  /// Clears the value of `payer`. Subsequent reads from it will return its default value.
+  public mutating func clearPayer() {self._payer = nil}
+
+  public var granter: String {
+    get {return _granter ?? String()}
+    set {_granter = newValue}
+  }
+  /// Returns true if `granter` has been explicitly set.
+  public var hasGranter: Bool {return self._granter != nil}
+  /// Clears the value of `granter`. Subsequent reads from it will return its default value.
+  public mutating func clearGranter() {self._granter = nil}
+
+  public var feePayer: String {
+    get {return _feePayer ?? String()}
+    set {_feePayer = newValue}
+  }
+  /// Returns true if `feePayer` has been explicitly set.
+  public var hasFeePayer: Bool {return self._feePayer != nil}
+  /// Clears the value of `feePayer`. Subsequent reads from it will return its default value.
+  public mutating func clearFeePayer() {self._feePayer = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _payer: String? = nil
+  fileprivate var _granter: String? = nil
+  fileprivate var _feePayer: String? = nil
+}
+
+public struct VSCosmosMsg {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var type: String = String()
+
+  public var value: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public struct VSSignAmino {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var fee: VSCosmosFee {
+    get {return _fee ?? VSCosmosFee()}
+    set {_fee = newValue}
+  }
+  /// Returns true if `fee` has been explicitly set.
+  public var hasFee: Bool {return self._fee != nil}
+  /// Clears the value of `fee`. Subsequent reads from it will return its default value.
+  public mutating func clearFee() {self._fee = nil}
+
+  public var msgs: [VSCosmosMsg] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _fee: VSCosmosFee? = nil
+}
+
+public struct VSSignDirect {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var bodyBytes: String = String()
+
+  public var authInfoBytes: String = String()
+
+  public var chainID: String = String()
+
+  public var accountNumber: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 public struct VSWasmExecuteContractPayload {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -54,6 +154,10 @@ public struct VSWasmExecuteContractPayload {
 
 #if swift(>=5.5) && canImport(_Concurrency)
 extension VSCosmosCoin: @unchecked Sendable {}
+extension VSCosmosFee: @unchecked Sendable {}
+extension VSCosmosMsg: @unchecked Sendable {}
+extension VSSignAmino: @unchecked Sendable {}
+extension VSSignDirect: @unchecked Sendable {}
 extension VSWasmExecuteContractPayload: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
@@ -94,6 +198,196 @@ extension VSCosmosCoin: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementat
   public static func ==(lhs: VSCosmosCoin, rhs: VSCosmosCoin) -> Bool {
     if lhs.denom != rhs.denom {return false}
     if lhs.amount != rhs.amount {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSCosmosFee: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".CosmosFee"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "amount"),
+    2: .same(proto: "gas"),
+    3: .same(proto: "payer"),
+    4: .same(proto: "granter"),
+    5: .standard(proto: "fee_payer"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.amount) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.gas) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self._payer) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self._granter) }()
+      case 5: try { try decoder.decodeSingularStringField(value: &self._feePayer) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    if !self.amount.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.amount, fieldNumber: 1)
+    }
+    if !self.gas.isEmpty {
+      try visitor.visitSingularStringField(value: self.gas, fieldNumber: 2)
+    }
+    try { if let v = self._payer {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 3)
+    } }()
+    try { if let v = self._granter {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 4)
+    } }()
+    try { if let v = self._feePayer {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 5)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSCosmosFee, rhs: VSCosmosFee) -> Bool {
+    if lhs.amount != rhs.amount {return false}
+    if lhs.gas != rhs.gas {return false}
+    if lhs._payer != rhs._payer {return false}
+    if lhs._granter != rhs._granter {return false}
+    if lhs._feePayer != rhs._feePayer {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSCosmosMsg: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".CosmosMsg"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "type"),
+    2: .same(proto: "value"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.type) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.value) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.type.isEmpty {
+      try visitor.visitSingularStringField(value: self.type, fieldNumber: 1)
+    }
+    if !self.value.isEmpty {
+      try visitor.visitSingularStringField(value: self.value, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSCosmosMsg, rhs: VSCosmosMsg) -> Bool {
+    if lhs.type != rhs.type {return false}
+    if lhs.value != rhs.value {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSSignAmino: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".SignAmino"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "fee"),
+    2: .same(proto: "msgs"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._fee) }()
+      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.msgs) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._fee {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.msgs.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.msgs, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSSignAmino, rhs: VSSignAmino) -> Bool {
+    if lhs._fee != rhs._fee {return false}
+    if lhs.msgs != rhs.msgs {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSSignDirect: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".SignDirect"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "body_bytes"),
+    2: .standard(proto: "auth_info_bytes"),
+    3: .standard(proto: "chain_id"),
+    4: .standard(proto: "account_number"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.bodyBytes) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.authInfoBytes) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.chainID) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.accountNumber) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.bodyBytes.isEmpty {
+      try visitor.visitSingularStringField(value: self.bodyBytes, fieldNumber: 1)
+    }
+    if !self.authInfoBytes.isEmpty {
+      try visitor.visitSingularStringField(value: self.authInfoBytes, fieldNumber: 2)
+    }
+    if !self.chainID.isEmpty {
+      try visitor.visitSingularStringField(value: self.chainID, fieldNumber: 3)
+    }
+    if !self.accountNumber.isEmpty {
+      try visitor.visitSingularStringField(value: self.accountNumber, fieldNumber: 4)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSSignDirect, rhs: VSSignDirect) -> Bool {
+    if lhs.bodyBytes != rhs.bodyBytes {return false}
+    if lhs.authInfoBytes != rhs.authInfoBytes {return false}
+    if lhs.chainID != rhs.chainID {return false}
+    if lhs.accountNumber != rhs.accountNumber {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
