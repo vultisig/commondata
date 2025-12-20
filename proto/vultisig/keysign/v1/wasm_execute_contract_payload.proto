@@ -25,15 +25,15 @@ message CosmosMsg {
 }
 
 message SignAmino {
-  CosmosFee fee = 40;
-  repeated CosmosMsg msgs = 41;
+  CosmosFee fee = 1;
+  repeated CosmosMsg msgs = 2;
 }
 
 message SignDirect {
-  string body_bytes = 42;
-  string auth_info_bytes = 43;
-  string chain_id = 44;
-  string account_number = 45;
+  string body_bytes = 1;
+  string auth_info_bytes = 2;
+  string chain_id = 3;
+  string account_number = 4;
 }
 
 message WasmExecuteContractPayload {

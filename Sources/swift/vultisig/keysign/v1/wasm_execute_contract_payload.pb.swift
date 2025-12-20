@@ -304,8 +304,8 @@ extension VSCosmosMsg: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementati
 extension VSSignAmino: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".SignAmino"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    40: .same(proto: "fee"),
-    41: .same(proto: "msgs"),
+    1: .same(proto: "fee"),
+    2: .same(proto: "msgs"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -314,8 +314,8 @@ extension VSSignAmino: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementati
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 40: try { try decoder.decodeSingularMessageField(value: &self._fee) }()
-      case 41: try { try decoder.decodeRepeatedMessageField(value: &self.msgs) }()
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._fee) }()
+      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.msgs) }()
       default: break
       }
     }
@@ -327,10 +327,10 @@ extension VSSignAmino: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementati
     // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
     // https://github.com/apple/swift-protobuf/issues/1182
     try { if let v = self._fee {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 40)
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
     } }()
     if !self.msgs.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.msgs, fieldNumber: 41)
+      try visitor.visitRepeatedMessageField(value: self.msgs, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -346,10 +346,10 @@ extension VSSignAmino: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementati
 extension VSSignDirect: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".SignDirect"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    42: .standard(proto: "body_bytes"),
-    43: .standard(proto: "auth_info_bytes"),
-    44: .standard(proto: "chain_id"),
-    45: .standard(proto: "account_number"),
+    1: .standard(proto: "body_bytes"),
+    2: .standard(proto: "auth_info_bytes"),
+    3: .standard(proto: "chain_id"),
+    4: .standard(proto: "account_number"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -358,10 +358,10 @@ extension VSSignDirect: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementat
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 42: try { try decoder.decodeSingularStringField(value: &self.bodyBytes) }()
-      case 43: try { try decoder.decodeSingularStringField(value: &self.authInfoBytes) }()
-      case 44: try { try decoder.decodeSingularStringField(value: &self.chainID) }()
-      case 45: try { try decoder.decodeSingularStringField(value: &self.accountNumber) }()
+      case 1: try { try decoder.decodeSingularStringField(value: &self.bodyBytes) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.authInfoBytes) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.chainID) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.accountNumber) }()
       default: break
       }
     }
@@ -369,16 +369,16 @@ extension VSSignDirect: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementat
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.bodyBytes.isEmpty {
-      try visitor.visitSingularStringField(value: self.bodyBytes, fieldNumber: 42)
+      try visitor.visitSingularStringField(value: self.bodyBytes, fieldNumber: 1)
     }
     if !self.authInfoBytes.isEmpty {
-      try visitor.visitSingularStringField(value: self.authInfoBytes, fieldNumber: 43)
+      try visitor.visitSingularStringField(value: self.authInfoBytes, fieldNumber: 2)
     }
     if !self.chainID.isEmpty {
-      try visitor.visitSingularStringField(value: self.chainID, fieldNumber: 44)
+      try visitor.visitSingularStringField(value: self.chainID, fieldNumber: 3)
     }
     if !self.accountNumber.isEmpty {
-      try visitor.visitSingularStringField(value: self.accountNumber, fieldNumber: 45)
+      try visitor.visitSingularStringField(value: self.accountNumber, fieldNumber: 4)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
