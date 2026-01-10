@@ -66,5 +66,6 @@ message KeysignPayload {
   oneof sign_data {
     SignAmino sign_amino = 39;
     SignDirect sign_direct = 40;
+    SignSolana sign_solana = 41;
   }
 }
