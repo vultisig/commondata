@@ -37,7 +37,7 @@ message SignDirect {
 }
 
 message SignSolana {
-  string raw_message = 1; // base64 encoded
+  repeated string raw_transactions = 1; // base64 encoded transactions
 }
 
 message WasmExecuteContractPayload {

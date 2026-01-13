@@ -139,8 +139,8 @@ public struct VSSignSolana {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// base64 encoded
-  public var rawMessage: String = String()
+  /// base64 encoded transactions
+  public var rawTransactions: [String] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -410,7 +410,7 @@ extension VSSignDirect: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementat
 extension VSSignSolana: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".SignSolana"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "raw_message"),
+    1: .standard(proto: "raw_transactions"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -419,21 +419,21 @@ extension VSSignSolana: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementat
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.rawMessage) }()
+      case 1: try { try decoder.decodeRepeatedStringField(value: &self.rawTransactions) }()
       default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.rawMessage.isEmpty {
-      try visitor.visitSingularStringField(value: self.rawMessage, fieldNumber: 1)
+    if !self.rawTransactions.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.rawTransactions, fieldNumber: 1)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: VSSignSolana, rhs: VSSignSolana) -> Bool {
-    if lhs.rawMessage != rhs.rawMessage {return false}
+    if lhs.rawTransactions != rhs.rawTransactions {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
