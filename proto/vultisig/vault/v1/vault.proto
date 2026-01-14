@@ -28,6 +28,7 @@ message Vault {
     string public_key = 1;
     string chain = 2;
     bool is_eddsa = 3;
+    string derivation_type = 4;
   }
   repeated ChainPublicKey chain_public_keys = 11;
 }

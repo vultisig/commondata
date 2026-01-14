@@ -81,6 +81,8 @@ public struct VSVault {
 
     public var isEddsa: Bool = false
 
+    public var derivationType: String = String()
+
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
     public init() {}
@@ -241,6 +243,7 @@ extension VSVault.ChainPublicKey: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     1: .standard(proto: "public_key"),
     2: .same(proto: "chain"),
     3: .standard(proto: "is_eddsa"),
+    4: .standard(proto: "derivation_type"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -252,6 +255,7 @@ extension VSVault.ChainPublicKey: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       case 1: try { try decoder.decodeSingularStringField(value: &self.publicKey) }()
       case 2: try { try decoder.decodeSingularStringField(value: &self.chain) }()
       case 3: try { try decoder.decodeSingularBoolField(value: &self.isEddsa) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.derivationType) }()
       default: break
       }
     }
@@ -267,6 +271,9 @@ extension VSVault.ChainPublicKey: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     if self.isEddsa != false {
       try visitor.visitSingularBoolField(value: self.isEddsa, fieldNumber: 3)
     }
+    if !self.derivationType.isEmpty {
+      try visitor.visitSingularStringField(value: self.derivationType, fieldNumber: 4)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -274,6 +281,7 @@ extension VSVault.ChainPublicKey: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     if lhs.publicKey != rhs.publicKey {return false}
     if lhs.chain != rhs.chain {return false}
     if lhs.isEddsa != rhs.isEddsa {return false}
+    if lhs.derivationType != rhs.derivationType {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
