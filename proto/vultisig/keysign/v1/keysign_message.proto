@@ -24,6 +24,7 @@ message KeysignMessage {
   bool use_vultisig_relay = 6;
   string payload_id = 7;
   optional CustomMessagePayload custom_message_payload = 8;
+  optional string custom_payload_id = 9;
 }
 
 message KeysignPayload {
