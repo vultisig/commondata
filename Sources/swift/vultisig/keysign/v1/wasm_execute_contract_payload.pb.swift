@@ -134,6 +134,19 @@ public struct VSSignDirect {
   public init() {}
 }
 
+public struct VSSignSolana {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// base64 encoded transactions
+  public var rawTransactions: [String] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 public struct VSWasmExecuteContractPayload {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -158,6 +171,7 @@ extension VSCosmosFee: @unchecked Sendable {}
 extension VSCosmosMsg: @unchecked Sendable {}
 extension VSSignAmino: @unchecked Sendable {}
 extension VSSignDirect: @unchecked Sendable {}
+extension VSSignSolana: @unchecked Sendable {}
 extension VSWasmExecuteContractPayload: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
@@ -388,6 +402,38 @@ extension VSSignDirect: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementat
     if lhs.authInfoBytes != rhs.authInfoBytes {return false}
     if lhs.chainID != rhs.chainID {return false}
     if lhs.accountNumber != rhs.accountNumber {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSSignSolana: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".SignSolana"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "raw_transactions"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeRepeatedStringField(value: &self.rawTransactions) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.rawTransactions.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.rawTransactions, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSSignSolana, rhs: VSSignSolana) -> Bool {
+    if lhs.rawTransactions != rhs.rawTransactions {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
