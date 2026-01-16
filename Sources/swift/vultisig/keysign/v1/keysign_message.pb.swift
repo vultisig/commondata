@@ -53,12 +53,22 @@ public struct VSKeysignMessage {
   /// Clears the value of `customMessagePayload`. Subsequent reads from it will return its default value.
   public mutating func clearCustomMessagePayload() {self._customMessagePayload = nil}
 
+  public var customPayloadID: String {
+    get {return _customPayloadID ?? String()}
+    set {_customPayloadID = newValue}
+  }
+  /// Returns true if `customPayloadID` has been explicitly set.
+  public var hasCustomPayloadID: Bool {return self._customPayloadID != nil}
+  /// Clears the value of `customPayloadID`. Subsequent reads from it will return its default value.
+  public mutating func clearCustomPayloadID() {self._customPayloadID = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _keysignPayload: VSKeysignPayload? = nil
   fileprivate var _customMessagePayload: VSCustomMessagePayload? = nil
+  fileprivate var _customPayloadID: String? = nil
 }
 
 public struct VSKeysignPayload {
@@ -537,6 +547,7 @@ extension VSKeysignMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     6: .standard(proto: "use_vultisig_relay"),
     7: .standard(proto: "payload_id"),
     8: .standard(proto: "custom_message_payload"),
+    9: .standard(proto: "custom_payload_id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -552,6 +563,7 @@ extension VSKeysignMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case 6: try { try decoder.decodeSingularBoolField(value: &self.useVultisigRelay) }()
       case 7: try { try decoder.decodeSingularStringField(value: &self.payloadID) }()
       case 8: try { try decoder.decodeSingularMessageField(value: &self._customMessagePayload) }()
+      case 9: try { try decoder.decodeSingularStringField(value: &self._customPayloadID) }()
       default: break
       }
     }
@@ -583,6 +595,9 @@ extension VSKeysignMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     try { if let v = self._customMessagePayload {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
     } }()
+    try { if let v = self._customPayloadID {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 9)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -594,6 +609,7 @@ extension VSKeysignMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if lhs.useVultisigRelay != rhs.useVultisigRelay {return false}
     if lhs.payloadID != rhs.payloadID {return false}
     if lhs._customMessagePayload != rhs._customMessagePayload {return false}
+    if lhs._customPayloadID != rhs._customPayloadID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
