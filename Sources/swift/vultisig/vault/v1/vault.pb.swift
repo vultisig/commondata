@@ -54,6 +54,9 @@ public struct VSVault {
 
   public var chainPublicKeys: [VSVault.ChainPublicKey] = []
 
+  /// For backward compatibility, this field is used to store the public key of MLDSA44. it is a sha256 of MLDSA44 public key
+  public var publicKeyMldsa44: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public struct KeyShare {
@@ -115,6 +118,7 @@ extension VSVault: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
     9: .standard(proto: "reshare_prefix"),
     10: .standard(proto: "lib_type"),
     11: .standard(proto: "chain_public_keys"),
+    12: .standard(proto: "public_key_mldsa44"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -134,6 +138,7 @@ extension VSVault: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
       case 9: try { try decoder.decodeSingularStringField(value: &self.resharePrefix) }()
       case 10: try { try decoder.decodeSingularEnumField(value: &self.libType) }()
       case 11: try { try decoder.decodeRepeatedMessageField(value: &self.chainPublicKeys) }()
+      case 12: try { try decoder.decodeSingularStringField(value: &self.publicKeyMldsa44) }()
       default: break
       }
     }
@@ -177,6 +182,9 @@ extension VSVault: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
     if !self.chainPublicKeys.isEmpty {
       try visitor.visitRepeatedMessageField(value: self.chainPublicKeys, fieldNumber: 11)
     }
+    if !self.publicKeyMldsa44.isEmpty {
+      try visitor.visitSingularStringField(value: self.publicKeyMldsa44, fieldNumber: 12)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -192,6 +200,7 @@ extension VSVault: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
     if lhs.resharePrefix != rhs.resharePrefix {return false}
     if lhs.libType != rhs.libType {return false}
     if lhs.chainPublicKeys != rhs.chainPublicKeys {return false}
+    if lhs.publicKeyMldsa44 != rhs.publicKeyMldsa44 {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
