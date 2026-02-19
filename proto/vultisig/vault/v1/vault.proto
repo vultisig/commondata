@@ -30,4 +30,5 @@ message Vault {
     bool is_eddsa = 3;
   }
   repeated ChainPublicKey chain_public_keys = 11;
+  string public_key_mldsa44 = 12; // For backward compatibility, this field is used to store the public key of MLDSA44. it is a sha256 of MLDSA44 public key
 }
