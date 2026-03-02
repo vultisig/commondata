@@ -1,0 +1,11 @@
+syntax = "proto3";
+package vultisig.keygen.v1;
+
+option go_package = "github.com/vultisig/commondata/go/vultisig/keygen/v1;v1";
+option java_package = "vultisig.keygen.v1";
+option swift_prefix = "VS";
+
+// buf:lint:ignore ENUM_ZERO_VALUE_SUFFIX
+enum SingleKeygenType {
+  SINGLE_KEYGEN_TYPE_MLDSA = 0;
+}
