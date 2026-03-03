@@ -33,8 +33,6 @@ public struct VSSingleKeygenMessage {
 
   public var publicKeyEcdsa: String = String()
 
-  public var oldParties: [String] = []
-
   public var encryptionKeyHex: String = String()
 
   public var useVultisigRelay: Bool = false
@@ -65,7 +63,6 @@ extension VSSingleKeygenMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     2: .standard(proto: "hex_chain_code"),
     3: .standard(proto: "service_name"),
     4: .standard(proto: "public_key_ecdsa"),
-    5: .standard(proto: "old_parties"),
     6: .standard(proto: "encryption_key_hex"),
     7: .standard(proto: "use_vultisig_relay"),
     8: .standard(proto: "vault_name"),
@@ -83,7 +80,6 @@ extension VSSingleKeygenMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
       case 2: try { try decoder.decodeSingularStringField(value: &self.hexChainCode) }()
       case 3: try { try decoder.decodeSingularStringField(value: &self.serviceName) }()
       case 4: try { try decoder.decodeSingularStringField(value: &self.publicKeyEcdsa) }()
-      case 5: try { try decoder.decodeRepeatedStringField(value: &self.oldParties) }()
       case 6: try { try decoder.decodeSingularStringField(value: &self.encryptionKeyHex) }()
       case 7: try { try decoder.decodeSingularBoolField(value: &self.useVultisigRelay) }()
       case 8: try { try decoder.decodeSingularStringField(value: &self.vaultName) }()
@@ -106,9 +102,6 @@ extension VSSingleKeygenMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     }
     if !self.publicKeyEcdsa.isEmpty {
       try visitor.visitSingularStringField(value: self.publicKeyEcdsa, fieldNumber: 4)
-    }
-    if !self.oldParties.isEmpty {
-      try visitor.visitRepeatedStringField(value: self.oldParties, fieldNumber: 5)
     }
     if !self.encryptionKeyHex.isEmpty {
       try visitor.visitSingularStringField(value: self.encryptionKeyHex, fieldNumber: 6)
@@ -133,7 +126,6 @@ extension VSSingleKeygenMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     if lhs.hexChainCode != rhs.hexChainCode {return false}
     if lhs.serviceName != rhs.serviceName {return false}
     if lhs.publicKeyEcdsa != rhs.publicKeyEcdsa {return false}
-    if lhs.oldParties != rhs.oldParties {return false}
     if lhs.encryptionKeyHex != rhs.encryptionKeyHex {return false}
     if lhs.useVultisigRelay != rhs.useVultisigRelay {return false}
     if lhs.vaultName != rhs.vaultName {return false}

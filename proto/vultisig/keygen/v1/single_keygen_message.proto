@@ -13,7 +13,6 @@ message SingleKeygenMessage {
   string hex_chain_code = 2;
   string service_name = 3;
   string public_key_ecdsa = 4;
-  repeated string old_parties = 5;
   string encryption_key_hex = 6;
   bool use_vultisig_relay = 7;
   string vault_name = 8;
