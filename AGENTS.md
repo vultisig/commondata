@@ -33,3 +33,13 @@ make                    # runs buf via Docker (no local buf needed)
 - Proto field removal is a breaking change — deprecate instead
 - Generated code must be committed alongside proto changes
 - Token metadata affects balance display — validate carefully
+
+## Knowledge Base
+
+For deeper context beyond this file, see [vultisig-knowledge](https://github.com/vultisig/vultisig-knowledge).
+
+Key docs for this repo:
+- [repos/commondata.md](https://github.com/vultisig/vultisig-knowledge/blob/main/repos/commondata.md)
+- [repos/index.md](https://github.com/vultisig/vultisig-knowledge/blob/main/repos/index.md) (dependency graph)
+- [coding/gotchas.md](https://github.com/vultisig/vultisig-knowledge/blob/main/coding/gotchas.md) (see "commondata changes break everything")
+- [coding/dependencies.md](https://github.com/vultisig/vultisig-knowledge/blob/main/coding/dependencies.md)
