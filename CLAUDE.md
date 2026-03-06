@@ -31,7 +31,7 @@ buf generate
 
 Protobuf schema repository with code generation.
 
-```
+```text
 proto/vultisig/         → .proto definitions (SOURCE OF TRUTH)
 Sources/swift/vultisig/ → Generated Swift code (do not edit)
 go/vultisig/            → Generated Go code (do not edit)

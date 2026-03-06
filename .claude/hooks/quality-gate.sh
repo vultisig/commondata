@@ -4,7 +4,12 @@
 
 cd "$CLAUDE_PROJECT_DIR" || exit 0
 
-MODIFIED=$(git diff --name-only --diff-filter=ACMR HEAD 2>/dev/null | grep -E '\.(go|proto)$' || true)
+MODIFIED=$(
+  {
+    git diff --name-only --diff-filter=ACMR HEAD
+    git ls-files --others --exclude-standard
+  } 2>/dev/null | grep -E '\.(go|proto)$' || true
+)
 
 if [ -z "$MODIFIED" ]; then
   exit 0

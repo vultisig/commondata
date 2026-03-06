@@ -37,12 +37,12 @@ fi
 
 # ── Destructive git operations ─────────────────────────────────────────────
 DESTRUCTIVE_PATTERNS=(
-  "git push.*--force[^-]"
-  "git push.*-f "
+  "git push.*--force([^-]|$)"
+  "git push.*-f( |$)"
   "--no-verify"
   "git reset --hard"
-  "git checkout \."
-  "git checkout -- \."
+  "git checkout \\./?$"
+  "git checkout -- \\./?$"
   "git clean -f"
   "git clean -fd"
   "git branch -D"
