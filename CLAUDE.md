@@ -65,3 +65,14 @@ Update workflow:
 
 - **buf** — Protobuf tooling (required for all operations)
 - Used as git submodule in: vultisig-ios, vultisig-android
+
+## Knowledge Base
+
+For deeper context, see [vultisig-knowledge](https://github.com/vultisig/vultisig-knowledge). Read only when needed:
+
+| Situation | Read |
+|-----------|------|
+| First time in this repo | [repos/commondata.md](https://github.com/vultisig/vultisig-knowledge/blob/main/repos/commondata.md) |
+| Understanding cross-repo impact | [coding/gotchas.md](https://github.com/vultisig/vultisig-knowledge/blob/main/coding/gotchas.md) (see "commondata changes break everything") |
+| Which repos depend on this | [repos/index.md](https://github.com/vultisig/vultisig-knowledge/blob/main/repos/index.md) (dependency graph) |
+| Checking dependency versions | [coding/dependencies.md](https://github.com/vultisig/vultisig-knowledge/blob/main/coding/dependencies.md) |
