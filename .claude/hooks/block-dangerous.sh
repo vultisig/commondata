@@ -62,11 +62,13 @@ SECRET_PATTERNS=(
   "\.env\."
   "/secret"
   "/credential"
+  "credentials\."
+  "secret\."
+  "keystore"
   "\.pem$"
   "\.key$"
   "\.p12$"
   "\.pfx$"
-  "\.keystore$"
   "\.jks$"
 )
 
