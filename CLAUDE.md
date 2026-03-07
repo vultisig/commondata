@@ -60,6 +60,7 @@ Update workflow:
 - Field naming: snake_case
 - Enums: UPPER_SNAKE_CASE with 0 = UNSPECIFIED
 - Every field change needs backwards compatibility consideration
+- Comments on all message types, enums, services, and non-obvious fields
 
 ## Dependencies
 
