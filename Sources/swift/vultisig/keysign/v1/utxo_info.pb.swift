@@ -20,6 +20,22 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
+public struct VSCardanoTokenAsset {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var policyID: String = String()
+
+  public var assetNameHex: String = String()
+
+  public var amount: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 public struct VSUtxoInfo {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -31,12 +47,15 @@ public struct VSUtxoInfo {
 
   public var index: UInt32 = 0
 
+  public var cardanoTokens: [VSCardanoTokenAsset] = []
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 }
 
 #if swift(>=5.5) && canImport(_Concurrency)
+extension VSCardanoTokenAsset: @unchecked Sendable {}
 extension VSUtxoInfo: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
@@ -44,12 +63,57 @@ extension VSUtxoInfo: @unchecked Sendable {}
 
 fileprivate let _protobuf_package = "vultisig.keysign.v1"
 
+extension VSCardanoTokenAsset: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".CardanoTokenAsset"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "policy_id"),
+    2: .standard(proto: "asset_name_hex"),
+    3: .same(proto: "amount"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.policyID) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.assetNameHex) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.amount) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.policyID.isEmpty {
+      try visitor.visitSingularStringField(value: self.policyID, fieldNumber: 1)
+    }
+    if !self.assetNameHex.isEmpty {
+      try visitor.visitSingularStringField(value: self.assetNameHex, fieldNumber: 2)
+    }
+    if !self.amount.isEmpty {
+      try visitor.visitSingularStringField(value: self.amount, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSCardanoTokenAsset, rhs: VSCardanoTokenAsset) -> Bool {
+    if lhs.policyID != rhs.policyID {return false}
+    if lhs.assetNameHex != rhs.assetNameHex {return false}
+    if lhs.amount != rhs.amount {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 extension VSUtxoInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".UtxoInfo"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "hash"),
     2: .same(proto: "amount"),
     3: .same(proto: "index"),
+    4: .standard(proto: "cardano_tokens"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -61,6 +125,7 @@ extension VSUtxoInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
       case 1: try { try decoder.decodeSingularStringField(value: &self.hash) }()
       case 2: try { try decoder.decodeSingularInt64Field(value: &self.amount) }()
       case 3: try { try decoder.decodeSingularUInt32Field(value: &self.index) }()
+      case 4: try { try decoder.decodeRepeatedMessageField(value: &self.cardanoTokens) }()
       default: break
       }
     }
@@ -76,6 +141,9 @@ extension VSUtxoInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
     if self.index != 0 {
       try visitor.visitSingularUInt32Field(value: self.index, fieldNumber: 3)
     }
+    if !self.cardanoTokens.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.cardanoTokens, fieldNumber: 4)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -83,6 +151,7 @@ extension VSUtxoInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
     if lhs.hash != rhs.hash {return false}
     if lhs.amount != rhs.amount {return false}
     if lhs.index != rhs.index {return false}
+    if lhs.cardanoTokens != rhs.cardanoTokens {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
