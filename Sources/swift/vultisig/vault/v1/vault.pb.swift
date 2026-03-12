@@ -57,6 +57,10 @@ public struct VSVault {
   /// For backward compatibility, this field is used to store the public key of MLDSA44. it is a sha256 of MLDSA44 public key
   public var publicKeyMldsa44: String = String()
 
+  public var publicKeyFrozt: String = String()
+
+  public var publicKeyFromt: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public struct KeyShare {
@@ -119,6 +123,8 @@ extension VSVault: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
     10: .standard(proto: "lib_type"),
     11: .standard(proto: "chain_public_keys"),
     12: .standard(proto: "public_key_mldsa44"),
+    13: .standard(proto: "public_key_frozt"),
+    14: .standard(proto: "public_key_fromt"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -139,6 +145,8 @@ extension VSVault: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
       case 10: try { try decoder.decodeSingularEnumField(value: &self.libType) }()
       case 11: try { try decoder.decodeRepeatedMessageField(value: &self.chainPublicKeys) }()
       case 12: try { try decoder.decodeSingularStringField(value: &self.publicKeyMldsa44) }()
+      case 13: try { try decoder.decodeSingularStringField(value: &self.publicKeyFrozt) }()
+      case 14: try { try decoder.decodeSingularStringField(value: &self.publicKeyFromt) }()
       default: break
       }
     }
@@ -185,6 +193,12 @@ extension VSVault: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
     if !self.publicKeyMldsa44.isEmpty {
       try visitor.visitSingularStringField(value: self.publicKeyMldsa44, fieldNumber: 12)
     }
+    if !self.publicKeyFrozt.isEmpty {
+      try visitor.visitSingularStringField(value: self.publicKeyFrozt, fieldNumber: 13)
+    }
+    if !self.publicKeyFromt.isEmpty {
+      try visitor.visitSingularStringField(value: self.publicKeyFromt, fieldNumber: 14)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -201,6 +215,8 @@ extension VSVault: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
     if lhs.libType != rhs.libType {return false}
     if lhs.chainPublicKeys != rhs.chainPublicKeys {return false}
     if lhs.publicKeyMldsa44 != rhs.publicKeyMldsa44 {return false}
+    if lhs.publicKeyFrozt != rhs.publicKeyFrozt {return false}
+    if lhs.publicKeyFromt != rhs.publicKeyFromt {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
