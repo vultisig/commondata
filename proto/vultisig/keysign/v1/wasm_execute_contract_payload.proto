@@ -40,6 +40,16 @@ message SignSolana {
   repeated string raw_transactions = 1; // base64 encoded transactions
 }
 
+message TonMessage {
+  string to = 1;
+  string amount = 2;
+  optional string payload = 3;
+}
+
+message SignTon {
+  repeated TonMessage ton_messages = 2;
+}
+
 message WasmExecuteContractPayload {
   string sender_address = 1;
   string contract_address = 2;
