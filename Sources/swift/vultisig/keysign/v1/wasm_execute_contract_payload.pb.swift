@@ -147,6 +147,43 @@ public struct VSSignSolana {
   public init() {}
 }
 
+public struct VSTonMessage {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var to: String = String()
+
+  public var amount: String = String()
+
+  public var payload: String {
+    get {return _payload ?? String()}
+    set {_payload = newValue}
+  }
+  /// Returns true if `payload` has been explicitly set.
+  public var hasPayload: Bool {return self._payload != nil}
+  /// Clears the value of `payload`. Subsequent reads from it will return its default value.
+  public mutating func clearPayload() {self._payload = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _payload: String? = nil
+}
+
+public struct VSSignTon {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var tonMessages: [VSTonMessage] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 public struct VSWasmExecuteContractPayload {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -172,6 +209,8 @@ extension VSCosmosMsg: @unchecked Sendable {}
 extension VSSignAmino: @unchecked Sendable {}
 extension VSSignDirect: @unchecked Sendable {}
 extension VSSignSolana: @unchecked Sendable {}
+extension VSTonMessage: @unchecked Sendable {}
+extension VSSignTon: @unchecked Sendable {}
 extension VSWasmExecuteContractPayload: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
@@ -434,6 +473,86 @@ extension VSSignSolana: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementat
 
   public static func ==(lhs: VSSignSolana, rhs: VSSignSolana) -> Bool {
     if lhs.rawTransactions != rhs.rawTransactions {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSTonMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".TonMessage"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "to"),
+    2: .same(proto: "amount"),
+    3: .same(proto: "payload"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.to) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.amount) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self._payload) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    if !self.to.isEmpty {
+      try visitor.visitSingularStringField(value: self.to, fieldNumber: 1)
+    }
+    if !self.amount.isEmpty {
+      try visitor.visitSingularStringField(value: self.amount, fieldNumber: 2)
+    }
+    try { if let v = self._payload {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 3)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSTonMessage, rhs: VSTonMessage) -> Bool {
+    if lhs.to != rhs.to {return false}
+    if lhs.amount != rhs.amount {return false}
+    if lhs._payload != rhs._payload {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSSignTon: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".SignTon"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    2: .standard(proto: "ton_messages"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.tonMessages) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.tonMessages.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.tonMessages, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSSignTon, rhs: VSSignTon) -> Bool {
+    if lhs.tonMessages != rhs.tonMessages {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

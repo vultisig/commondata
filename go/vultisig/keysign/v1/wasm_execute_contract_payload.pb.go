@@ -382,6 +382,116 @@ func (x *SignSolana) GetRawTransactions() []string {
 	return nil
 }
 
+type TonMessage struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	To      string  `protobuf:"bytes,1,opt,name=to,proto3" json:"to,omitempty"`
+	Amount  string  `protobuf:"bytes,2,opt,name=amount,proto3" json:"amount,omitempty"`
+	Payload *string `protobuf:"bytes,3,opt,name=payload,proto3,oneof" json:"payload,omitempty"`
+}
+
+func (x *TonMessage) Reset() {
+	*x = TonMessage{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *TonMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TonMessage) ProtoMessage() {}
+
+func (x *TonMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TonMessage.ProtoReflect.Descriptor instead.
+func (*TonMessage) Descriptor() ([]byte, []int) {
+	return file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *TonMessage) GetTo() string {
+	if x != nil {
+		return x.To
+	}
+	return ""
+}
+
+func (x *TonMessage) GetAmount() string {
+	if x != nil {
+		return x.Amount
+	}
+	return ""
+}
+
+func (x *TonMessage) GetPayload() string {
+	if x != nil && x.Payload != nil {
+		return *x.Payload
+	}
+	return ""
+}
+
+type SignTon struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	TonMessages []*TonMessage `protobuf:"bytes,2,rep,name=ton_messages,json=tonMessages,proto3" json:"ton_messages,omitempty"`
+}
+
+func (x *SignTon) Reset() {
+	*x = SignTon{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SignTon) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SignTon) ProtoMessage() {}
+
+func (x *SignTon) ProtoReflect() protoreflect.Message {
+	mi := &file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SignTon.ProtoReflect.Descriptor instead.
+func (*SignTon) Descriptor() ([]byte, []int) {
+	return file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *SignTon) GetTonMessages() []*TonMessage {
+	if x != nil {
+		return x.TonMessages
+	}
+	return nil
+}
+
 type WasmExecuteContractPayload struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -396,7 +506,7 @@ type WasmExecuteContractPayload struct {
 func (x *WasmExecuteContractPayload) Reset() {
 	*x = WasmExecuteContractPayload{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes[6]
+		mi := &file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -409,7 +519,7 @@ func (x *WasmExecuteContractPayload) String() string {
 func (*WasmExecuteContractPayload) ProtoMessage() {}
 
 func (x *WasmExecuteContractPayload) ProtoReflect() protoreflect.Message {
-	mi := &file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes[6]
+	mi := &file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -422,7 +532,7 @@ func (x *WasmExecuteContractPayload) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WasmExecuteContractPayload.ProtoReflect.Descriptor instead.
 func (*WasmExecuteContractPayload) Descriptor() ([]byte, []int) {
-	return file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_rawDescGZIP(), []int{6}
+	return file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *WasmExecuteContractPayload) GetSenderAddress() string {
@@ -501,7 +611,18 @@ var file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_rawDesc = []byt
 	0x75, 0x6d, 0x62, 0x65, 0x72, 0x22, 0x37, 0x0a, 0x0a, 0x53, 0x69, 0x67, 0x6e, 0x53, 0x6f, 0x6c,
 	0x61, 0x6e, 0x61, 0x12, 0x29, 0x0a, 0x10, 0x72, 0x61, 0x77, 0x5f, 0x74, 0x72, 0x61, 0x6e, 0x73,
 	0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x09, 0x52, 0x0f, 0x72,
-	0x61, 0x77, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x22, 0xc6,
+	0x61, 0x77, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x22, 0x5f,
+	0x0a, 0x0a, 0x54, 0x6f, 0x6e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x0e, 0x0a, 0x02,
+	0x74, 0x6f, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x74, 0x6f, 0x12, 0x16, 0x0a, 0x06,
+	0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x61, 0x6d,
+	0x6f, 0x75, 0x6e, 0x74, 0x12, 0x1d, 0x0a, 0x07, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x09, 0x48, 0x00, 0x52, 0x07, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64,
+	0x88, 0x01, 0x01, 0x42, 0x0a, 0x0a, 0x08, 0x5f, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x22,
+	0x4d, 0x0a, 0x07, 0x53, 0x69, 0x67, 0x6e, 0x54, 0x6f, 0x6e, 0x12, 0x42, 0x0a, 0x0c, 0x74, 0x6f,
+	0x6e, 0x5f, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b,
+	0x32, 0x1f, 0x2e, 0x76, 0x75, 0x6c, 0x74, 0x69, 0x73, 0x69, 0x67, 0x2e, 0x6b, 0x65, 0x79, 0x73,
+	0x69, 0x67, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x54, 0x6f, 0x6e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67,
+	0x65, 0x52, 0x0b, 0x74, 0x6f, 0x6e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x73, 0x22, 0xc6,
 	0x01, 0x0a, 0x1a, 0x57, 0x61, 0x73, 0x6d, 0x45, 0x78, 0x65, 0x63, 0x75, 0x74, 0x65, 0x43, 0x6f,
 	0x6e, 0x74, 0x72, 0x61, 0x63, 0x74, 0x50, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x12, 0x25, 0x0a,
 	0x0e, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18,
@@ -535,7 +656,7 @@ func file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_rawDescGZIP() 
 	return file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_rawDescData
 }
 
-var file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_goTypes = []any{
 	(*CosmosCoin)(nil),                 // 0: vultisig.keysign.v1.CosmosCoin
 	(*CosmosFee)(nil),                  // 1: vultisig.keysign.v1.CosmosFee
@@ -543,18 +664,21 @@ var file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_goTypes = []any
 	(*SignAmino)(nil),                  // 3: vultisig.keysign.v1.SignAmino
 	(*SignDirect)(nil),                 // 4: vultisig.keysign.v1.SignDirect
 	(*SignSolana)(nil),                 // 5: vultisig.keysign.v1.SignSolana
-	(*WasmExecuteContractPayload)(nil), // 6: vultisig.keysign.v1.WasmExecuteContractPayload
+	(*TonMessage)(nil),                 // 6: vultisig.keysign.v1.TonMessage
+	(*SignTon)(nil),                    // 7: vultisig.keysign.v1.SignTon
+	(*WasmExecuteContractPayload)(nil), // 8: vultisig.keysign.v1.WasmExecuteContractPayload
 }
 var file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_depIdxs = []int32{
 	0, // 0: vultisig.keysign.v1.CosmosFee.amount:type_name -> vultisig.keysign.v1.CosmosCoin
 	1, // 1: vultisig.keysign.v1.SignAmino.fee:type_name -> vultisig.keysign.v1.CosmosFee
 	2, // 2: vultisig.keysign.v1.SignAmino.msgs:type_name -> vultisig.keysign.v1.CosmosMsg
-	0, // 3: vultisig.keysign.v1.WasmExecuteContractPayload.coins:type_name -> vultisig.keysign.v1.CosmosCoin
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	6, // 3: vultisig.keysign.v1.SignTon.ton_messages:type_name -> vultisig.keysign.v1.TonMessage
+	0, // 4: vultisig.keysign.v1.WasmExecuteContractPayload.coins:type_name -> vultisig.keysign.v1.CosmosCoin
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_init() }
@@ -636,6 +760,30 @@ func file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_init() {
 			}
 		}
 		file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes[6].Exporter = func(v any, i int) any {
+			switch v := v.(*TonMessage); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes[7].Exporter = func(v any, i int) any {
+			switch v := v.(*SignTon); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes[8].Exporter = func(v any, i int) any {
 			switch v := v.(*WasmExecuteContractPayload); i {
 			case 0:
 				return &v.state
@@ -649,13 +797,14 @@ func file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_init() {
 		}
 	}
 	file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes[1].OneofWrappers = []any{}
+	file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes[6].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   7,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
