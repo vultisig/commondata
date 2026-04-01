@@ -202,6 +202,115 @@ public struct VSWasmExecuteContractPayload {
   public init() {}
 }
 
+/// A single Bitcoin transaction input decomposed from a PSBT.
+/// Contains all data needed for sighash computation and verification.
+public struct VSBitcoinInput {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Previous txid (hex, big-endian)
+  public var hash: String = String()
+
+  /// Previous output index (vout)
+  public var index: UInt32 = 0
+
+  /// Satoshis (from witness UTXO)
+  public var amount: Int64 = 0
+
+  /// Hex scriptPubKey of the UTXO being spent
+  public var scriptPubKey: String = String()
+
+  /// "p2wpkh", "p2pkh", "p2tr", "p2sh-p2wpkh"
+  public var scriptType: String = String()
+
+  /// BIP-143/341 sighash flag (default SIGHASH_ALL=1)
+  public var sighashType: UInt32 = 0
+
+  /// Whether this device signs this input
+  public var isOurs: Bool = false
+
+  /// For P2SH-P2WPKH: hex redeem script
+  public var redeemScript: String {
+    get {return _redeemScript ?? String()}
+    set {_redeemScript = newValue}
+  }
+  /// Returns true if `redeemScript` has been explicitly set.
+  public var hasRedeemScript: Bool {return self._redeemScript != nil}
+  /// Clears the value of `redeemScript`. Subsequent reads from it will return its default value.
+  public mutating func clearRedeemScript() {self._redeemScript = nil}
+
+  /// nSequence (default 0xFFFFFFFF)
+  public var sequence: UInt32 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _redeemScript: String? = nil
+}
+
+/// A single Bitcoin transaction output decomposed from a PSBT.
+public struct VSBitcoinOutput {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Satoshis
+  public var amount: Int64 = 0
+
+  /// Decoded address (empty for OP_RETURN)
+  public var address: String = String()
+
+  /// Hex data if OP_RETURN
+  public var opReturnData: String {
+    get {return _opReturnData ?? String()}
+    set {_opReturnData = newValue}
+  }
+  /// Returns true if `opReturnData` has been explicitly set.
+  public var hasOpReturnData: Bool {return self._opReturnData != nil}
+  /// Clears the value of `opReturnData`. Subsequent reads from it will return its default value.
+  public mutating func clearOpReturnData() {self._opReturnData = nil}
+
+  /// Hex output scriptPubKey
+  public var scriptPubKey: String = String()
+
+  /// Whether output is change back to sender
+  public var isChange: Bool = false
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _opReturnData: String? = nil
+}
+
+/// Structured PSBT representation for Bitcoin dApp signing.
+/// Decomposes a BIP-174 PSBT into verifiable fields so co-signing
+/// devices can display transaction details and compute exact sighashes
+/// without receiving an opaque blob.
+public struct VSSignBitcoin {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Transaction version (typically 1 or 2)
+  public var version: UInt32 = 0
+
+  /// Transaction locktime
+  public var locktime: UInt32 = 0
+
+  /// All inputs in exact PSBT order
+  public var inputs: [VSBitcoinInput] = []
+
+  /// All outputs in exact PSBT order
+  public var outputs: [VSBitcoinOutput] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 #if swift(>=5.5) && canImport(_Concurrency)
 extension VSCosmosCoin: @unchecked Sendable {}
 extension VSCosmosFee: @unchecked Sendable {}
@@ -212,6 +321,9 @@ extension VSSignSolana: @unchecked Sendable {}
 extension VSTonMessage: @unchecked Sendable {}
 extension VSSignTon: @unchecked Sendable {}
 extension VSWasmExecuteContractPayload: @unchecked Sendable {}
+extension VSBitcoinInput: @unchecked Sendable {}
+extension VSBitcoinOutput: @unchecked Sendable {}
+extension VSSignBitcoin: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -603,6 +715,200 @@ extension VSWasmExecuteContractPayload: SwiftProtobuf.Message, SwiftProtobuf._Me
     if lhs.contractAddress != rhs.contractAddress {return false}
     if lhs.executeMsg != rhs.executeMsg {return false}
     if lhs.coins != rhs.coins {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSBitcoinInput: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".BitcoinInput"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "hash"),
+    2: .same(proto: "index"),
+    3: .same(proto: "amount"),
+    4: .standard(proto: "script_pub_key"),
+    5: .standard(proto: "script_type"),
+    6: .standard(proto: "sighash_type"),
+    7: .standard(proto: "is_ours"),
+    8: .standard(proto: "redeem_script"),
+    9: .same(proto: "sequence"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.hash) }()
+      case 2: try { try decoder.decodeSingularUInt32Field(value: &self.index) }()
+      case 3: try { try decoder.decodeSingularInt64Field(value: &self.amount) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.scriptPubKey) }()
+      case 5: try { try decoder.decodeSingularStringField(value: &self.scriptType) }()
+      case 6: try { try decoder.decodeSingularUInt32Field(value: &self.sighashType) }()
+      case 7: try { try decoder.decodeSingularBoolField(value: &self.isOurs) }()
+      case 8: try { try decoder.decodeSingularStringField(value: &self._redeemScript) }()
+      case 9: try { try decoder.decodeSingularUInt32Field(value: &self.sequence) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    if !self.hash.isEmpty {
+      try visitor.visitSingularStringField(value: self.hash, fieldNumber: 1)
+    }
+    if self.index != 0 {
+      try visitor.visitSingularUInt32Field(value: self.index, fieldNumber: 2)
+    }
+    if self.amount != 0 {
+      try visitor.visitSingularInt64Field(value: self.amount, fieldNumber: 3)
+    }
+    if !self.scriptPubKey.isEmpty {
+      try visitor.visitSingularStringField(value: self.scriptPubKey, fieldNumber: 4)
+    }
+    if !self.scriptType.isEmpty {
+      try visitor.visitSingularStringField(value: self.scriptType, fieldNumber: 5)
+    }
+    if self.sighashType != 0 {
+      try visitor.visitSingularUInt32Field(value: self.sighashType, fieldNumber: 6)
+    }
+    if self.isOurs != false {
+      try visitor.visitSingularBoolField(value: self.isOurs, fieldNumber: 7)
+    }
+    try { if let v = self._redeemScript {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 8)
+    } }()
+    if self.sequence != 0 {
+      try visitor.visitSingularUInt32Field(value: self.sequence, fieldNumber: 9)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSBitcoinInput, rhs: VSBitcoinInput) -> Bool {
+    if lhs.hash != rhs.hash {return false}
+    if lhs.index != rhs.index {return false}
+    if lhs.amount != rhs.amount {return false}
+    if lhs.scriptPubKey != rhs.scriptPubKey {return false}
+    if lhs.scriptType != rhs.scriptType {return false}
+    if lhs.sighashType != rhs.sighashType {return false}
+    if lhs.isOurs != rhs.isOurs {return false}
+    if lhs._redeemScript != rhs._redeemScript {return false}
+    if lhs.sequence != rhs.sequence {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSBitcoinOutput: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".BitcoinOutput"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "amount"),
+    2: .same(proto: "address"),
+    3: .standard(proto: "op_return_data"),
+    4: .standard(proto: "script_pub_key"),
+    5: .standard(proto: "is_change"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularInt64Field(value: &self.amount) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.address) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self._opReturnData) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.scriptPubKey) }()
+      case 5: try { try decoder.decodeSingularBoolField(value: &self.isChange) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    if self.amount != 0 {
+      try visitor.visitSingularInt64Field(value: self.amount, fieldNumber: 1)
+    }
+    if !self.address.isEmpty {
+      try visitor.visitSingularStringField(value: self.address, fieldNumber: 2)
+    }
+    try { if let v = self._opReturnData {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 3)
+    } }()
+    if !self.scriptPubKey.isEmpty {
+      try visitor.visitSingularStringField(value: self.scriptPubKey, fieldNumber: 4)
+    }
+    if self.isChange != false {
+      try visitor.visitSingularBoolField(value: self.isChange, fieldNumber: 5)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSBitcoinOutput, rhs: VSBitcoinOutput) -> Bool {
+    if lhs.amount != rhs.amount {return false}
+    if lhs.address != rhs.address {return false}
+    if lhs._opReturnData != rhs._opReturnData {return false}
+    if lhs.scriptPubKey != rhs.scriptPubKey {return false}
+    if lhs.isChange != rhs.isChange {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSSignBitcoin: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".SignBitcoin"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "version"),
+    2: .same(proto: "locktime"),
+    3: .same(proto: "inputs"),
+    4: .same(proto: "outputs"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularUInt32Field(value: &self.version) }()
+      case 2: try { try decoder.decodeSingularUInt32Field(value: &self.locktime) }()
+      case 3: try { try decoder.decodeRepeatedMessageField(value: &self.inputs) }()
+      case 4: try { try decoder.decodeRepeatedMessageField(value: &self.outputs) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.version != 0 {
+      try visitor.visitSingularUInt32Field(value: self.version, fieldNumber: 1)
+    }
+    if self.locktime != 0 {
+      try visitor.visitSingularUInt32Field(value: self.locktime, fieldNumber: 2)
+    }
+    if !self.inputs.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.inputs, fieldNumber: 3)
+    }
+    if !self.outputs.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.outputs, fieldNumber: 4)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSSignBitcoin, rhs: VSSignBitcoin) -> Bool {
+    if lhs.version != rhs.version {return false}
+    if lhs.locktime != rhs.locktime {return false}
+    if lhs.inputs != rhs.inputs {return false}
+    if lhs.outputs != rhs.outputs {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

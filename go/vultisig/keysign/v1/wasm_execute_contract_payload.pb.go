@@ -563,6 +563,274 @@ func (x *WasmExecuteContractPayload) GetCoins() []*CosmosCoin {
 	return nil
 }
 
+// A single Bitcoin transaction input decomposed from a PSBT.
+// Contains all data needed for sighash computation and verification.
+type BitcoinInput struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Hash         string  `protobuf:"bytes,1,opt,name=hash,proto3" json:"hash,omitempty"`                                           // Previous txid (hex, big-endian)
+	Index        uint32  `protobuf:"varint,2,opt,name=index,proto3" json:"index,omitempty"`                                        // Previous output index (vout)
+	Amount       int64   `protobuf:"varint,3,opt,name=amount,proto3" json:"amount,omitempty"`                                      // Satoshis (from witness UTXO)
+	ScriptPubKey string  `protobuf:"bytes,4,opt,name=script_pub_key,json=scriptPubKey,proto3" json:"script_pub_key,omitempty"`     // Hex scriptPubKey of the UTXO being spent
+	ScriptType   string  `protobuf:"bytes,5,opt,name=script_type,json=scriptType,proto3" json:"script_type,omitempty"`             // "p2wpkh", "p2pkh", "p2tr", "p2sh-p2wpkh"
+	SighashType  uint32  `protobuf:"varint,6,opt,name=sighash_type,json=sighashType,proto3" json:"sighash_type,omitempty"`         // BIP-143/341 sighash flag (default SIGHASH_ALL=1)
+	IsOurs       bool    `protobuf:"varint,7,opt,name=is_ours,json=isOurs,proto3" json:"is_ours,omitempty"`                        // Whether this device signs this input
+	RedeemScript *string `protobuf:"bytes,8,opt,name=redeem_script,json=redeemScript,proto3,oneof" json:"redeem_script,omitempty"` // For P2SH-P2WPKH: hex redeem script
+	Sequence     uint32  `protobuf:"varint,9,opt,name=sequence,proto3" json:"sequence,omitempty"`                                  // nSequence (default 0xFFFFFFFF)
+}
+
+func (x *BitcoinInput) Reset() {
+	*x = BitcoinInput{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes[9]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *BitcoinInput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BitcoinInput) ProtoMessage() {}
+
+func (x *BitcoinInput) ProtoReflect() protoreflect.Message {
+	mi := &file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes[9]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BitcoinInput.ProtoReflect.Descriptor instead.
+func (*BitcoinInput) Descriptor() ([]byte, []int) {
+	return file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *BitcoinInput) GetHash() string {
+	if x != nil {
+		return x.Hash
+	}
+	return ""
+}
+
+func (x *BitcoinInput) GetIndex() uint32 {
+	if x != nil {
+		return x.Index
+	}
+	return 0
+}
+
+func (x *BitcoinInput) GetAmount() int64 {
+	if x != nil {
+		return x.Amount
+	}
+	return 0
+}
+
+func (x *BitcoinInput) GetScriptPubKey() string {
+	if x != nil {
+		return x.ScriptPubKey
+	}
+	return ""
+}
+
+func (x *BitcoinInput) GetScriptType() string {
+	if x != nil {
+		return x.ScriptType
+	}
+	return ""
+}
+
+func (x *BitcoinInput) GetSighashType() uint32 {
+	if x != nil {
+		return x.SighashType
+	}
+	return 0
+}
+
+func (x *BitcoinInput) GetIsOurs() bool {
+	if x != nil {
+		return x.IsOurs
+	}
+	return false
+}
+
+func (x *BitcoinInput) GetRedeemScript() string {
+	if x != nil && x.RedeemScript != nil {
+		return *x.RedeemScript
+	}
+	return ""
+}
+
+func (x *BitcoinInput) GetSequence() uint32 {
+	if x != nil {
+		return x.Sequence
+	}
+	return 0
+}
+
+// A single Bitcoin transaction output decomposed from a PSBT.
+type BitcoinOutput struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Amount       int64   `protobuf:"varint,1,opt,name=amount,proto3" json:"amount,omitempty"`                                        // Satoshis
+	Address      string  `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`                                       // Decoded address (empty for OP_RETURN)
+	OpReturnData *string `protobuf:"bytes,3,opt,name=op_return_data,json=opReturnData,proto3,oneof" json:"op_return_data,omitempty"` // Hex data if OP_RETURN
+	ScriptPubKey string  `protobuf:"bytes,4,opt,name=script_pub_key,json=scriptPubKey,proto3" json:"script_pub_key,omitempty"`       // Hex output scriptPubKey
+	IsChange     bool    `protobuf:"varint,5,opt,name=is_change,json=isChange,proto3" json:"is_change,omitempty"`                    // Whether output is change back to sender
+}
+
+func (x *BitcoinOutput) Reset() {
+	*x = BitcoinOutput{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes[10]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *BitcoinOutput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BitcoinOutput) ProtoMessage() {}
+
+func (x *BitcoinOutput) ProtoReflect() protoreflect.Message {
+	mi := &file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes[10]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BitcoinOutput.ProtoReflect.Descriptor instead.
+func (*BitcoinOutput) Descriptor() ([]byte, []int) {
+	return file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *BitcoinOutput) GetAmount() int64 {
+	if x != nil {
+		return x.Amount
+	}
+	return 0
+}
+
+func (x *BitcoinOutput) GetAddress() string {
+	if x != nil {
+		return x.Address
+	}
+	return ""
+}
+
+func (x *BitcoinOutput) GetOpReturnData() string {
+	if x != nil && x.OpReturnData != nil {
+		return *x.OpReturnData
+	}
+	return ""
+}
+
+func (x *BitcoinOutput) GetScriptPubKey() string {
+	if x != nil {
+		return x.ScriptPubKey
+	}
+	return ""
+}
+
+func (x *BitcoinOutput) GetIsChange() bool {
+	if x != nil {
+		return x.IsChange
+	}
+	return false
+}
+
+// Structured PSBT representation for Bitcoin dApp signing.
+// Decomposes a BIP-174 PSBT into verifiable fields so co-signing
+// devices can display transaction details and compute exact sighashes
+// without receiving an opaque blob.
+type SignBitcoin struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Version  uint32           `protobuf:"varint,1,opt,name=version,proto3" json:"version,omitempty"`   // Transaction version (typically 1 or 2)
+	Locktime uint32           `protobuf:"varint,2,opt,name=locktime,proto3" json:"locktime,omitempty"` // Transaction locktime
+	Inputs   []*BitcoinInput  `protobuf:"bytes,3,rep,name=inputs,proto3" json:"inputs,omitempty"`      // All inputs in exact PSBT order
+	Outputs  []*BitcoinOutput `protobuf:"bytes,4,rep,name=outputs,proto3" json:"outputs,omitempty"`    // All outputs in exact PSBT order
+}
+
+func (x *SignBitcoin) Reset() {
+	*x = SignBitcoin{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes[11]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SignBitcoin) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SignBitcoin) ProtoMessage() {}
+
+func (x *SignBitcoin) ProtoReflect() protoreflect.Message {
+	mi := &file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes[11]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SignBitcoin.ProtoReflect.Descriptor instead.
+func (*SignBitcoin) Descriptor() ([]byte, []int) {
+	return file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *SignBitcoin) GetVersion() uint32 {
+	if x != nil {
+		return x.Version
+	}
+	return 0
+}
+
+func (x *SignBitcoin) GetLocktime() uint32 {
+	if x != nil {
+		return x.Locktime
+	}
+	return 0
+}
+
+func (x *SignBitcoin) GetInputs() []*BitcoinInput {
+	if x != nil {
+		return x.Inputs
+	}
+	return nil
+}
+
+func (x *SignBitcoin) GetOutputs() []*BitcoinOutput {
+	if x != nil {
+		return x.Outputs
+	}
+	return nil
+}
+
 var File_vultisig_keysign_v1_wasm_execute_contract_payload_proto protoreflect.FileDescriptor
 
 var file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_rawDesc = []byte{
@@ -635,13 +903,56 @@ var file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_rawDesc = []byt
 	0x12, 0x35, 0x0a, 0x05, 0x63, 0x6f, 0x69, 0x6e, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x0b, 0x32,
 	0x1f, 0x2e, 0x76, 0x75, 0x6c, 0x74, 0x69, 0x73, 0x69, 0x67, 0x2e, 0x6b, 0x65, 0x79, 0x73, 0x69,
 	0x67, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x43, 0x6f, 0x69, 0x6e,
-	0x52, 0x05, 0x63, 0x6f, 0x69, 0x6e, 0x73, 0x42, 0x54, 0x0a, 0x13, 0x76, 0x75, 0x6c, 0x74, 0x69,
-	0x73, 0x69, 0x67, 0x2e, 0x6b, 0x65, 0x79, 0x73, 0x69, 0x67, 0x6e, 0x2e, 0x76, 0x31, 0x5a, 0x38,
-	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x76, 0x75, 0x6c, 0x74, 0x69,
-	0x73, 0x69, 0x67, 0x2f, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x64, 0x61, 0x74, 0x61, 0x2f, 0x67,
-	0x6f, 0x2f, 0x76, 0x75, 0x6c, 0x74, 0x69, 0x73, 0x69, 0x67, 0x2f, 0x6b, 0x65, 0x79, 0x73, 0x69,
-	0x67, 0x6e, 0x2f, 0x76, 0x31, 0x3b, 0x76, 0x31, 0xba, 0x02, 0x02, 0x56, 0x53, 0x62, 0x06, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x52, 0x05, 0x63, 0x6f, 0x69, 0x6e, 0x73, 0x22, 0xab, 0x02, 0x0a, 0x0c, 0x42, 0x69, 0x74, 0x63,
+	0x6f, 0x69, 0x6e, 0x49, 0x6e, 0x70, 0x75, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x68, 0x61, 0x73, 0x68,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x68, 0x61, 0x73, 0x68, 0x12, 0x14, 0x0a, 0x05,
+	0x69, 0x6e, 0x64, 0x65, 0x78, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x05, 0x69, 0x6e, 0x64,
+	0x65, 0x78, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x03, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x24, 0x0a, 0x0e, 0x73, 0x63,
+	0x72, 0x69, 0x70, 0x74, 0x5f, 0x70, 0x75, 0x62, 0x5f, 0x6b, 0x65, 0x79, 0x18, 0x04, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x0c, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x50, 0x75, 0x62, 0x4b, 0x65, 0x79,
+	0x12, 0x1f, 0x0a, 0x0b, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x18,
+	0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x54, 0x79, 0x70,
+	0x65, 0x12, 0x21, 0x0a, 0x0c, 0x73, 0x69, 0x67, 0x68, 0x61, 0x73, 0x68, 0x5f, 0x74, 0x79, 0x70,
+	0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0b, 0x73, 0x69, 0x67, 0x68, 0x61, 0x73, 0x68,
+	0x54, 0x79, 0x70, 0x65, 0x12, 0x17, 0x0a, 0x07, 0x69, 0x73, 0x5f, 0x6f, 0x75, 0x72, 0x73, 0x18,
+	0x07, 0x20, 0x01, 0x28, 0x08, 0x52, 0x06, 0x69, 0x73, 0x4f, 0x75, 0x72, 0x73, 0x12, 0x28, 0x0a,
+	0x0d, 0x72, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x5f, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x18, 0x08,
+	0x20, 0x01, 0x28, 0x09, 0x48, 0x00, 0x52, 0x0c, 0x72, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x53, 0x63,
+	0x72, 0x69, 0x70, 0x74, 0x88, 0x01, 0x01, 0x12, 0x1a, 0x0a, 0x08, 0x73, 0x65, 0x71, 0x75, 0x65,
+	0x6e, 0x63, 0x65, 0x18, 0x09, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x08, 0x73, 0x65, 0x71, 0x75, 0x65,
+	0x6e, 0x63, 0x65, 0x42, 0x10, 0x0a, 0x0e, 0x5f, 0x72, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x5f, 0x73,
+	0x63, 0x72, 0x69, 0x70, 0x74, 0x22, 0xc2, 0x01, 0x0a, 0x0d, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69,
+	0x6e, 0x4f, 0x75, 0x74, 0x70, 0x75, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e,
+	0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12,
+	0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x29, 0x0a, 0x0e, 0x6f, 0x70, 0x5f,
+	0x72, 0x65, 0x74, 0x75, 0x72, 0x6e, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x18, 0x03, 0x20, 0x01, 0x28,
+	0x09, 0x48, 0x00, 0x52, 0x0c, 0x6f, 0x70, 0x52, 0x65, 0x74, 0x75, 0x72, 0x6e, 0x44, 0x61, 0x74,
+	0x61, 0x88, 0x01, 0x01, 0x12, 0x24, 0x0a, 0x0e, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x5f, 0x70,
+	0x75, 0x62, 0x5f, 0x6b, 0x65, 0x79, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x73, 0x63,
+	0x72, 0x69, 0x70, 0x74, 0x50, 0x75, 0x62, 0x4b, 0x65, 0x79, 0x12, 0x1b, 0x0a, 0x09, 0x69, 0x73,
+	0x5f, 0x63, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x08, 0x52, 0x08, 0x69,
+	0x73, 0x43, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x42, 0x11, 0x0a, 0x0f, 0x5f, 0x6f, 0x70, 0x5f, 0x72,
+	0x65, 0x74, 0x75, 0x72, 0x6e, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x22, 0xbc, 0x01, 0x0a, 0x0b, 0x53,
+	0x69, 0x67, 0x6e, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x12, 0x18, 0x0a, 0x07, 0x76, 0x65,
+	0x72, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x07, 0x76, 0x65, 0x72,
+	0x73, 0x69, 0x6f, 0x6e, 0x12, 0x1a, 0x0a, 0x08, 0x6c, 0x6f, 0x63, 0x6b, 0x74, 0x69, 0x6d, 0x65,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x08, 0x6c, 0x6f, 0x63, 0x6b, 0x74, 0x69, 0x6d, 0x65,
+	0x12, 0x39, 0x0a, 0x06, 0x69, 0x6e, 0x70, 0x75, 0x74, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b,
+	0x32, 0x21, 0x2e, 0x76, 0x75, 0x6c, 0x74, 0x69, 0x73, 0x69, 0x67, 0x2e, 0x6b, 0x65, 0x79, 0x73,
+	0x69, 0x67, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x49, 0x6e,
+	0x70, 0x75, 0x74, 0x52, 0x06, 0x69, 0x6e, 0x70, 0x75, 0x74, 0x73, 0x12, 0x3c, 0x0a, 0x07, 0x6f,
+	0x75, 0x74, 0x70, 0x75, 0x74, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x76,
+	0x75, 0x6c, 0x74, 0x69, 0x73, 0x69, 0x67, 0x2e, 0x6b, 0x65, 0x79, 0x73, 0x69, 0x67, 0x6e, 0x2e,
+	0x76, 0x31, 0x2e, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x4f, 0x75, 0x74, 0x70, 0x75, 0x74,
+	0x52, 0x07, 0x6f, 0x75, 0x74, 0x70, 0x75, 0x74, 0x73, 0x42, 0x54, 0x0a, 0x13, 0x76, 0x75, 0x6c,
+	0x74, 0x69, 0x73, 0x69, 0x67, 0x2e, 0x6b, 0x65, 0x79, 0x73, 0x69, 0x67, 0x6e, 0x2e, 0x76, 0x31,
+	0x5a, 0x38, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x76, 0x75, 0x6c,
+	0x74, 0x69, 0x73, 0x69, 0x67, 0x2f, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x64, 0x61, 0x74, 0x61,
+	0x2f, 0x67, 0x6f, 0x2f, 0x76, 0x75, 0x6c, 0x74, 0x69, 0x73, 0x69, 0x67, 0x2f, 0x6b, 0x65, 0x79,
+	0x73, 0x69, 0x67, 0x6e, 0x2f, 0x76, 0x31, 0x3b, 0x76, 0x31, 0xba, 0x02, 0x02, 0x56, 0x53, 0x62,
+	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -656,7 +967,7 @@ func file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_rawDescGZIP() 
 	return file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_rawDescData
 }
 
-var file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_goTypes = []any{
 	(*CosmosCoin)(nil),                 // 0: vultisig.keysign.v1.CosmosCoin
 	(*CosmosFee)(nil),                  // 1: vultisig.keysign.v1.CosmosFee
@@ -667,18 +978,23 @@ var file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_goTypes = []any
 	(*TonMessage)(nil),                 // 6: vultisig.keysign.v1.TonMessage
 	(*SignTon)(nil),                    // 7: vultisig.keysign.v1.SignTon
 	(*WasmExecuteContractPayload)(nil), // 8: vultisig.keysign.v1.WasmExecuteContractPayload
+	(*BitcoinInput)(nil),               // 9: vultisig.keysign.v1.BitcoinInput
+	(*BitcoinOutput)(nil),              // 10: vultisig.keysign.v1.BitcoinOutput
+	(*SignBitcoin)(nil),                // 11: vultisig.keysign.v1.SignBitcoin
 }
 var file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_depIdxs = []int32{
-	0, // 0: vultisig.keysign.v1.CosmosFee.amount:type_name -> vultisig.keysign.v1.CosmosCoin
-	1, // 1: vultisig.keysign.v1.SignAmino.fee:type_name -> vultisig.keysign.v1.CosmosFee
-	2, // 2: vultisig.keysign.v1.SignAmino.msgs:type_name -> vultisig.keysign.v1.CosmosMsg
-	6, // 3: vultisig.keysign.v1.SignTon.ton_messages:type_name -> vultisig.keysign.v1.TonMessage
-	0, // 4: vultisig.keysign.v1.WasmExecuteContractPayload.coins:type_name -> vultisig.keysign.v1.CosmosCoin
-	5, // [5:5] is the sub-list for method output_type
-	5, // [5:5] is the sub-list for method input_type
-	5, // [5:5] is the sub-list for extension type_name
-	5, // [5:5] is the sub-list for extension extendee
-	0, // [0:5] is the sub-list for field type_name
+	0,  // 0: vultisig.keysign.v1.CosmosFee.amount:type_name -> vultisig.keysign.v1.CosmosCoin
+	1,  // 1: vultisig.keysign.v1.SignAmino.fee:type_name -> vultisig.keysign.v1.CosmosFee
+	2,  // 2: vultisig.keysign.v1.SignAmino.msgs:type_name -> vultisig.keysign.v1.CosmosMsg
+	6,  // 3: vultisig.keysign.v1.SignTon.ton_messages:type_name -> vultisig.keysign.v1.TonMessage
+	0,  // 4: vultisig.keysign.v1.WasmExecuteContractPayload.coins:type_name -> vultisig.keysign.v1.CosmosCoin
+	9,  // 5: vultisig.keysign.v1.SignBitcoin.inputs:type_name -> vultisig.keysign.v1.BitcoinInput
+	10, // 6: vultisig.keysign.v1.SignBitcoin.outputs:type_name -> vultisig.keysign.v1.BitcoinOutput
+	7,  // [7:7] is the sub-list for method output_type
+	7,  // [7:7] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_init() }
@@ -795,16 +1111,54 @@ func file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_init() {
 				return nil
 			}
 		}
+		file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes[9].Exporter = func(v any, i int) any {
+			switch v := v.(*BitcoinInput); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes[10].Exporter = func(v any, i int) any {
+			switch v := v.(*BitcoinOutput); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes[11].Exporter = func(v any, i int) any {
+			switch v := v.(*SignBitcoin); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes[1].OneofWrappers = []any{}
 	file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes[6].OneofWrappers = []any{}
+	file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes[9].OneofWrappers = []any{}
+	file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_msgTypes[10].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   9,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

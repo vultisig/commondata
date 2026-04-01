@@ -354,6 +354,14 @@ public struct VSKeysignPayload {
     set {_uniqueStorage()._signData = .signTon(newValue)}
   }
 
+  public var signBitcoin: VSSignBitcoin {
+    get {
+      if case .signBitcoin(let v)? = _storage._signData {return v}
+      return VSSignBitcoin()
+    }
+    set {_uniqueStorage()._signData = .signBitcoin(newValue)}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum OneOf_BlockchainSpecific: Equatable {
@@ -503,6 +511,7 @@ public struct VSKeysignPayload {
     case signDirect(VSSignDirect)
     case signSolana(VSSignSolana)
     case signTon(VSSignTon)
+    case signBitcoin(VSSignBitcoin)
 
   #if !swift(>=4.1)
     public static func ==(lhs: VSKeysignPayload.OneOf_SignData, rhs: VSKeysignPayload.OneOf_SignData) -> Bool {
@@ -524,6 +533,10 @@ public struct VSKeysignPayload {
       }()
       case (.signTon, .signTon): return {
         guard case .signTon(let l) = lhs, case .signTon(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.signBitcoin, .signBitcoin): return {
+        guard case .signBitcoin(let l) = lhs, case .signBitcoin(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
       default: return false
@@ -665,6 +678,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     40: .standard(proto: "sign_direct"),
     41: .standard(proto: "sign_solana"),
     42: .standard(proto: "sign_ton"),
+    43: .standard(proto: "sign_bitcoin"),
   ]
 
   fileprivate class _StorageClass {
@@ -1050,6 +1064,19 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
             _storage._signData = .signTon(v)
           }
         }()
+        case 43: try {
+          var v: VSSignBitcoin?
+          var hadOneofValue = false
+          if let current = _storage._signData {
+            hadOneofValue = true
+            if case .signBitcoin(let m) = current {v = m}
+          }
+          try decoder.decodeSingularMessageField(value: &v)
+          if let v = v {
+            if hadOneofValue {try decoder.handleConflictingOneOf()}
+            _storage._signData = .signBitcoin(v)
+          }
+        }()
         default: break
         }
       }
@@ -1197,6 +1224,10 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case .signTon?: try {
         guard case .signTon(let v)? = _storage._signData else { preconditionFailure() }
         try visitor.visitSingularMessageField(value: v, fieldNumber: 42)
+      }()
+      case .signBitcoin?: try {
+        guard case .signBitcoin(let v)? = _storage._signData else { preconditionFailure() }
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 43)
       }()
       case nil: break
       }
