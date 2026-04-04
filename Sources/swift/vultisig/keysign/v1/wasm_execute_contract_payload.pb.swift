@@ -224,8 +224,15 @@ public struct VSBitcoinInput {
   /// "p2wpkh", "p2pkh", "p2tr", "p2sh-p2wpkh"
   public var scriptType: String = String()
 
-  /// BIP-143/341 sighash flag (default SIGHASH_ALL=1)
-  public var sighashType: UInt32 = 0
+  /// BIP-143/341 sighash flag; when absent, treat as SIGHASH_ALL (1)
+  public var sighashType: UInt32 {
+    get {return _sighashType ?? 0}
+    set {_sighashType = newValue}
+  }
+  /// Returns true if `sighashType` has been explicitly set.
+  public var hasSighashType: Bool {return self._sighashType != nil}
+  /// Clears the value of `sighashType`. Subsequent reads from it will return its default value.
+  public mutating func clearSighashType() {self._sighashType = nil}
 
   /// Whether this device signs this input
   public var isOurs: Bool = false
@@ -240,14 +247,23 @@ public struct VSBitcoinInput {
   /// Clears the value of `redeemScript`. Subsequent reads from it will return its default value.
   public mutating func clearRedeemScript() {self._redeemScript = nil}
 
-  /// nSequence (default 0xFFFFFFFF)
-  public var sequence: UInt32 = 0
+  /// nSequence; when absent, treat as 0xFFFFFFFF
+  public var sequence: UInt32 {
+    get {return _sequence ?? 0}
+    set {_sequence = newValue}
+  }
+  /// Returns true if `sequence` has been explicitly set.
+  public var hasSequence: Bool {return self._sequence != nil}
+  /// Clears the value of `sequence`. Subsequent reads from it will return its default value.
+  public mutating func clearSequence() {self._sequence = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
+  fileprivate var _sighashType: UInt32? = nil
   fileprivate var _redeemScript: String? = nil
+  fileprivate var _sequence: UInt32? = nil
 }
 
 /// A single Bitcoin transaction output decomposed from a PSBT.
@@ -745,10 +761,10 @@ extension VSBitcoinInput: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
       case 3: try { try decoder.decodeSingularInt64Field(value: &self.amount) }()
       case 4: try { try decoder.decodeSingularStringField(value: &self.scriptPubKey) }()
       case 5: try { try decoder.decodeSingularStringField(value: &self.scriptType) }()
-      case 6: try { try decoder.decodeSingularUInt32Field(value: &self.sighashType) }()
+      case 6: try { try decoder.decodeSingularUInt32Field(value: &self._sighashType) }()
       case 7: try { try decoder.decodeSingularBoolField(value: &self.isOurs) }()
       case 8: try { try decoder.decodeSingularStringField(value: &self._redeemScript) }()
-      case 9: try { try decoder.decodeSingularUInt32Field(value: &self.sequence) }()
+      case 9: try { try decoder.decodeSingularUInt32Field(value: &self._sequence) }()
       default: break
       }
     }
@@ -774,18 +790,18 @@ extension VSBitcoinInput: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
     if !self.scriptType.isEmpty {
       try visitor.visitSingularStringField(value: self.scriptType, fieldNumber: 5)
     }
-    if self.sighashType != 0 {
-      try visitor.visitSingularUInt32Field(value: self.sighashType, fieldNumber: 6)
-    }
+    try { if let v = self._sighashType {
+      try visitor.visitSingularUInt32Field(value: v, fieldNumber: 6)
+    } }()
     if self.isOurs != false {
       try visitor.visitSingularBoolField(value: self.isOurs, fieldNumber: 7)
     }
     try { if let v = self._redeemScript {
       try visitor.visitSingularStringField(value: v, fieldNumber: 8)
     } }()
-    if self.sequence != 0 {
-      try visitor.visitSingularUInt32Field(value: self.sequence, fieldNumber: 9)
-    }
+    try { if let v = self._sequence {
+      try visitor.visitSingularUInt32Field(value: v, fieldNumber: 9)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -795,10 +811,10 @@ extension VSBitcoinInput: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
     if lhs.amount != rhs.amount {return false}
     if lhs.scriptPubKey != rhs.scriptPubKey {return false}
     if lhs.scriptType != rhs.scriptType {return false}
-    if lhs.sighashType != rhs.sighashType {return false}
+    if lhs._sighashType != rhs._sighashType {return false}
     if lhs.isOurs != rhs.isOurs {return false}
     if lhs._redeemScript != rhs._redeemScript {return false}
-    if lhs.sequence != rhs.sequence {return false}
+    if lhs._sequence != rhs._sequence {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

@@ -60,24 +60,24 @@ message WasmExecuteContractPayload {
 // A single Bitcoin transaction input decomposed from a PSBT.
 // Contains all data needed for sighash computation and verification.
 message BitcoinInput {
-  string hash = 1;                   // Previous txid (hex, big-endian)
-  uint32 index = 2;                  // Previous output index (vout)
-  int64 amount = 3;                  // Satoshis (from witness UTXO)
-  string script_pub_key = 4;         // Hex scriptPubKey of the UTXO being spent
-  string script_type = 5;            // "p2wpkh", "p2pkh", "p2tr", "p2sh-p2wpkh"
-  uint32 sighash_type = 6;           // BIP-143/341 sighash flag (default SIGHASH_ALL=1)
-  bool is_ours = 7;                  // Whether this device signs this input
+  string hash = 1; // Previous txid (hex, big-endian)
+  uint32 index = 2; // Previous output index (vout)
+  int64 amount = 3; // Satoshis (from witness UTXO)
+  string script_pub_key = 4; // Hex scriptPubKey of the UTXO being spent
+  string script_type = 5; // "p2wpkh", "p2pkh", "p2tr", "p2sh-p2wpkh"
+  optional uint32 sighash_type = 6; // BIP-143/341 sighash flag; when absent, treat as SIGHASH_ALL (1)
+  bool is_ours = 7; // Whether this device signs this input
   optional string redeem_script = 8; // For P2SH-P2WPKH: hex redeem script
-  uint32 sequence = 9;               // nSequence (default 0xFFFFFFFF)
+  optional uint32 sequence = 9; // nSequence; when absent, treat as 0xFFFFFFFF
 }
 
 // A single Bitcoin transaction output decomposed from a PSBT.
 message BitcoinOutput {
-  int64 amount = 1;                   // Satoshis
-  string address = 2;                 // Decoded address (empty for OP_RETURN)
+  int64 amount = 1; // Satoshis
+  string address = 2; // Decoded address (empty for OP_RETURN)
   optional string op_return_data = 3; // Hex data if OP_RETURN
-  string script_pub_key = 4;          // Hex output scriptPubKey
-  bool is_change = 5;                 // Whether output is change back to sender
+  string script_pub_key = 4; // Hex output scriptPubKey
+  bool is_change = 5; // Whether output is change back to sender
 }
 
 // Structured PSBT representation for Bitcoin dApp signing.
@@ -85,8 +85,8 @@ message BitcoinOutput {
 // devices can display transaction details and compute exact sighashes
 // without receiving an opaque blob.
 message SignBitcoin {
-  uint32 version = 1;                 // Transaction version (typically 1 or 2)
-  uint32 locktime = 2;                // Transaction locktime
-  repeated BitcoinInput inputs = 3;   // All inputs in exact PSBT order
+  uint32 version = 1; // Transaction version (typically 1 or 2)
+  uint32 locktime = 2; // Transaction locktime
+  repeated BitcoinInput inputs = 3; // All inputs in exact PSBT order
   repeated BitcoinOutput outputs = 4; // All outputs in exact PSBT order
 }
