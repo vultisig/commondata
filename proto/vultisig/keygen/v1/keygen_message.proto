@@ -16,4 +16,5 @@ message KeygenMessage {
   string vault_name = 6;
   LibType lib_type = 7; // Default to GG20
   repeated string chains = 8; // This field only used by KeyImport
+  bool is_tss_batch = 9; // Initiator opts the ceremony into parallel ECDSA+EdDSA keygen
 }
