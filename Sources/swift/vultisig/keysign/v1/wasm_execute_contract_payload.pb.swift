@@ -165,11 +165,21 @@ public struct VSTonMessage {
   /// Clears the value of `payload`. Subsequent reads from it will return its default value.
   public mutating func clearPayload() {self._payload = nil}
 
+  public var stateInit: String {
+    get {return _stateInit ?? String()}
+    set {_stateInit = newValue}
+  }
+  /// Returns true if `stateInit` has been explicitly set.
+  public var hasStateInit: Bool {return self._stateInit != nil}
+  /// Clears the value of `stateInit`. Subsequent reads from it will return its default value.
+  public mutating func clearStateInit() {self._stateInit = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _payload: String? = nil
+  fileprivate var _stateInit: String? = nil
 }
 
 public struct VSSignTon {
@@ -612,6 +622,7 @@ extension VSTonMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementat
     1: .same(proto: "to"),
     2: .same(proto: "amount"),
     3: .same(proto: "payload"),
+    4: .standard(proto: "state_init"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -623,6 +634,7 @@ extension VSTonMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementat
       case 1: try { try decoder.decodeSingularStringField(value: &self.to) }()
       case 2: try { try decoder.decodeSingularStringField(value: &self.amount) }()
       case 3: try { try decoder.decodeSingularStringField(value: &self._payload) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self._stateInit) }()
       default: break
       }
     }
@@ -642,6 +654,9 @@ extension VSTonMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementat
     try { if let v = self._payload {
       try visitor.visitSingularStringField(value: v, fieldNumber: 3)
     } }()
+    try { if let v = self._stateInit {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 4)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -649,6 +664,7 @@ extension VSTonMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementat
     if lhs.to != rhs.to {return false}
     if lhs.amount != rhs.amount {return false}
     if lhs._payload != rhs._payload {return false}
+    if lhs._stateInit != rhs._stateInit {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
