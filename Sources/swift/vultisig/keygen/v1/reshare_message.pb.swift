@@ -43,6 +43,9 @@ public struct VSReshareMessage {
 
   public var vaultName: String = String()
 
+  /// Initiator opts the ceremony into parallel ECDSA+EdDSA reshare
+  public var isTssBatch: Bool = false
+
   /// Default to GG20
   public var libType: VSLibType = .gg20
 
@@ -71,6 +74,7 @@ extension VSReshareMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     7: .standard(proto: "use_vultisig_relay"),
     8: .standard(proto: "old_reshare_prefix"),
     9: .standard(proto: "vault_name"),
+    10: .standard(proto: "is_tss_batch"),
     20: .standard(proto: "lib_type"),
   ]
 
@@ -89,6 +93,7 @@ extension VSReshareMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case 7: try { try decoder.decodeSingularBoolField(value: &self.useVultisigRelay) }()
       case 8: try { try decoder.decodeSingularStringField(value: &self.oldResharePrefix) }()
       case 9: try { try decoder.decodeSingularStringField(value: &self.vaultName) }()
+      case 10: try { try decoder.decodeSingularBoolField(value: &self.isTssBatch) }()
       case 20: try { try decoder.decodeSingularEnumField(value: &self.libType) }()
       default: break
       }
@@ -123,6 +128,9 @@ extension VSReshareMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if !self.vaultName.isEmpty {
       try visitor.visitSingularStringField(value: self.vaultName, fieldNumber: 9)
     }
+    if self.isTssBatch != false {
+      try visitor.visitSingularBoolField(value: self.isTssBatch, fieldNumber: 10)
+    }
     if self.libType != .gg20 {
       try visitor.visitSingularEnumField(value: self.libType, fieldNumber: 20)
     }
@@ -139,6 +147,7 @@ extension VSReshareMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if lhs.useVultisigRelay != rhs.useVultisigRelay {return false}
     if lhs.oldResharePrefix != rhs.oldResharePrefix {return false}
     if lhs.vaultName != rhs.vaultName {return false}
+    if lhs.isTssBatch != rhs.isTssBatch {return false}
     if lhs.libType != rhs.libType {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true

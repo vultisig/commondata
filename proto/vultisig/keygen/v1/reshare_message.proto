@@ -17,5 +17,6 @@ message ReshareMessage {
   bool use_vultisig_relay = 7;
   string old_reshare_prefix = 8;
   string vault_name = 9;
+  bool is_tss_batch = 10; // Initiator opts the ceremony into parallel ECDSA+EdDSA reshare
   LibType lib_type = 20; // Default to GG20
 }
