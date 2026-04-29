@@ -362,6 +362,19 @@ public struct VSKeysignPayload {
     set {_uniqueStorage()._signData = .signBitcoin(newValue)}
   }
 
+  /// Set on round 1 of a multi-round QBTC claim (SecureVault flow).
+  /// Presence of this field signals to the peer device that this is
+  /// a multi-round flow: the peer stays alive after signing round 1
+  /// and waits for round 2 inputs over the relay-message channel.
+  public var qbtcClaimContext: VSQbtcClaimContext {
+    get {return _storage._qbtcClaimContext ?? VSQbtcClaimContext()}
+    set {_uniqueStorage()._qbtcClaimContext = newValue}
+  }
+  /// Returns true if `qbtcClaimContext` has been explicitly set.
+  public var hasQbtcClaimContext: Bool {return _storage._qbtcClaimContext != nil}
+  /// Clears the value of `qbtcClaimContext`. Subsequent reads from it will return its default value.
+  public mutating func clearQbtcClaimContext() {_uniqueStorage()._qbtcClaimContext = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum OneOf_BlockchainSpecific: Equatable {
@@ -550,6 +563,49 @@ public struct VSKeysignPayload {
   fileprivate var _storage = _StorageClass.defaultInstance
 }
 
+/// One UTXO included in a QBTC claim. Mirrors the on-iOS ClaimableUtxo.
+public struct VSQbtcClaimUtxoRef {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var txid: String = String()
+
+  public var vout: UInt32 = 0
+
+  /// BTC amount in satoshis.
+  public var amount: UInt64 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+/// Per-round-1 context for a SecureVault QBTC claim. Carries everything
+/// the peer device needs to (a) compute round 1's message hash
+/// independently and (b) reconstruct round 2's SignDoc once the round 2
+/// prep message arrives over the relay.
+///
+/// `claimer_address` and `utxos` are user-selected inputs; `base_session_id`
+/// is the relay session prefix — per-round sessions use suffixes
+/// `-0` (BTC ECDSA) and `-1` (MLDSA) so each TSS protocol runs in its
+/// own clean namespace on the relay.
+public struct VSQbtcClaimContext {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var claimerAddress: String = String()
+
+  public var utxos: [VSQbtcClaimUtxoRef] = []
+
+  public var baseSessionID: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 #if swift(>=5.5) && canImport(_Concurrency)
 extension VSKeysignMessage: @unchecked Sendable {}
 extension VSKeysignPayload: @unchecked Sendable {}
@@ -557,6 +613,8 @@ extension VSKeysignPayload.OneOf_BlockchainSpecific: @unchecked Sendable {}
 extension VSKeysignPayload.OneOf_SwapPayload: @unchecked Sendable {}
 extension VSKeysignPayload.OneOf_ContractPayload: @unchecked Sendable {}
 extension VSKeysignPayload.OneOf_SignData: @unchecked Sendable {}
+extension VSQbtcClaimUtxoRef: @unchecked Sendable {}
+extension VSQbtcClaimContext: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -679,6 +737,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     41: .standard(proto: "sign_solana"),
     42: .standard(proto: "sign_ton"),
     43: .standard(proto: "sign_bitcoin"),
+    44: .standard(proto: "qbtc_claim_context"),
   ]
 
   fileprivate class _StorageClass {
@@ -696,6 +755,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     var _skipBroadcast: Bool? = nil
     var _contractPayload: VSKeysignPayload.OneOf_ContractPayload?
     var _signData: VSKeysignPayload.OneOf_SignData?
+    var _qbtcClaimContext: VSQbtcClaimContext? = nil
 
     #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
@@ -724,6 +784,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       _skipBroadcast = source._skipBroadcast
       _contractPayload = source._contractPayload
       _signData = source._signData
+      _qbtcClaimContext = source._qbtcClaimContext
     }
   }
 
@@ -1077,6 +1138,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
             _storage._signData = .signBitcoin(v)
           }
         }()
+        case 44: try { try decoder.decodeSingularMessageField(value: &_storage._qbtcClaimContext) }()
         default: break
         }
       }
@@ -1231,6 +1293,9 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       }()
       case nil: break
       }
+      try { if let v = _storage._qbtcClaimContext {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 44)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -1254,10 +1319,99 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         if _storage._skipBroadcast != rhs_storage._skipBroadcast {return false}
         if _storage._contractPayload != rhs_storage._contractPayload {return false}
         if _storage._signData != rhs_storage._signData {return false}
+        if _storage._qbtcClaimContext != rhs_storage._qbtcClaimContext {return false}
         return true
       }
       if !storagesAreEqual {return false}
     }
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSQbtcClaimUtxoRef: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".QbtcClaimUtxoRef"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "txid"),
+    2: .same(proto: "vout"),
+    3: .same(proto: "amount"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.txid) }()
+      case 2: try { try decoder.decodeSingularUInt32Field(value: &self.vout) }()
+      case 3: try { try decoder.decodeSingularUInt64Field(value: &self.amount) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.txid.isEmpty {
+      try visitor.visitSingularStringField(value: self.txid, fieldNumber: 1)
+    }
+    if self.vout != 0 {
+      try visitor.visitSingularUInt32Field(value: self.vout, fieldNumber: 2)
+    }
+    if self.amount != 0 {
+      try visitor.visitSingularUInt64Field(value: self.amount, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSQbtcClaimUtxoRef, rhs: VSQbtcClaimUtxoRef) -> Bool {
+    if lhs.txid != rhs.txid {return false}
+    if lhs.vout != rhs.vout {return false}
+    if lhs.amount != rhs.amount {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSQbtcClaimContext: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".QbtcClaimContext"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "claimer_address"),
+    2: .same(proto: "utxos"),
+    3: .standard(proto: "base_session_id"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.claimerAddress) }()
+      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.utxos) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.baseSessionID) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.claimerAddress.isEmpty {
+      try visitor.visitSingularStringField(value: self.claimerAddress, fieldNumber: 1)
+    }
+    if !self.utxos.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.utxos, fieldNumber: 2)
+    }
+    if !self.baseSessionID.isEmpty {
+      try visitor.visitSingularStringField(value: self.baseSessionID, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSQbtcClaimContext, rhs: VSQbtcClaimContext) -> Bool {
+    if lhs.claimerAddress != rhs.claimerAddress {return false}
+    if lhs.utxos != rhs.utxos {return false}
+    if lhs.baseSessionID != rhs.baseSessionID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
