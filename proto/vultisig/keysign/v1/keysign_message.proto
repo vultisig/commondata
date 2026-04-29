@@ -71,4 +71,32 @@ message KeysignPayload {
     SignTon sign_ton = 42;
     SignBitcoin sign_bitcoin = 43;
   }
+  // Set on round 1 of a multi-round QBTC claim (SecureVault flow).
+  // Presence of this field signals to the peer device that this is
+  // a multi-round flow: the peer stays alive after signing round 1
+  // and waits for round 2 inputs over the relay-message channel.
+  optional QbtcClaimContext qbtc_claim_context = 44;
+}
+
+// One UTXO included in a QBTC claim. Mirrors the on-iOS ClaimableUtxo.
+message QbtcClaimUtxoRef {
+  string txid = 1;
+  uint32 vout = 2;
+  // BTC amount in satoshis.
+  uint64 amount = 3;
+}
+
+// Per-round-1 context for a SecureVault QBTC claim. Carries everything
+// the peer device needs to (a) compute round 1's message hash
+// independently and (b) reconstruct round 2's SignDoc once the round 2
+// prep message arrives over the relay.
+//
+// `claimer_address` and `utxos` are user-selected inputs; `base_session_id`
+// is the relay session prefix — per-round sessions use suffixes
+// `-0` (BTC ECDSA) and `-1` (MLDSA) so each TSS protocol runs in its
+// own clean namespace on the relay.
+message QbtcClaimContext {
+  string claimer_address = 1;
+  repeated QbtcClaimUtxoRef utxos = 2;
+  string base_session_id = 3;
 }
