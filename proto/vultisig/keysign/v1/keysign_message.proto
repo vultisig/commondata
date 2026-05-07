@@ -25,7 +25,7 @@ message KeysignMessage {
   string payload_id = 7;
   optional CustomMessagePayload custom_message_payload = 8;
   optional string custom_payload_id = 9;
-  optional DAppMetadata dapp_metadata = 50;
+  optional DAppMetadata dapp_metadata = 10;
 }
 
 message DAppMetadata {
