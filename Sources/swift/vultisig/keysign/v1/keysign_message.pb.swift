@@ -62,6 +62,15 @@ public struct VSKeysignMessage {
   /// Clears the value of `customPayloadID`. Subsequent reads from it will return its default value.
   public mutating func clearCustomPayloadID() {self._customPayloadID = nil}
 
+  public var dappMetadata: VSDAppMetadata {
+    get {return _dappMetadata ?? VSDAppMetadata()}
+    set {_dappMetadata = newValue}
+  }
+  /// Returns true if `dappMetadata` has been explicitly set.
+  public var hasDappMetadata: Bool {return self._dappMetadata != nil}
+  /// Clears the value of `dappMetadata`. Subsequent reads from it will return its default value.
+  public mutating func clearDappMetadata() {self._dappMetadata = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -69,6 +78,7 @@ public struct VSKeysignMessage {
   fileprivate var _keysignPayload: VSKeysignPayload? = nil
   fileprivate var _customMessagePayload: VSCustomMessagePayload? = nil
   fileprivate var _customPayloadID: String? = nil
+  fileprivate var _dappMetadata: VSDAppMetadata? = nil
 }
 
 public struct VSDAppMetadata {
@@ -378,15 +388,6 @@ public struct VSKeysignPayload {
     set {_uniqueStorage()._signData = .signBitcoin(newValue)}
   }
 
-  public var dappMetadata: VSDAppMetadata {
-    get {return _storage._dappMetadata ?? VSDAppMetadata()}
-    set {_uniqueStorage()._dappMetadata = newValue}
-  }
-  /// Returns true if `dappMetadata` has been explicitly set.
-  public var hasDappMetadata: Bool {return _storage._dappMetadata != nil}
-  /// Clears the value of `dappMetadata`. Subsequent reads from it will return its default value.
-  public mutating func clearDappMetadata() {_uniqueStorage()._dappMetadata = nil}
-
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum OneOf_BlockchainSpecific: Equatable {
@@ -600,6 +601,7 @@ extension VSKeysignMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     7: .standard(proto: "payload_id"),
     8: .standard(proto: "custom_message_payload"),
     9: .standard(proto: "custom_payload_id"),
+    50: .standard(proto: "dapp_metadata"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -616,6 +618,7 @@ extension VSKeysignMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case 7: try { try decoder.decodeSingularStringField(value: &self.payloadID) }()
       case 8: try { try decoder.decodeSingularMessageField(value: &self._customMessagePayload) }()
       case 9: try { try decoder.decodeSingularStringField(value: &self._customPayloadID) }()
+      case 50: try { try decoder.decodeSingularMessageField(value: &self._dappMetadata) }()
       default: break
       }
     }
@@ -650,6 +653,9 @@ extension VSKeysignMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     try { if let v = self._customPayloadID {
       try visitor.visitSingularStringField(value: v, fieldNumber: 9)
     } }()
+    try { if let v = self._dappMetadata {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 50)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -662,6 +668,7 @@ extension VSKeysignMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if lhs.payloadID != rhs.payloadID {return false}
     if lhs._customMessagePayload != rhs._customMessagePayload {return false}
     if lhs._customPayloadID != rhs._customPayloadID {return false}
+    if lhs._dappMetadata != rhs._dappMetadata {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -749,7 +756,6 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     41: .standard(proto: "sign_solana"),
     42: .standard(proto: "sign_ton"),
     43: .standard(proto: "sign_bitcoin"),
-    50: .standard(proto: "dapp_metadata"),
   ]
 
   fileprivate class _StorageClass {
@@ -767,7 +773,6 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     var _skipBroadcast: Bool? = nil
     var _contractPayload: VSKeysignPayload.OneOf_ContractPayload?
     var _signData: VSKeysignPayload.OneOf_SignData?
-    var _dappMetadata: VSDAppMetadata? = nil
 
     #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
@@ -796,7 +801,6 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       _skipBroadcast = source._skipBroadcast
       _contractPayload = source._contractPayload
       _signData = source._signData
-      _dappMetadata = source._dappMetadata
     }
   }
 
@@ -1150,7 +1154,6 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
             _storage._signData = .signBitcoin(v)
           }
         }()
-        case 50: try { try decoder.decodeSingularMessageField(value: &_storage._dappMetadata) }()
         default: break
         }
       }
@@ -1305,9 +1308,6 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       }()
       case nil: break
       }
-      try { if let v = _storage._dappMetadata {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 50)
-      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -1331,7 +1331,6 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         if _storage._skipBroadcast != rhs_storage._skipBroadcast {return false}
         if _storage._contractPayload != rhs_storage._contractPayload {return false}
         if _storage._signData != rhs_storage._signData {return false}
-        if _storage._dappMetadata != rhs_storage._dappMetadata {return false}
         return true
       }
       if !storagesAreEqual {return false}
