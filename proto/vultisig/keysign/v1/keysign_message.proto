@@ -71,32 +71,25 @@ message KeysignPayload {
     SignTon sign_ton = 42;
     SignBitcoin sign_bitcoin = 43;
   }
-  // Set on round 1 of a multi-round QBTC claim (SecureVault flow).
-  // Presence of this field signals to the peer device that this is
-  // a multi-round flow: the peer stays alive after signing round 1
-  // and waits for round 2 inputs over the relay-message channel.
+  // Set on a SecureVault QBTC claim QR. Presence of this field signals
+  // to the peer device that the BTC ECDSA signature it's about to produce
+  // is for a QBTC claim — the peer computes the message hash locally
+  // from `claimer_address` (plus its own vault BTC address + pubkey +
+  // chain id) and signs THAT, so a compromised initiator cannot divert
+  // the signature to an arbitrary BTC spending tx.
   optional QbtcClaimContext qbtc_claim_context = 44;
 }
 
-// One UTXO included in a QBTC claim. Mirrors the on-iOS ClaimableUtxo.
-message QbtcClaimUtxoRef {
-  string txid = 1;
-  uint32 vout = 2;
-  // BTC amount in satoshis.
-  uint64 amount = 3;
-}
-
-// Per-round-1 context for a SecureVault QBTC claim. Carries everything
-// the peer device needs to (a) compute round 1's message hash
-// independently and (b) reconstruct round 2's SignDoc once the round 2
-// prep message arrives over the relay.
+// Sanity-check context for a SecureVault QBTC claim. The peer device
+// derives the BTC ECDSA message hash from `claimer_address` (combined
+// with its own vault BTC address/pubkey and the chain id) so it never
+// blind-signs whatever hash the initiator asks for.
 //
-// `claimer_address` and `utxos` are user-selected inputs; `base_session_id`
-// is the relay session prefix — per-round sessions use suffixes
-// `-0` (BTC ECDSA) and `-1` (MLDSA) so each TSS protocol runs in its
-// own clean namespace on the relay.
+// Under the post-qbtc#158 flow the proof service signs and broadcasts
+// `MsgClaimWithProof` itself, so the peer no longer reconstructs a
+// cosmos `SignDoc` or needs to know which UTXOs are being claimed —
+// `claimer_address` is the only piece of state it can't derive from
+// its own vault.
 message QbtcClaimContext {
   string claimer_address = 1;
-  repeated QbtcClaimUtxoRef utxos = 2;
-  string base_session_id = 3;
 }
