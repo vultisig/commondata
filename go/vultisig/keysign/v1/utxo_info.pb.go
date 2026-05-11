@@ -20,14 +20,22 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// CardanoTokenAsset describes a Cardano native asset present on a UTXO.
+// Native assets are identified by (policy_id, asset_name) with integer
+// quantities. See https://docs.cardano.org/developer-resources/native-tokens.
 type CardanoTokenAsset struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	PolicyId     string `protobuf:"bytes,1,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`
+	// Hex-encoded policy id (28 bytes / 56 hex chars).
+	PolicyId string `protobuf:"bytes,1,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`
+	// Hex-encoded asset name (0..32 bytes / 0..64 hex chars). Empty for the
+	// unnamed asset under a policy.
 	AssetNameHex string `protobuf:"bytes,2,opt,name=asset_name_hex,json=assetNameHex,proto3" json:"asset_name_hex,omitempty"`
-	Amount       string `protobuf:"bytes,3,opt,name=amount,proto3" json:"amount,omitempty"`
+	// Token quantity in the asset's base units, as a decimal string to fit
+	// values outside int64 range.
+	Amount string `protobuf:"bytes,3,opt,name=amount,proto3" json:"amount,omitempty"`
 }
 
 func (x *CardanoTokenAsset) Reset() {
@@ -88,9 +96,15 @@ type UtxoInfo struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Hash          string               `protobuf:"bytes,1,opt,name=hash,proto3" json:"hash,omitempty"`
-	Amount        int64                `protobuf:"varint,2,opt,name=amount,proto3" json:"amount,omitempty"`
-	Index         uint32               `protobuf:"varint,3,opt,name=index,proto3" json:"index,omitempty"`
+	Hash string `protobuf:"bytes,1,opt,name=hash,proto3" json:"hash,omitempty"`
+	// For UTXO chains other than Cardano, this is the UTXO amount in the
+	// chain's smallest unit (e.g. satoshis). For Cardano, this is the
+	// lovelace amount on the UTXO; per-UTXO native assets live in
+	// cardano_tokens.
+	Amount int64  `protobuf:"varint,2,opt,name=amount,proto3" json:"amount,omitempty"`
+	Index  uint32 `protobuf:"varint,3,opt,name=index,proto3" json:"index,omitempty"`
+	// Cardano-only: native assets carried by this UTXO. Empty for non-Cardano
+	// chains and for ADA-only UTXOs.
 	CardanoTokens []*CardanoTokenAsset `protobuf:"bytes,4,rep,name=cardano_tokens,json=cardanoTokens,proto3" json:"cardano_tokens,omitempty"`
 }
 

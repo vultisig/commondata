@@ -20,15 +20,23 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
+/// CardanoTokenAsset describes a Cardano native asset present on a UTXO.
+/// Native assets are identified by (policy_id, asset_name) with integer
+/// quantities. See https://docs.cardano.org/developer-resources/native-tokens.
 public struct VSCardanoTokenAsset {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
+  /// Hex-encoded policy id (28 bytes / 56 hex chars).
   public var policyID: String = String()
 
+  /// Hex-encoded asset name (0..32 bytes / 0..64 hex chars). Empty for the
+  /// unnamed asset under a policy.
   public var assetNameHex: String = String()
 
+  /// Token quantity in the asset's base units, as a decimal string to fit
+  /// values outside int64 range.
   public var amount: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -43,10 +51,16 @@ public struct VSUtxoInfo {
 
   public var hash: String = String()
 
+  /// For UTXO chains other than Cardano, this is the UTXO amount in the
+  /// chain's smallest unit (e.g. satoshis). For Cardano, this is the
+  /// lovelace amount on the UTXO; per-UTXO native assets live in
+  /// cardano_tokens.
   public var amount: Int64 = 0
 
   public var index: UInt32 = 0
 
+  /// Cardano-only: native assets carried by this UTXO. Empty for non-Cardano
+  /// chains and for ADA-only UTXOs.
   public var cardanoTokens: [VSCardanoTokenAsset] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
