@@ -27,6 +27,12 @@ message KeysignMessage {
   optional string custom_payload_id = 9;
 }
 
+message DAppMetadata {
+  string name = 1;
+  string url = 2;
+  string icon_url = 3;
+}
+
 message KeysignPayload {
   Coin coin = 1;
   string to_address = 2;
@@ -78,6 +84,7 @@ message KeysignPayload {
   // chain id) and signs THAT, so a compromised initiator cannot divert
   // the signature to an arbitrary BTC spending tx.
   optional QbtcClaimContext qbtc_claim_context = 44;
+  optional DAppMetadata dapp_metadata = 50;
 }
 
 // Sanity-check context for a SecureVault QBTC claim. The peer device
