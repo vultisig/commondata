@@ -601,7 +601,7 @@ extension VSKeysignMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     7: .standard(proto: "payload_id"),
     8: .standard(proto: "custom_message_payload"),
     9: .standard(proto: "custom_payload_id"),
-    10: .standard(proto: "dapp_metadata"),
+    50: .standard(proto: "dapp_metadata"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -618,7 +618,7 @@ extension VSKeysignMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case 7: try { try decoder.decodeSingularStringField(value: &self.payloadID) }()
       case 8: try { try decoder.decodeSingularMessageField(value: &self._customMessagePayload) }()
       case 9: try { try decoder.decodeSingularStringField(value: &self._customPayloadID) }()
-      case 10: try { try decoder.decodeSingularMessageField(value: &self._dappMetadata) }()
+      case 50: try { try decoder.decodeSingularMessageField(value: &self._dappMetadata) }()
       default: break
       }
     }
@@ -654,7 +654,7 @@ extension VSKeysignMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       try visitor.visitSingularStringField(value: v, fieldNumber: 9)
     } }()
     try { if let v = self._dappMetadata {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 50)
     } }()
     try unknownFields.traverse(visitor: &visitor)
   }
