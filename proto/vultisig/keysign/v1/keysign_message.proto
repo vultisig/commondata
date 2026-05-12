@@ -77,5 +77,26 @@ message KeysignPayload {
     SignTon sign_ton = 42;
     SignBitcoin sign_bitcoin = 43;
   }
+  // Set on a SecureVault QBTC claim QR. Presence of this field signals
+  // to the peer device that the BTC ECDSA signature it's about to produce
+  // is for a QBTC claim — the peer computes the message hash locally
+  // from `claimer_address` (plus its own vault BTC address + pubkey +
+  // chain id) and signs THAT, so a compromised initiator cannot divert
+  // the signature to an arbitrary BTC spending tx.
+  optional QbtcClaimContext qbtc_claim_context = 44;
   optional DAppMetadata dapp_metadata = 50;
+}
+
+// Sanity-check context for a SecureVault QBTC claim. The peer device
+// derives the BTC ECDSA message hash from `claimer_address` (combined
+// with its own vault BTC address/pubkey and the chain id) so it never
+// blind-signs whatever hash the initiator asks for.
+//
+// Under the post-qbtc#158 flow the proof service signs and broadcasts
+// `MsgClaimWithProof` itself, so the peer no longer reconstructs a
+// cosmos `SignDoc` or needs to know which UTXOs are being claimed —
+// `claimer_address` is the only piece of state it can't derive from
+// its own vault.
+message QbtcClaimContext {
+  string claimer_address = 1;
 }

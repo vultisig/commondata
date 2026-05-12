@@ -237,8 +237,15 @@ type KeysignPayload struct {
 	//	*KeysignPayload_SignSolana
 	//	*KeysignPayload_SignTon
 	//	*KeysignPayload_SignBitcoin
-	SignData     isKeysignPayload_SignData `protobuf_oneof:"sign_data"`
-	DappMetadata *DAppMetadata             `protobuf:"bytes,50,opt,name=dapp_metadata,json=dappMetadata,proto3,oneof" json:"dapp_metadata,omitempty"`
+	SignData isKeysignPayload_SignData `protobuf_oneof:"sign_data"`
+	// Set on a SecureVault QBTC claim QR. Presence of this field signals
+	// to the peer device that the BTC ECDSA signature it's about to produce
+	// is for a QBTC claim — the peer computes the message hash locally
+	// from `claimer_address` (plus its own vault BTC address + pubkey +
+	// chain id) and signs THAT, so a compromised initiator cannot divert
+	// the signature to an arbitrary BTC spending tx.
+	QbtcClaimContext *QbtcClaimContext `protobuf:"bytes,44,opt,name=qbtc_claim_context,json=qbtcClaimContext,proto3,oneof" json:"qbtc_claim_context,omitempty"`
+	DappMetadata     *DAppMetadata     `protobuf:"bytes,50,opt,name=dapp_metadata,json=dappMetadata,proto3,oneof" json:"dapp_metadata,omitempty"`
 }
 
 func (x *KeysignPayload) Reset() {
@@ -546,6 +553,13 @@ func (x *KeysignPayload) GetSignBitcoin() *SignBitcoin {
 	return nil
 }
 
+func (x *KeysignPayload) GetQbtcClaimContext() *QbtcClaimContext {
+	if x != nil {
+		return x.QbtcClaimContext
+	}
+	return nil
+}
+
 func (x *KeysignPayload) GetDappMetadata() *DAppMetadata {
 	if x != nil {
 		return x.DappMetadata
@@ -719,6 +733,63 @@ func (*KeysignPayload_SignTon) isKeysignPayload_SignData() {}
 
 func (*KeysignPayload_SignBitcoin) isKeysignPayload_SignData() {}
 
+// Sanity-check context for a SecureVault QBTC claim. The peer device
+// derives the BTC ECDSA message hash from `claimer_address` (combined
+// with its own vault BTC address/pubkey and the chain id) so it never
+// blind-signs whatever hash the initiator asks for.
+//
+// Under the post-qbtc#158 flow the proof service signs and broadcasts
+// `MsgClaimWithProof` itself, so the peer no longer reconstructs a
+// cosmos `SignDoc` or needs to know which UTXOs are being claimed —
+// `claimer_address` is the only piece of state it can't derive from
+// its own vault.
+type QbtcClaimContext struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ClaimerAddress string `protobuf:"bytes,1,opt,name=claimer_address,json=claimerAddress,proto3" json:"claimer_address,omitempty"`
+}
+
+func (x *QbtcClaimContext) Reset() {
+	*x = QbtcClaimContext{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_vultisig_keysign_v1_keysign_message_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QbtcClaimContext) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QbtcClaimContext) ProtoMessage() {}
+
+func (x *QbtcClaimContext) ProtoReflect() protoreflect.Message {
+	mi := &file_vultisig_keysign_v1_keysign_message_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use QbtcClaimContext.ProtoReflect.Descriptor instead.
+func (*QbtcClaimContext) Descriptor() ([]byte, []int) {
+	return file_vultisig_keysign_v1_keysign_message_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *QbtcClaimContext) GetClaimerAddress() string {
+	if x != nil {
+		return x.ClaimerAddress
+	}
+	return ""
+}
+
 var File_vultisig_keysign_v1_keysign_message_proto protoreflect.FileDescriptor
 
 var file_vultisig_keysign_v1_keysign_message_proto_rawDesc = []byte{
@@ -790,7 +861,7 @@ var file_vultisig_keysign_v1_keysign_message_proto_rawDesc = []byte{
 	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x10, 0x0a,
 	0x03, 0x75, 0x72, 0x6c, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x75, 0x72, 0x6c, 0x12,
 	0x19, 0x0a, 0x08, 0x69, 0x63, 0x6f, 0x6e, 0x5f, 0x75, 0x72, 0x6c, 0x18, 0x03, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x07, 0x69, 0x63, 0x6f, 0x6e, 0x55, 0x72, 0x6c, 0x22, 0xbd, 0x16, 0x0a, 0x0e, 0x4b,
+	0x09, 0x52, 0x07, 0x69, 0x63, 0x6f, 0x6e, 0x55, 0x72, 0x6c, 0x22, 0xae, 0x17, 0x0a, 0x0e, 0x4b,
 	0x65, 0x79, 0x73, 0x69, 0x67, 0x6e, 0x50, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x12, 0x2d, 0x0a,
 	0x04, 0x63, 0x6f, 0x69, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x76, 0x75,
 	0x6c, 0x74, 0x69, 0x73, 0x69, 0x67, 0x2e, 0x6b, 0x65, 0x79, 0x73, 0x69, 0x67, 0x6e, 0x2e, 0x76,
@@ -956,27 +1027,38 @@ var file_vultisig_keysign_v1_keysign_message_proto_rawDesc = []byte{
 	0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x18, 0x2b, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x20, 0x2e, 0x76,
 	0x75, 0x6c, 0x74, 0x69, 0x73, 0x69, 0x67, 0x2e, 0x6b, 0x65, 0x79, 0x73, 0x69, 0x67, 0x6e, 0x2e,
 	0x76, 0x31, 0x2e, 0x53, 0x69, 0x67, 0x6e, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x48, 0x03,
-	0x52, 0x0b, 0x73, 0x69, 0x67, 0x6e, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x12, 0x4b, 0x0a,
-	0x0d, 0x64, 0x61, 0x70, 0x70, 0x5f, 0x6d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x18, 0x32,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x76, 0x75, 0x6c, 0x74, 0x69, 0x73, 0x69, 0x67, 0x2e,
-	0x6b, 0x65, 0x79, 0x73, 0x69, 0x67, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x41, 0x70, 0x70, 0x4d,
-	0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x48, 0x07, 0x52, 0x0c, 0x64, 0x61, 0x70, 0x70, 0x4d,
-	0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x88, 0x01, 0x01, 0x42, 0x15, 0x0a, 0x13, 0x62, 0x6c,
-	0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x5f, 0x73, 0x70, 0x65, 0x63, 0x69, 0x66, 0x69,
-	0x63, 0x42, 0x0e, 0x0a, 0x0c, 0x73, 0x77, 0x61, 0x70, 0x5f, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61,
-	0x64, 0x42, 0x12, 0x0a, 0x10, 0x63, 0x6f, 0x6e, 0x74, 0x72, 0x61, 0x63, 0x74, 0x5f, 0x70, 0x61,
-	0x79, 0x6c, 0x6f, 0x61, 0x64, 0x42, 0x0b, 0x0a, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x5f, 0x64, 0x61,
-	0x74, 0x61, 0x42, 0x07, 0x0a, 0x05, 0x5f, 0x6d, 0x65, 0x6d, 0x6f, 0x42, 0x18, 0x0a, 0x16, 0x5f,
-	0x65, 0x72, 0x63, 0x32, 0x30, 0x5f, 0x61, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x65, 0x5f, 0x70, 0x61,
-	0x79, 0x6c, 0x6f, 0x61, 0x64, 0x42, 0x11, 0x0a, 0x0f, 0x5f, 0x73, 0x6b, 0x69, 0x70, 0x5f, 0x62,
-	0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x42, 0x10, 0x0a, 0x0e, 0x5f, 0x64, 0x61, 0x70,
-	0x70, 0x5f, 0x6d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x42, 0x54, 0x0a, 0x13, 0x76, 0x75,
-	0x6c, 0x74, 0x69, 0x73, 0x69, 0x67, 0x2e, 0x6b, 0x65, 0x79, 0x73, 0x69, 0x67, 0x6e, 0x2e, 0x76,
-	0x31, 0x5a, 0x38, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x76, 0x75,
-	0x6c, 0x74, 0x69, 0x73, 0x69, 0x67, 0x2f, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x64, 0x61, 0x74,
-	0x61, 0x2f, 0x67, 0x6f, 0x2f, 0x76, 0x75, 0x6c, 0x74, 0x69, 0x73, 0x69, 0x67, 0x2f, 0x6b, 0x65,
-	0x79, 0x73, 0x69, 0x67, 0x6e, 0x2f, 0x76, 0x31, 0x3b, 0x76, 0x31, 0xba, 0x02, 0x02, 0x56, 0x53,
-	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x52, 0x0b, 0x73, 0x69, 0x67, 0x6e, 0x42, 0x69, 0x74, 0x63, 0x6f, 0x69, 0x6e, 0x12, 0x58, 0x0a,
+	0x12, 0x71, 0x62, 0x74, 0x63, 0x5f, 0x63, 0x6c, 0x61, 0x69, 0x6d, 0x5f, 0x63, 0x6f, 0x6e, 0x74,
+	0x65, 0x78, 0x74, 0x18, 0x2c, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x76, 0x75, 0x6c, 0x74,
+	0x69, 0x73, 0x69, 0x67, 0x2e, 0x6b, 0x65, 0x79, 0x73, 0x69, 0x67, 0x6e, 0x2e, 0x76, 0x31, 0x2e,
+	0x51, 0x62, 0x74, 0x63, 0x43, 0x6c, 0x61, 0x69, 0x6d, 0x43, 0x6f, 0x6e, 0x74, 0x65, 0x78, 0x74,
+	0x48, 0x07, 0x52, 0x10, 0x71, 0x62, 0x74, 0x63, 0x43, 0x6c, 0x61, 0x69, 0x6d, 0x43, 0x6f, 0x6e,
+	0x74, 0x65, 0x78, 0x74, 0x88, 0x01, 0x01, 0x12, 0x4b, 0x0a, 0x0d, 0x64, 0x61, 0x70, 0x70, 0x5f,
+	0x6d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x18, 0x32, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x21,
+	0x2e, 0x76, 0x75, 0x6c, 0x74, 0x69, 0x73, 0x69, 0x67, 0x2e, 0x6b, 0x65, 0x79, 0x73, 0x69, 0x67,
+	0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x41, 0x70, 0x70, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74,
+	0x61, 0x48, 0x08, 0x52, 0x0c, 0x64, 0x61, 0x70, 0x70, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74,
+	0x61, 0x88, 0x01, 0x01, 0x42, 0x15, 0x0a, 0x13, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61,
+	0x69, 0x6e, 0x5f, 0x73, 0x70, 0x65, 0x63, 0x69, 0x66, 0x69, 0x63, 0x42, 0x0e, 0x0a, 0x0c, 0x73,
+	0x77, 0x61, 0x70, 0x5f, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x42, 0x12, 0x0a, 0x10, 0x63,
+	0x6f, 0x6e, 0x74, 0x72, 0x61, 0x63, 0x74, 0x5f, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x42,
+	0x0b, 0x0a, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x42, 0x07, 0x0a, 0x05,
+	0x5f, 0x6d, 0x65, 0x6d, 0x6f, 0x42, 0x18, 0x0a, 0x16, 0x5f, 0x65, 0x72, 0x63, 0x32, 0x30, 0x5f,
+	0x61, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x65, 0x5f, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x42,
+	0x11, 0x0a, 0x0f, 0x5f, 0x73, 0x6b, 0x69, 0x70, 0x5f, 0x62, 0x72, 0x6f, 0x61, 0x64, 0x63, 0x61,
+	0x73, 0x74, 0x42, 0x15, 0x0a, 0x13, 0x5f, 0x71, 0x62, 0x74, 0x63, 0x5f, 0x63, 0x6c, 0x61, 0x69,
+	0x6d, 0x5f, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x78, 0x74, 0x42, 0x10, 0x0a, 0x0e, 0x5f, 0x64, 0x61,
+	0x70, 0x70, 0x5f, 0x6d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x22, 0x3b, 0x0a, 0x10, 0x51,
+	0x62, 0x74, 0x63, 0x43, 0x6c, 0x61, 0x69, 0x6d, 0x43, 0x6f, 0x6e, 0x74, 0x65, 0x78, 0x74, 0x12,
+	0x27, 0x0a, 0x0f, 0x63, 0x6c, 0x61, 0x69, 0x6d, 0x65, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65,
+	0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x63, 0x6c, 0x61, 0x69, 0x6d, 0x65,
+	0x72, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x42, 0x54, 0x0a, 0x13, 0x76, 0x75, 0x6c, 0x74,
+	0x69, 0x73, 0x69, 0x67, 0x2e, 0x6b, 0x65, 0x79, 0x73, 0x69, 0x67, 0x6e, 0x2e, 0x76, 0x31, 0x5a,
+	0x38, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x76, 0x75, 0x6c, 0x74,
+	0x69, 0x73, 0x69, 0x67, 0x2f, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x64, 0x61, 0x74, 0x61, 0x2f,
+	0x67, 0x6f, 0x2f, 0x76, 0x75, 0x6c, 0x74, 0x69, 0x73, 0x69, 0x67, 0x2f, 0x6b, 0x65, 0x79, 0x73,
+	0x69, 0x67, 0x6e, 0x2f, 0x76, 0x31, 0x3b, 0x76, 0x31, 0xba, 0x02, 0x02, 0x56, 0x53, 0x62, 0x06,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -991,77 +1073,79 @@ func file_vultisig_keysign_v1_keysign_message_proto_rawDescGZIP() []byte {
 	return file_vultisig_keysign_v1_keysign_message_proto_rawDescData
 }
 
-var file_vultisig_keysign_v1_keysign_message_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_vultisig_keysign_v1_keysign_message_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_vultisig_keysign_v1_keysign_message_proto_goTypes = []any{
 	(*KeysignMessage)(nil),                   // 0: vultisig.keysign.v1.KeysignMessage
 	(*DAppMetadata)(nil),                     // 1: vultisig.keysign.v1.DAppMetadata
 	(*KeysignPayload)(nil),                   // 2: vultisig.keysign.v1.KeysignPayload
-	(*CustomMessagePayload)(nil),             // 3: vultisig.keysign.v1.CustomMessagePayload
-	(*Coin)(nil),                             // 4: vultisig.keysign.v1.Coin
-	(*UTXOSpecific)(nil),                     // 5: vultisig.keysign.v1.UTXOSpecific
-	(*EthereumSpecific)(nil),                 // 6: vultisig.keysign.v1.EthereumSpecific
-	(*THORChainSpecific)(nil),                // 7: vultisig.keysign.v1.THORChainSpecific
-	(*MAYAChainSpecific)(nil),                // 8: vultisig.keysign.v1.MAYAChainSpecific
-	(*CosmosSpecific)(nil),                   // 9: vultisig.keysign.v1.CosmosSpecific
-	(*SolanaSpecific)(nil),                   // 10: vultisig.keysign.v1.SolanaSpecific
-	(*PolkadotSpecific)(nil),                 // 11: vultisig.keysign.v1.PolkadotSpecific
-	(*SuiSpecific)(nil),                      // 12: vultisig.keysign.v1.SuiSpecific
-	(*TonSpecific)(nil),                      // 13: vultisig.keysign.v1.TonSpecific
-	(*RippleSpecific)(nil),                   // 14: vultisig.keysign.v1.RippleSpecific
-	(*TronSpecific)(nil),                     // 15: vultisig.keysign.v1.TronSpecific
-	(*CardanoChainSpecific)(nil),             // 16: vultisig.keysign.v1.CardanoChainSpecific
-	(*UtxoInfo)(nil),                         // 17: vultisig.keysign.v1.UtxoInfo
-	(*THORChainSwapPayload)(nil),             // 18: vultisig.keysign.v1.THORChainSwapPayload
-	(*OneInchSwapPayload)(nil),               // 19: vultisig.keysign.v1.OneInchSwapPayload
-	(*KyberSwapPayload)(nil),                 // 20: vultisig.keysign.v1.KyberSwapPayload
-	(*Erc20ApprovePayload)(nil),              // 21: vultisig.keysign.v1.Erc20ApprovePayload
-	(*WasmExecuteContractPayload)(nil),       // 22: vultisig.keysign.v1.WasmExecuteContractPayload
-	(*TronTransferContractPayload)(nil),      // 23: vultisig.keysign.v1.TronTransferContractPayload
-	(*TronTriggerSmartContractPayload)(nil),  // 24: vultisig.keysign.v1.TronTriggerSmartContractPayload
-	(*TronTransferAssetContractPayload)(nil), // 25: vultisig.keysign.v1.TronTransferAssetContractPayload
-	(*SignAmino)(nil),                        // 26: vultisig.keysign.v1.SignAmino
-	(*SignDirect)(nil),                       // 27: vultisig.keysign.v1.SignDirect
-	(*SignSolana)(nil),                       // 28: vultisig.keysign.v1.SignSolana
-	(*SignTon)(nil),                          // 29: vultisig.keysign.v1.SignTon
-	(*SignBitcoin)(nil),                      // 30: vultisig.keysign.v1.SignBitcoin
+	(*QbtcClaimContext)(nil),                 // 3: vultisig.keysign.v1.QbtcClaimContext
+	(*CustomMessagePayload)(nil),             // 4: vultisig.keysign.v1.CustomMessagePayload
+	(*Coin)(nil),                             // 5: vultisig.keysign.v1.Coin
+	(*UTXOSpecific)(nil),                     // 6: vultisig.keysign.v1.UTXOSpecific
+	(*EthereumSpecific)(nil),                 // 7: vultisig.keysign.v1.EthereumSpecific
+	(*THORChainSpecific)(nil),                // 8: vultisig.keysign.v1.THORChainSpecific
+	(*MAYAChainSpecific)(nil),                // 9: vultisig.keysign.v1.MAYAChainSpecific
+	(*CosmosSpecific)(nil),                   // 10: vultisig.keysign.v1.CosmosSpecific
+	(*SolanaSpecific)(nil),                   // 11: vultisig.keysign.v1.SolanaSpecific
+	(*PolkadotSpecific)(nil),                 // 12: vultisig.keysign.v1.PolkadotSpecific
+	(*SuiSpecific)(nil),                      // 13: vultisig.keysign.v1.SuiSpecific
+	(*TonSpecific)(nil),                      // 14: vultisig.keysign.v1.TonSpecific
+	(*RippleSpecific)(nil),                   // 15: vultisig.keysign.v1.RippleSpecific
+	(*TronSpecific)(nil),                     // 16: vultisig.keysign.v1.TronSpecific
+	(*CardanoChainSpecific)(nil),             // 17: vultisig.keysign.v1.CardanoChainSpecific
+	(*UtxoInfo)(nil),                         // 18: vultisig.keysign.v1.UtxoInfo
+	(*THORChainSwapPayload)(nil),             // 19: vultisig.keysign.v1.THORChainSwapPayload
+	(*OneInchSwapPayload)(nil),               // 20: vultisig.keysign.v1.OneInchSwapPayload
+	(*KyberSwapPayload)(nil),                 // 21: vultisig.keysign.v1.KyberSwapPayload
+	(*Erc20ApprovePayload)(nil),              // 22: vultisig.keysign.v1.Erc20ApprovePayload
+	(*WasmExecuteContractPayload)(nil),       // 23: vultisig.keysign.v1.WasmExecuteContractPayload
+	(*TronTransferContractPayload)(nil),      // 24: vultisig.keysign.v1.TronTransferContractPayload
+	(*TronTriggerSmartContractPayload)(nil),  // 25: vultisig.keysign.v1.TronTriggerSmartContractPayload
+	(*TronTransferAssetContractPayload)(nil), // 26: vultisig.keysign.v1.TronTransferAssetContractPayload
+	(*SignAmino)(nil),                        // 27: vultisig.keysign.v1.SignAmino
+	(*SignDirect)(nil),                       // 28: vultisig.keysign.v1.SignDirect
+	(*SignSolana)(nil),                       // 29: vultisig.keysign.v1.SignSolana
+	(*SignTon)(nil),                          // 30: vultisig.keysign.v1.SignTon
+	(*SignBitcoin)(nil),                      // 31: vultisig.keysign.v1.SignBitcoin
 }
 var file_vultisig_keysign_v1_keysign_message_proto_depIdxs = []int32{
 	2,  // 0: vultisig.keysign.v1.KeysignMessage.keysign_payload:type_name -> vultisig.keysign.v1.KeysignPayload
-	3,  // 1: vultisig.keysign.v1.KeysignMessage.custom_message_payload:type_name -> vultisig.keysign.v1.CustomMessagePayload
-	4,  // 2: vultisig.keysign.v1.KeysignPayload.coin:type_name -> vultisig.keysign.v1.Coin
-	5,  // 3: vultisig.keysign.v1.KeysignPayload.utxo_specific:type_name -> vultisig.keysign.v1.UTXOSpecific
-	6,  // 4: vultisig.keysign.v1.KeysignPayload.ethereum_specific:type_name -> vultisig.keysign.v1.EthereumSpecific
-	7,  // 5: vultisig.keysign.v1.KeysignPayload.thorchain_specific:type_name -> vultisig.keysign.v1.THORChainSpecific
-	8,  // 6: vultisig.keysign.v1.KeysignPayload.maya_specific:type_name -> vultisig.keysign.v1.MAYAChainSpecific
-	9,  // 7: vultisig.keysign.v1.KeysignPayload.cosmos_specific:type_name -> vultisig.keysign.v1.CosmosSpecific
-	10, // 8: vultisig.keysign.v1.KeysignPayload.solana_specific:type_name -> vultisig.keysign.v1.SolanaSpecific
-	11, // 9: vultisig.keysign.v1.KeysignPayload.polkadot_specific:type_name -> vultisig.keysign.v1.PolkadotSpecific
-	12, // 10: vultisig.keysign.v1.KeysignPayload.suiche_specific:type_name -> vultisig.keysign.v1.SuiSpecific
-	13, // 11: vultisig.keysign.v1.KeysignPayload.ton_specific:type_name -> vultisig.keysign.v1.TonSpecific
-	14, // 12: vultisig.keysign.v1.KeysignPayload.ripple_specific:type_name -> vultisig.keysign.v1.RippleSpecific
-	15, // 13: vultisig.keysign.v1.KeysignPayload.tron_specific:type_name -> vultisig.keysign.v1.TronSpecific
-	16, // 14: vultisig.keysign.v1.KeysignPayload.cardano:type_name -> vultisig.keysign.v1.CardanoChainSpecific
-	17, // 15: vultisig.keysign.v1.KeysignPayload.utxo_info:type_name -> vultisig.keysign.v1.UtxoInfo
-	18, // 16: vultisig.keysign.v1.KeysignPayload.thorchain_swap_payload:type_name -> vultisig.keysign.v1.THORChainSwapPayload
-	18, // 17: vultisig.keysign.v1.KeysignPayload.mayachain_swap_payload:type_name -> vultisig.keysign.v1.THORChainSwapPayload
-	19, // 18: vultisig.keysign.v1.KeysignPayload.oneinch_swap_payload:type_name -> vultisig.keysign.v1.OneInchSwapPayload
-	20, // 19: vultisig.keysign.v1.KeysignPayload.kyberswap_swap_payload:type_name -> vultisig.keysign.v1.KyberSwapPayload
-	21, // 20: vultisig.keysign.v1.KeysignPayload.erc20_approve_payload:type_name -> vultisig.keysign.v1.Erc20ApprovePayload
-	22, // 21: vultisig.keysign.v1.KeysignPayload.wasm_execute_contract_payload:type_name -> vultisig.keysign.v1.WasmExecuteContractPayload
-	23, // 22: vultisig.keysign.v1.KeysignPayload.tron_transfer_contract_payload:type_name -> vultisig.keysign.v1.TronTransferContractPayload
-	24, // 23: vultisig.keysign.v1.KeysignPayload.tron_trigger_smart_contract_payload:type_name -> vultisig.keysign.v1.TronTriggerSmartContractPayload
-	25, // 24: vultisig.keysign.v1.KeysignPayload.tron_transfer_asset_contract_payload:type_name -> vultisig.keysign.v1.TronTransferAssetContractPayload
-	26, // 25: vultisig.keysign.v1.KeysignPayload.sign_amino:type_name -> vultisig.keysign.v1.SignAmino
-	27, // 26: vultisig.keysign.v1.KeysignPayload.sign_direct:type_name -> vultisig.keysign.v1.SignDirect
-	28, // 27: vultisig.keysign.v1.KeysignPayload.sign_solana:type_name -> vultisig.keysign.v1.SignSolana
-	29, // 28: vultisig.keysign.v1.KeysignPayload.sign_ton:type_name -> vultisig.keysign.v1.SignTon
-	30, // 29: vultisig.keysign.v1.KeysignPayload.sign_bitcoin:type_name -> vultisig.keysign.v1.SignBitcoin
-	1,  // 30: vultisig.keysign.v1.KeysignPayload.dapp_metadata:type_name -> vultisig.keysign.v1.DAppMetadata
-	31, // [31:31] is the sub-list for method output_type
-	31, // [31:31] is the sub-list for method input_type
-	31, // [31:31] is the sub-list for extension type_name
-	31, // [31:31] is the sub-list for extension extendee
-	0,  // [0:31] is the sub-list for field type_name
+	4,  // 1: vultisig.keysign.v1.KeysignMessage.custom_message_payload:type_name -> vultisig.keysign.v1.CustomMessagePayload
+	5,  // 2: vultisig.keysign.v1.KeysignPayload.coin:type_name -> vultisig.keysign.v1.Coin
+	6,  // 3: vultisig.keysign.v1.KeysignPayload.utxo_specific:type_name -> vultisig.keysign.v1.UTXOSpecific
+	7,  // 4: vultisig.keysign.v1.KeysignPayload.ethereum_specific:type_name -> vultisig.keysign.v1.EthereumSpecific
+	8,  // 5: vultisig.keysign.v1.KeysignPayload.thorchain_specific:type_name -> vultisig.keysign.v1.THORChainSpecific
+	9,  // 6: vultisig.keysign.v1.KeysignPayload.maya_specific:type_name -> vultisig.keysign.v1.MAYAChainSpecific
+	10, // 7: vultisig.keysign.v1.KeysignPayload.cosmos_specific:type_name -> vultisig.keysign.v1.CosmosSpecific
+	11, // 8: vultisig.keysign.v1.KeysignPayload.solana_specific:type_name -> vultisig.keysign.v1.SolanaSpecific
+	12, // 9: vultisig.keysign.v1.KeysignPayload.polkadot_specific:type_name -> vultisig.keysign.v1.PolkadotSpecific
+	13, // 10: vultisig.keysign.v1.KeysignPayload.suiche_specific:type_name -> vultisig.keysign.v1.SuiSpecific
+	14, // 11: vultisig.keysign.v1.KeysignPayload.ton_specific:type_name -> vultisig.keysign.v1.TonSpecific
+	15, // 12: vultisig.keysign.v1.KeysignPayload.ripple_specific:type_name -> vultisig.keysign.v1.RippleSpecific
+	16, // 13: vultisig.keysign.v1.KeysignPayload.tron_specific:type_name -> vultisig.keysign.v1.TronSpecific
+	17, // 14: vultisig.keysign.v1.KeysignPayload.cardano:type_name -> vultisig.keysign.v1.CardanoChainSpecific
+	18, // 15: vultisig.keysign.v1.KeysignPayload.utxo_info:type_name -> vultisig.keysign.v1.UtxoInfo
+	19, // 16: vultisig.keysign.v1.KeysignPayload.thorchain_swap_payload:type_name -> vultisig.keysign.v1.THORChainSwapPayload
+	19, // 17: vultisig.keysign.v1.KeysignPayload.mayachain_swap_payload:type_name -> vultisig.keysign.v1.THORChainSwapPayload
+	20, // 18: vultisig.keysign.v1.KeysignPayload.oneinch_swap_payload:type_name -> vultisig.keysign.v1.OneInchSwapPayload
+	21, // 19: vultisig.keysign.v1.KeysignPayload.kyberswap_swap_payload:type_name -> vultisig.keysign.v1.KyberSwapPayload
+	22, // 20: vultisig.keysign.v1.KeysignPayload.erc20_approve_payload:type_name -> vultisig.keysign.v1.Erc20ApprovePayload
+	23, // 21: vultisig.keysign.v1.KeysignPayload.wasm_execute_contract_payload:type_name -> vultisig.keysign.v1.WasmExecuteContractPayload
+	24, // 22: vultisig.keysign.v1.KeysignPayload.tron_transfer_contract_payload:type_name -> vultisig.keysign.v1.TronTransferContractPayload
+	25, // 23: vultisig.keysign.v1.KeysignPayload.tron_trigger_smart_contract_payload:type_name -> vultisig.keysign.v1.TronTriggerSmartContractPayload
+	26, // 24: vultisig.keysign.v1.KeysignPayload.tron_transfer_asset_contract_payload:type_name -> vultisig.keysign.v1.TronTransferAssetContractPayload
+	27, // 25: vultisig.keysign.v1.KeysignPayload.sign_amino:type_name -> vultisig.keysign.v1.SignAmino
+	28, // 26: vultisig.keysign.v1.KeysignPayload.sign_direct:type_name -> vultisig.keysign.v1.SignDirect
+	29, // 27: vultisig.keysign.v1.KeysignPayload.sign_solana:type_name -> vultisig.keysign.v1.SignSolana
+	30, // 28: vultisig.keysign.v1.KeysignPayload.sign_ton:type_name -> vultisig.keysign.v1.SignTon
+	31, // 29: vultisig.keysign.v1.KeysignPayload.sign_bitcoin:type_name -> vultisig.keysign.v1.SignBitcoin
+	3,  // 30: vultisig.keysign.v1.KeysignPayload.qbtc_claim_context:type_name -> vultisig.keysign.v1.QbtcClaimContext
+	1,  // 31: vultisig.keysign.v1.KeysignPayload.dapp_metadata:type_name -> vultisig.keysign.v1.DAppMetadata
+	32, // [32:32] is the sub-list for method output_type
+	32, // [32:32] is the sub-list for method input_type
+	32, // [32:32] is the sub-list for extension type_name
+	32, // [32:32] is the sub-list for extension extendee
+	0,  // [0:32] is the sub-list for field type_name
 }
 
 func init() { file_vultisig_keysign_v1_keysign_message_proto_init() }
@@ -1116,6 +1200,18 @@ func file_vultisig_keysign_v1_keysign_message_proto_init() {
 				return nil
 			}
 		}
+		file_vultisig_keysign_v1_keysign_message_proto_msgTypes[3].Exporter = func(v any, i int) any {
+			switch v := v.(*QbtcClaimContext); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	file_vultisig_keysign_v1_keysign_message_proto_msgTypes[0].OneofWrappers = []any{}
 	file_vultisig_keysign_v1_keysign_message_proto_msgTypes[2].OneofWrappers = []any{
@@ -1151,7 +1247,7 @@ func file_vultisig_keysign_v1_keysign_message_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_vultisig_keysign_v1_keysign_message_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

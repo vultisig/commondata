@@ -378,6 +378,21 @@ public struct VSKeysignPayload {
     set {_uniqueStorage()._signData = .signBitcoin(newValue)}
   }
 
+  /// Set on a SecureVault QBTC claim QR. Presence of this field signals
+  /// to the peer device that the BTC ECDSA signature it's about to produce
+  /// is for a QBTC claim — the peer computes the message hash locally
+  /// from `claimer_address` (plus its own vault BTC address + pubkey +
+  /// chain id) and signs THAT, so a compromised initiator cannot divert
+  /// the signature to an arbitrary BTC spending tx.
+  public var qbtcClaimContext: VSQbtcClaimContext {
+    get {return _storage._qbtcClaimContext ?? VSQbtcClaimContext()}
+    set {_uniqueStorage()._qbtcClaimContext = newValue}
+  }
+  /// Returns true if `qbtcClaimContext` has been explicitly set.
+  public var hasQbtcClaimContext: Bool {return _storage._qbtcClaimContext != nil}
+  /// Clears the value of `qbtcClaimContext`. Subsequent reads from it will return its default value.
+  public mutating func clearQbtcClaimContext() {_uniqueStorage()._qbtcClaimContext = nil}
+
   public var dappMetadata: VSDAppMetadata {
     get {return _storage._dappMetadata ?? VSDAppMetadata()}
     set {_uniqueStorage()._dappMetadata = newValue}
@@ -575,6 +590,28 @@ public struct VSKeysignPayload {
   fileprivate var _storage = _StorageClass.defaultInstance
 }
 
+/// Sanity-check context for a SecureVault QBTC claim. The peer device
+/// derives the BTC ECDSA message hash from `claimer_address` (combined
+/// with its own vault BTC address/pubkey and the chain id) so it never
+/// blind-signs whatever hash the initiator asks for.
+///
+/// Under the post-qbtc#158 flow the proof service signs and broadcasts
+/// `MsgClaimWithProof` itself, so the peer no longer reconstructs a
+/// cosmos `SignDoc` or needs to know which UTXOs are being claimed —
+/// `claimer_address` is the only piece of state it can't derive from
+/// its own vault.
+public struct VSQbtcClaimContext {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var claimerAddress: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 #if swift(>=5.5) && canImport(_Concurrency)
 extension VSKeysignMessage: @unchecked Sendable {}
 extension VSDAppMetadata: @unchecked Sendable {}
@@ -583,6 +620,7 @@ extension VSKeysignPayload.OneOf_BlockchainSpecific: @unchecked Sendable {}
 extension VSKeysignPayload.OneOf_SwapPayload: @unchecked Sendable {}
 extension VSKeysignPayload.OneOf_ContractPayload: @unchecked Sendable {}
 extension VSKeysignPayload.OneOf_SignData: @unchecked Sendable {}
+extension VSQbtcClaimContext: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -749,6 +787,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     41: .standard(proto: "sign_solana"),
     42: .standard(proto: "sign_ton"),
     43: .standard(proto: "sign_bitcoin"),
+    44: .standard(proto: "qbtc_claim_context"),
     50: .standard(proto: "dapp_metadata"),
   ]
 
@@ -767,6 +806,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     var _skipBroadcast: Bool? = nil
     var _contractPayload: VSKeysignPayload.OneOf_ContractPayload?
     var _signData: VSKeysignPayload.OneOf_SignData?
+    var _qbtcClaimContext: VSQbtcClaimContext? = nil
     var _dappMetadata: VSDAppMetadata? = nil
 
     #if swift(>=5.10)
@@ -796,6 +836,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       _skipBroadcast = source._skipBroadcast
       _contractPayload = source._contractPayload
       _signData = source._signData
+      _qbtcClaimContext = source._qbtcClaimContext
       _dappMetadata = source._dappMetadata
     }
   }
@@ -1150,6 +1191,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
             _storage._signData = .signBitcoin(v)
           }
         }()
+        case 44: try { try decoder.decodeSingularMessageField(value: &_storage._qbtcClaimContext) }()
         case 50: try { try decoder.decodeSingularMessageField(value: &_storage._dappMetadata) }()
         default: break
         }
@@ -1305,6 +1347,9 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       }()
       case nil: break
       }
+      try { if let v = _storage._qbtcClaimContext {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 44)
+      } }()
       try { if let v = _storage._dappMetadata {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 50)
       } }()
@@ -1331,11 +1376,44 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         if _storage._skipBroadcast != rhs_storage._skipBroadcast {return false}
         if _storage._contractPayload != rhs_storage._contractPayload {return false}
         if _storage._signData != rhs_storage._signData {return false}
+        if _storage._qbtcClaimContext != rhs_storage._qbtcClaimContext {return false}
         if _storage._dappMetadata != rhs_storage._dappMetadata {return false}
         return true
       }
       if !storagesAreEqual {return false}
     }
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSQbtcClaimContext: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".QbtcClaimContext"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "claimer_address"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.claimerAddress) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.claimerAddress.isEmpty {
+      try visitor.visitSingularStringField(value: self.claimerAddress, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSQbtcClaimContext, rhs: VSQbtcClaimContext) -> Bool {
+    if lhs.claimerAddress != rhs.claimerAddress {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
