@@ -25,7 +25,6 @@ message KeysignMessage {
   string payload_id = 7;
   optional CustomMessagePayload custom_message_payload = 8;
   optional string custom_payload_id = 9;
-  optional DAppMetadata dapp_metadata = 50;
 }
 
 message DAppMetadata {
@@ -78,4 +77,5 @@ message KeysignPayload {
     SignTon sign_ton = 42;
     SignBitcoin sign_bitcoin = 43;
   }
+  optional DAppMetadata dapp_metadata = 50;
 }
