@@ -22,4 +22,10 @@ message CustomMessagePayload {
   // length 64 chars. Untrusted — consumers must treat as display-only
   // and not use it for authorization or routing.
   optional string dapp_name = 7;
+  // URL of the dApp's icon, for UI display only. Should be an
+  // absolute HTTPS URL pointing to an image resource (e.g. PNG, SVG).
+  // Untrusted input — consumers must treat it as display-only,
+  // validate the scheme/host before fetching, and never execute or
+  // trust its contents beyond rendering.
+  string icon_url = 8;
 }

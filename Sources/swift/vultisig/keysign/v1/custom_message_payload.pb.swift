@@ -42,6 +42,11 @@ public struct VSCustomMessagePayload {
   /// Clears the value of `chain`. Subsequent reads from it will return its default value.
   public mutating func clearChain() {self._chain = nil}
 
+  /// Origin of the requesting dApp as a URL with scheme and host
+  /// (e.g. "https://app.example.com"). Port is allowed when present;
+  /// no trailing slash and no path/query/fragment. Untrusted input —
+  /// consumers should treat it as display/identity data only and
+  /// validate before use.
   public var origin: String {
     get {return _origin ?? String()}
     set {_origin = newValue}
@@ -51,6 +56,10 @@ public struct VSCustomMessagePayload {
   /// Clears the value of `origin`. Subsequent reads from it will return its default value.
   public mutating func clearOrigin() {self._origin = nil}
 
+  /// Human-readable display name of the dApp, for UI only. Not an
+  /// identifier and not guaranteed unique. UTF-8, suggested max
+  /// length 64 chars. Untrusted — consumers must treat as display-only
+  /// and not use it for authorization or routing.
   public var dappName: String {
     get {return _dappName ?? String()}
     set {_dappName = newValue}
@@ -59,6 +68,8 @@ public struct VSCustomMessagePayload {
   public var hasDappName: Bool {return self._dappName != nil}
   /// Clears the value of `dappName`. Subsequent reads from it will return its default value.
   public mutating func clearDappName() {self._dappName = nil}
+
+  public var iconURL: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -87,6 +98,7 @@ extension VSCustomMessagePayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     5: .same(proto: "chain"),
     6: .same(proto: "origin"),
     7: .standard(proto: "dapp_name"),
+    8: .standard(proto: "icon_url"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -102,6 +114,7 @@ extension VSCustomMessagePayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       case 5: try { try decoder.decodeSingularStringField(value: &self._chain) }()
       case 6: try { try decoder.decodeSingularStringField(value: &self._origin) }()
       case 7: try { try decoder.decodeSingularStringField(value: &self._dappName) }()
+      case 8: try { try decoder.decodeSingularStringField(value: &self.iconURL) }()
       default: break
       }
     }
@@ -133,6 +146,9 @@ extension VSCustomMessagePayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     try { if let v = self._dappName {
       try visitor.visitSingularStringField(value: v, fieldNumber: 7)
     } }()
+    if !self.iconURL.isEmpty {
+      try visitor.visitSingularStringField(value: self.iconURL, fieldNumber: 8)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -144,6 +160,7 @@ extension VSCustomMessagePayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     if lhs._chain != rhs._chain {return false}
     if lhs._origin != rhs._origin {return false}
     if lhs._dappName != rhs._dappName {return false}
+    if lhs.iconURL != rhs.iconURL {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
