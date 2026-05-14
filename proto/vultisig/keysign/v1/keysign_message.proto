@@ -23,14 +23,17 @@ message KeysignMessage {
   KeysignPayload keysign_payload = 5;
   bool use_vultisig_relay = 6;
   string payload_id = 7;
+  // Optional custom message to be signed instead of a transaction
+  // (e.g. EIP-191 / EIP-712 personal_sign or typed-data requests
+  // originating from a dApp). When set, signers should treat this
+  // as an arbitrary-message signing request and surface the dApp
+  // identity (origin, dapp_name, icon_url) to the user for review.
   optional CustomMessagePayload custom_message_payload = 8;
+  // Optional identifier for a server-stored custom payload. When the
+  // raw payload is too large to embed in a QR code, it is uploaded
+  // to the relay and referenced here; signers fetch the full payload
+  // by this id before signing.
   optional string custom_payload_id = 9;
-}
-
-message DAppMetadata {
-  string name = 1;
-  string url = 2;
-  string icon_url = 3;
 }
 
 message KeysignPayload {
@@ -77,5 +80,4 @@ message KeysignPayload {
     SignTon sign_ton = 42;
     SignBitcoin sign_bitcoin = 43;
   }
-  optional DAppMetadata dapp_metadata = 50;
 }

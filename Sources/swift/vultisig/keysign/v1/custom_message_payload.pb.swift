@@ -42,11 +42,42 @@ public struct VSCustomMessagePayload {
   /// Clears the value of `chain`. Subsequent reads from it will return its default value.
   public mutating func clearChain() {self._chain = nil}
 
+  /// Origin of the requesting dApp as a URL with scheme and host
+  /// (e.g. "https://app.example.com"). Port is allowed when present;
+  /// no trailing slash and no path/query/fragment. Untrusted input —
+  /// consumers should treat it as display/identity data only and
+  /// validate before use.
+  public var origin: String {
+    get {return _origin ?? String()}
+    set {_origin = newValue}
+  }
+  /// Returns true if `origin` has been explicitly set.
+  public var hasOrigin: Bool {return self._origin != nil}
+  /// Clears the value of `origin`. Subsequent reads from it will return its default value.
+  public mutating func clearOrigin() {self._origin = nil}
+
+  /// Human-readable display name of the dApp, for UI only. Not an
+  /// identifier and not guaranteed unique. UTF-8, suggested max
+  /// length 64 chars. Untrusted — consumers must treat as display-only
+  /// and not use it for authorization or routing.
+  public var dappName: String {
+    get {return _dappName ?? String()}
+    set {_dappName = newValue}
+  }
+  /// Returns true if `dappName` has been explicitly set.
+  public var hasDappName: Bool {return self._dappName != nil}
+  /// Clears the value of `dappName`. Subsequent reads from it will return its default value.
+  public mutating func clearDappName() {self._dappName = nil}
+
+  public var iconURL: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _chain: String? = nil
+  fileprivate var _origin: String? = nil
+  fileprivate var _dappName: String? = nil
 }
 
 #if swift(>=5.5) && canImport(_Concurrency)
@@ -65,6 +96,9 @@ extension VSCustomMessagePayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     3: .standard(proto: "vault_public_key_ecdsa"),
     4: .standard(proto: "vault_local_party_id"),
     5: .same(proto: "chain"),
+    6: .same(proto: "origin"),
+    7: .standard(proto: "dapp_name"),
+    8: .standard(proto: "icon_url"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -78,6 +112,9 @@ extension VSCustomMessagePayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       case 3: try { try decoder.decodeSingularStringField(value: &self.vaultPublicKeyEcdsa) }()
       case 4: try { try decoder.decodeSingularStringField(value: &self.vaultLocalPartyID) }()
       case 5: try { try decoder.decodeSingularStringField(value: &self._chain) }()
+      case 6: try { try decoder.decodeSingularStringField(value: &self._origin) }()
+      case 7: try { try decoder.decodeSingularStringField(value: &self._dappName) }()
+      case 8: try { try decoder.decodeSingularStringField(value: &self.iconURL) }()
       default: break
       }
     }
@@ -103,6 +140,15 @@ extension VSCustomMessagePayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     try { if let v = self._chain {
       try visitor.visitSingularStringField(value: v, fieldNumber: 5)
     } }()
+    try { if let v = self._origin {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 6)
+    } }()
+    try { if let v = self._dappName {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 7)
+    } }()
+    if !self.iconURL.isEmpty {
+      try visitor.visitSingularStringField(value: self.iconURL, fieldNumber: 8)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -112,6 +158,9 @@ extension VSCustomMessagePayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     if lhs.vaultPublicKeyEcdsa != rhs.vaultPublicKeyEcdsa {return false}
     if lhs.vaultLocalPartyID != rhs.vaultLocalPartyID {return false}
     if lhs._chain != rhs._chain {return false}
+    if lhs._origin != rhs._origin {return false}
+    if lhs._dappName != rhs._dappName {return false}
+    if lhs.iconURL != rhs.iconURL {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

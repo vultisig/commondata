@@ -11,4 +11,21 @@ message CustomMessagePayload {
   string vault_public_key_ecdsa = 3;
   string vault_local_party_id = 4;
   optional string chain = 5;
+  // Origin of the requesting dApp as a URL with scheme and host
+  // (e.g. "https://app.example.com"). Port is allowed when present;
+  // no trailing slash and no path/query/fragment. Untrusted input —
+  // consumers should treat it as display/identity data only and
+  // validate before use.
+  optional string origin = 6;
+  // Human-readable display name of the dApp, for UI only. Not an
+  // identifier and not guaranteed unique. UTF-8, suggested max
+  // length 64 chars. Untrusted — consumers must treat as display-only
+  // and not use it for authorization or routing.
+  optional string dapp_name = 7;
+  // URL of the dApp's icon, for UI display only. Should be an
+  // absolute HTTPS URL pointing to an image resource (e.g. PNG, SVG).
+  // Untrusted input — consumers must treat it as display-only,
+  // validate the scheme/host before fetching, and never execute or
+  // trust its contents beyond rendering.
+  string icon_url = 8;
 }
