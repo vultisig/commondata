@@ -1,0 +1,36 @@
+# CodeRabbit configuration for Vultisig repos
+# Docs: https://docs.coderabbit.ai/guides/configure-coderabbit
+
+language: en
+reviews:
+  profile: chill
+  request_changes_workflow: false
+  high_level_summary: true
+  review_status: true
+  collapse_walkthrough: true
+  auto_review:
+    enabled: true
+    drafts: true
+    base_branches:
+      - main
+      - master
+  path_instructions:
+    - path: "**/*.proto"
+      instructions: |
+        Review Guidelines:
+        - Proto3 syntax, package vultisig.v1
+        - Field naming: snake_case, enums: UPPER_SNAKE_CASE with 0 = UNSPECIFIED
+        - Never remove fields — deprecate instead (breaking change affects all platforms)
+        - Every change requires buf generate to update Swift + Go code
+    - path: "Sources/swift/**,go/vultisig/**"
+      instructions: |
+        These are GENERATED files from buf generate. Do not review for style or suggest manual edits.
+        Only verify they match the proto definitions.
+  tools:
+    markdownlint:
+      enabled: true
+    github-checks:
+      enabled: true
+      timeout_ms: 300000
+chat:
+  auto_reply: true
