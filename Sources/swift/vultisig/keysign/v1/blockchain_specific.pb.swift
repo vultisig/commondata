@@ -31,6 +31,7 @@ public enum VSTransactionType: SwiftProtobuf.Enum {
   case tonDeposit // = 6
   case tonWithdraw // = 7
   case genericContract // = 8
+  case qbtcClaimWithProof // = 9
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -48,6 +49,7 @@ public enum VSTransactionType: SwiftProtobuf.Enum {
     case 6: self = .tonDeposit
     case 7: self = .tonWithdraw
     case 8: self = .genericContract
+    case 9: self = .qbtcClaimWithProof
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -63,6 +65,7 @@ public enum VSTransactionType: SwiftProtobuf.Enum {
     case .tonDeposit: return 6
     case .tonWithdraw: return 7
     case .genericContract: return 8
+    case .qbtcClaimWithProof: return 9
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -83,6 +86,7 @@ extension VSTransactionType: CaseIterable {
     .tonDeposit,
     .tonWithdraw,
     .genericContract,
+    .qbtcClaimWithProof,
   ]
 }
 
@@ -463,6 +467,7 @@ extension VSTransactionType: SwiftProtobuf._ProtoNameProviding {
     6: .same(proto: "TRANSACTION_TYPE_TON_DEPOSIT"),
     7: .same(proto: "TRANSACTION_TYPE_TON_WITHDRAW"),
     8: .same(proto: "TRANSACTION_TYPE_GENERIC_CONTRACT"),
+    9: .same(proto: "TRANSACTION_TYPE_QBTC_CLAIM_WITH_PROOF"),
   ]
 }
 

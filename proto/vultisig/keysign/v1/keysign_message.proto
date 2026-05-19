@@ -77,5 +77,12 @@ message KeysignPayload {
     SignTon sign_ton = 42;
     SignBitcoin sign_bitcoin = 43;
   }
+  // Set true on a SecureVault QBTC claim QR. Signals to the peer device
+  // that the BTC ECDSA signature it's about to produce is for a QBTC
+  // claim — the peer derives the claimer's QBTC address from its own
+  // vault (same vault, same derived QBTC address) and computes the
+  // message hash locally so a compromised initiator cannot divert the
+  // signature to an arbitrary BTC spending tx.
+  bool is_qbtc_claim = 44;
   optional DAppMetadata dapp_metadata = 50;
 }

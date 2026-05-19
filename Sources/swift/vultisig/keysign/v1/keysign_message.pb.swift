@@ -378,6 +378,17 @@ public struct VSKeysignPayload {
     set {_uniqueStorage()._signData = .signBitcoin(newValue)}
   }
 
+  /// Set true on a SecureVault QBTC claim QR. Signals to the peer device
+  /// that the BTC ECDSA signature it's about to produce is for a QBTC
+  /// claim — the peer derives the claimer's QBTC address from its own
+  /// vault (same vault, same derived QBTC address) and computes the
+  /// message hash locally so a compromised initiator cannot divert the
+  /// signature to an arbitrary BTC spending tx.
+  public var isQbtcClaim: Bool {
+    get {return _storage._isQbtcClaim}
+    set {_uniqueStorage()._isQbtcClaim = newValue}
+  }
+
   public var dappMetadata: VSDAppMetadata {
     get {return _storage._dappMetadata ?? VSDAppMetadata()}
     set {_uniqueStorage()._dappMetadata = newValue}
@@ -749,6 +760,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     41: .standard(proto: "sign_solana"),
     42: .standard(proto: "sign_ton"),
     43: .standard(proto: "sign_bitcoin"),
+    44: .standard(proto: "is_qbtc_claim"),
     50: .standard(proto: "dapp_metadata"),
   ]
 
@@ -767,6 +779,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     var _skipBroadcast: Bool? = nil
     var _contractPayload: VSKeysignPayload.OneOf_ContractPayload?
     var _signData: VSKeysignPayload.OneOf_SignData?
+    var _isQbtcClaim: Bool = false
     var _dappMetadata: VSDAppMetadata? = nil
 
     #if swift(>=5.10)
@@ -796,6 +809,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       _skipBroadcast = source._skipBroadcast
       _contractPayload = source._contractPayload
       _signData = source._signData
+      _isQbtcClaim = source._isQbtcClaim
       _dappMetadata = source._dappMetadata
     }
   }
@@ -1150,6 +1164,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
             _storage._signData = .signBitcoin(v)
           }
         }()
+        case 44: try { try decoder.decodeSingularBoolField(value: &_storage._isQbtcClaim) }()
         case 50: try { try decoder.decodeSingularMessageField(value: &_storage._dappMetadata) }()
         default: break
         }
@@ -1305,6 +1320,9 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       }()
       case nil: break
       }
+      if _storage._isQbtcClaim != false {
+        try visitor.visitSingularBoolField(value: _storage._isQbtcClaim, fieldNumber: 44)
+      }
       try { if let v = _storage._dappMetadata {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 50)
       } }()
@@ -1331,6 +1349,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         if _storage._skipBroadcast != rhs_storage._skipBroadcast {return false}
         if _storage._contractPayload != rhs_storage._contractPayload {return false}
         if _storage._signData != rhs_storage._signData {return false}
+        if _storage._isQbtcClaim != rhs_storage._isQbtcClaim {return false}
         if _storage._dappMetadata != rhs_storage._dappMetadata {return false}
         return true
       }
