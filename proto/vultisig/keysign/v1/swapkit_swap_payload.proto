@@ -1,0 +1,88 @@
+syntax = "proto3";
+package vultisig.keysign.v1;
+
+import "vultisig/keysign/v1/coin.proto";
+
+option go_package = "github.com/vultisig/commondata/go/vultisig/keysign/v1;v1";
+option java_package = "vultisig.keysign.v1";
+option swift_prefix = "VS";
+
+// SwapKit-routed swap whose wire shape doesn't fit the EVM-typed
+// OneInchSwapPayload. Used for BTC PSBT, Sui PTB, TRON nested-object,
+// TON transfer array, and Cardano deposit-only flows returned by
+// POST /v3/swap on https://api.swapkit.dev.
+//
+// EVM and Solana SwapKit swaps continue to ride OneInchSwapPayload —
+// their /v3/swap shape matches OneInchQuote 1:1 and stays typed at the
+// proto layer. The `provider` string field on OneInchSwapPayload
+// disambiguates the aggregator at the peer.
+//
+// The flexibility here lives in tx_payload (a bytes passthrough opaque
+// to commondata) and tx_type (a string discriminator the cosigning
+// peer uses to dispatch to the right per-chain signer). Cosigning
+// peers MUST tolerate unknown tx_type values — drop through to an
+// "unsupported provider" UI rather than crashing the decode.
+message SwapKitSwapPayload {
+  // Identity — same as every other swap payload.
+  Coin from_coin = 1;
+  Coin to_coin = 2;
+  // Raw, in source-asset base units.
+  string from_amount = 3;
+  // Human-readable, decimal-formatted expected output amount.
+  string to_amount_decimal = 4;
+
+  // SwapKit's `meta.txType` verbatim. Drives the peer-side dispatcher:
+  //   "PSBT"     — tx_payload is a base64-decoded BTC PSBT
+  //   "TRON"     — tx_payload is a JSON-encoded TronWeb transaction object
+  //   "TON"      — tx_payload is a JSON-encoded [{address, amount}] array
+  //   "SUI"      — tx_payload is a base64-decoded Sui PTB
+  //   "CARDANO"  — tx_payload is empty (deposit-only flow);
+  //                use target_address + from_amount to build a plain send
+  //
+  // Forward-compatible: new SwapKit chains land here without a commondata
+  // bump, so long as the client SDK on each platform learns to decode the
+  // new tx_type string. Peers that don't recognise a tx_type MUST fall
+  // through to an "unsupported provider" UI rather than crash.
+  string tx_type = 5;
+
+  // Raw unsigned-transaction bytes returned by POST /v3/swap.
+  //
+  // Encoding by tx_type:
+  //   PSBT     — base64-decoded PSBT bytes
+  //   SUI      — base64-decoded Sui PTB bytes
+  //   TRON     — UTF-8 bytes of the canonical JSON of the TronWeb object
+  //   TON      — UTF-8 bytes of the canonical JSON of the transfer array
+  //   CARDANO  — empty bytes (deposit-only flow)
+  //
+  // Bytes rather than string so binary payloads (PSBT, PTB) don't need
+  // base64 round-tripping. Object-shaped payloads are JSON-encoded on
+  // the initiator and decoded on the peer; canonical key ordering keeps
+  // the digest deterministic.
+  bytes tx_payload = 6;
+
+  // Deposit address on the source chain. For PSBT this duplicates info
+  // also encoded inside tx_payload; for deposit-only chains (Cardano)
+  // this is the only routing info available.
+  string target_address = 7;
+
+  // THORChain-style inbound vault address. Optional — populated only for
+  // routes that go through TC-style inbound monitoring. Rare in SwapKit
+  // since the iOS / Android / SDK clients filter THORChain/Maya routes
+  // out client-side, but kept for forward compatibility.
+  optional string inbound_address = 8;
+
+  // Optional memo. SwapKit V3 returned null for every chain spike result
+  // we captured; field exists for forward compatibility with providers
+  // we haven't observed.
+  optional string memo = 9;
+
+  // Sub-provider tag for the verify screen, e.g. "CHAINFLIP", "NEAR",
+  // "GARDEN", "FLASHNET", "HARBOR". Verbatim from route.providers[0]
+  // in the /v3/quote response.
+  string sub_provider = 10;
+
+  // SwapKit swap identifier — persisted for tracking and analytics.
+  // Doesn't participate in signing. NOT accepted by POST /track —
+  // tracking still keys off the broadcast hash + source chain id.
+  string swap_id = 11;
+}
