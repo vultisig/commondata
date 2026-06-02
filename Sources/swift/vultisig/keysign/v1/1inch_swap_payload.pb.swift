@@ -39,9 +39,46 @@ public struct VSOneInchTransaction {
 
   public var swapFee: String = String()
 
+  /// Coin context for `swap_fee`. The amount alone is not enough because
+  /// providers attribute the fee to different coins (e.g. KyberSwap charges
+  /// it in the destination token; LI.FI / 1inch / SwapKit charge it in the
+  /// source chain's fee coin). Receivers need these fields to compute the
+  /// correct fiat-equivalent value. All three are optional for backwards
+  /// compatibility with senders that do not yet populate them.
+  public var swapFeeChain: String {
+    get {return _swapFeeChain ?? String()}
+    set {_swapFeeChain = newValue}
+  }
+  /// Returns true if `swapFeeChain` has been explicitly set.
+  public var hasSwapFeeChain: Bool {return self._swapFeeChain != nil}
+  /// Clears the value of `swapFeeChain`. Subsequent reads from it will return its default value.
+  public mutating func clearSwapFeeChain() {self._swapFeeChain = nil}
+
+  public var swapFeeTokenID: String {
+    get {return _swapFeeTokenID ?? String()}
+    set {_swapFeeTokenID = newValue}
+  }
+  /// Returns true if `swapFeeTokenID` has been explicitly set.
+  public var hasSwapFeeTokenID: Bool {return self._swapFeeTokenID != nil}
+  /// Clears the value of `swapFeeTokenID`. Subsequent reads from it will return its default value.
+  public mutating func clearSwapFeeTokenID() {self._swapFeeTokenID = nil}
+
+  public var swapFeeDecimals: Int32 {
+    get {return _swapFeeDecimals ?? 0}
+    set {_swapFeeDecimals = newValue}
+  }
+  /// Returns true if `swapFeeDecimals` has been explicitly set.
+  public var hasSwapFeeDecimals: Bool {return self._swapFeeDecimals != nil}
+  /// Clears the value of `swapFeeDecimals`. Subsequent reads from it will return its default value.
+  public mutating func clearSwapFeeDecimals() {self._swapFeeDecimals = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
+
+  fileprivate var _swapFeeChain: String? = nil
+  fileprivate var _swapFeeTokenID: String? = nil
+  fileprivate var _swapFeeDecimals: Int32? = nil
 }
 
 public struct VSOneInchQuote {
@@ -141,6 +178,9 @@ extension VSOneInchTransaction: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     5: .standard(proto: "gas_price"),
     6: .same(proto: "gas"),
     7: .standard(proto: "swap_fee"),
+    8: .standard(proto: "swap_fee_chain"),
+    9: .standard(proto: "swap_fee_token_id"),
+    10: .standard(proto: "swap_fee_decimals"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -156,12 +196,19 @@ extension VSOneInchTransaction: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
       case 5: try { try decoder.decodeSingularStringField(value: &self.gasPrice) }()
       case 6: try { try decoder.decodeSingularInt64Field(value: &self.gas) }()
       case 7: try { try decoder.decodeSingularStringField(value: &self.swapFee) }()
+      case 8: try { try decoder.decodeSingularStringField(value: &self._swapFeeChain) }()
+      case 9: try { try decoder.decodeSingularStringField(value: &self._swapFeeTokenID) }()
+      case 10: try { try decoder.decodeSingularInt32Field(value: &self._swapFeeDecimals) }()
       default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
     if !self.from.isEmpty {
       try visitor.visitSingularStringField(value: self.from, fieldNumber: 1)
     }
@@ -183,6 +230,15 @@ extension VSOneInchTransaction: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     if !self.swapFee.isEmpty {
       try visitor.visitSingularStringField(value: self.swapFee, fieldNumber: 7)
     }
+    try { if let v = self._swapFeeChain {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 8)
+    } }()
+    try { if let v = self._swapFeeTokenID {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 9)
+    } }()
+    try { if let v = self._swapFeeDecimals {
+      try visitor.visitSingularInt32Field(value: v, fieldNumber: 10)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -194,6 +250,9 @@ extension VSOneInchTransaction: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     if lhs.gasPrice != rhs.gasPrice {return false}
     if lhs.gas != rhs.gas {return false}
     if lhs.swapFee != rhs.swapFee {return false}
+    if lhs._swapFeeChain != rhs._swapFeeChain {return false}
+    if lhs._swapFeeTokenID != rhs._swapFeeTokenID {return false}
+    if lhs._swapFeeDecimals != rhs._swapFeeDecimals {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
