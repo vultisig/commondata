@@ -8,4 +8,11 @@ option swift_prefix = "VS";
 message Erc20ApprovePayload {
   string amount = 1;
   string spender = 2;
+  // ERC-20 token the approval targets. Optional, backward-compatible: when empty
+  // the signer falls back to the keysign coin's contract address (the existing
+  // behavior, so swap-path approves are unchanged). Set it to approve a token
+  // other than the keysign coin — e.g. an approve bundled before a native-coin
+  // EVM contract call (calldata in `memo`), where the keysign coin is the native
+  // gas coin (ETH) rather than the token being approved.
+  string token = 3;
 }

@@ -29,6 +29,14 @@ public struct VSErc20ApprovePayload {
 
   public var spender: String = String()
 
+  /// ERC-20 token the approval targets. Optional, backward-compatible: when empty
+  /// the signer falls back to the keysign coin's contract address (the existing
+  /// behavior, so swap-path approves are unchanged). Set it to approve a token
+  /// other than the keysign coin — e.g. an approve bundled before a native-coin
+  /// EVM contract call (calldata in `memo`), where the keysign coin is the native
+  /// gas coin (ETH) rather than the token being approved.
+  public var token: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -47,6 +55,7 @@ extension VSErc20ApprovePayload: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "amount"),
     2: .same(proto: "spender"),
+    3: .same(proto: "token"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -57,6 +66,7 @@ extension VSErc20ApprovePayload: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularStringField(value: &self.amount) }()
       case 2: try { try decoder.decodeSingularStringField(value: &self.spender) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.token) }()
       default: break
       }
     }
@@ -69,12 +79,16 @@ extension VSErc20ApprovePayload: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     if !self.spender.isEmpty {
       try visitor.visitSingularStringField(value: self.spender, fieldNumber: 2)
     }
+    if !self.token.isEmpty {
+      try visitor.visitSingularStringField(value: self.token, fieldNumber: 3)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: VSErc20ApprovePayload, rhs: VSErc20ApprovePayload) -> Bool {
     if lhs.amount != rhs.amount {return false}
     if lhs.spender != rhs.spender {return false}
+    if lhs.token != rhs.token {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
