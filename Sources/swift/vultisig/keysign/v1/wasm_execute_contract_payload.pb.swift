@@ -196,8 +196,7 @@ public struct VSSignTon {
 
 /// Pre-built Sui Programmable Transaction Block supplied by a dApp via the
 /// Sui Wallet Standard. The bytes are already serialized in BCS form, ready
-/// for the signing pipeline to digest and sign — the wallet did not
-/// construct them and `SuiSpecific` is irrelevant on this path.
+/// for the signing pipeline to digest and sign
 public struct VSSignSui {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
