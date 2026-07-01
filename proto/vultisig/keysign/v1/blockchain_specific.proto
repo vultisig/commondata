@@ -44,6 +44,12 @@ message CosmosSpecific {
   TransactionType transaction_type = 4;
   optional CosmosIbcDenomTrace ibc_denom_traces = 5;
   optional CosmosIbcInfo ibc_info = 6;
+  // Per-tx signed gas limit from a `/cosmos/tx/v1beta1/simulate` estimate.
+  // When unset, signing peers fall back to the static per-chain gas limit.
+  // This value is part of the SignDoc, so every co-signing device MUST honor
+  // it identically or the MPC signature fails. Note that field 3 `gas` is the
+  // fee AMOUNT (not a limit).
+  optional uint64 gas_limit = 7;
 }
 
 message CosmosIbcDenomTrace {
