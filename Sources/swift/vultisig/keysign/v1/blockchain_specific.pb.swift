@@ -415,9 +415,27 @@ public struct VSRippleSpecific {
 
   public var lastLedgerSequence: UInt64 = 0
 
+  /// XRPL DestinationTag: 32-bit unsigned integer, optional (proto3 `optional`
+  /// so a present tag of 0 is distinguishable from "no tag"). During the
+  /// dual-write transition the tag is ALSO carried in the generic
+  /// KeysignPayload.memo as a canonical uint32 decimal; signers prefer this
+  /// field and fall back to the memo so mixed-version device pairs stay
+  /// byte-identical in MPC keysign. The memo carrier is retired once every
+  /// platform reads this field.
+  public var destinationTag: UInt32 {
+    get {return _destinationTag ?? 0}
+    set {_destinationTag = newValue}
+  }
+  /// Returns true if `destinationTag` has been explicitly set.
+  public var hasDestinationTag: Bool {return self._destinationTag != nil}
+  /// Clears the value of `destinationTag`. Subsequent reads from it will return its default value.
+  public mutating func clearDestinationTag() {self._destinationTag = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
+
+  fileprivate var _destinationTag: UInt32? = nil
 }
 
 public struct VSTronSpecific {
@@ -1192,6 +1210,7 @@ extension VSRippleSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     1: .same(proto: "sequence"),
     2: .same(proto: "gas"),
     3: .standard(proto: "last_ledger_sequence"),
+    4: .standard(proto: "destination_tag"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -1203,12 +1222,17 @@ extension VSRippleSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case 1: try { try decoder.decodeSingularUInt64Field(value: &self.sequence) }()
       case 2: try { try decoder.decodeSingularUInt64Field(value: &self.gas) }()
       case 3: try { try decoder.decodeSingularUInt64Field(value: &self.lastLedgerSequence) }()
+      case 4: try { try decoder.decodeSingularUInt32Field(value: &self._destinationTag) }()
       default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
     if self.sequence != 0 {
       try visitor.visitSingularUInt64Field(value: self.sequence, fieldNumber: 1)
     }
@@ -1218,6 +1242,9 @@ extension VSRippleSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if self.lastLedgerSequence != 0 {
       try visitor.visitSingularUInt64Field(value: self.lastLedgerSequence, fieldNumber: 3)
     }
+    try { if let v = self._destinationTag {
+      try visitor.visitSingularUInt32Field(value: v, fieldNumber: 4)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -1225,6 +1252,7 @@ extension VSRippleSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if lhs.sequence != rhs.sequence {return false}
     if lhs.gas != rhs.gas {return false}
     if lhs.lastLedgerSequence != rhs.lastLedgerSequence {return false}
+    if lhs._destinationTag != rhs._destinationTag {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
