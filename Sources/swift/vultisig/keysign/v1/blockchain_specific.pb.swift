@@ -436,13 +436,21 @@ public struct VSRippleSpecific {
   /// destination_tag rather than an independent XRPL memo. Upgraded signers
   /// omit the carrier from the signed transaction; legacy signers drop this
   /// field and continue decoding the canonical numeric memo as DestinationTag.
-  public var destinationTagInMemo: Bool = false
+  public var destinationTagInMemo: Bool {
+    get {return _destinationTagInMemo ?? false}
+    set {_destinationTagInMemo = newValue}
+  }
+  /// Returns true if `destinationTagInMemo` has been explicitly set.
+  public var hasDestinationTagInMemo: Bool {return self._destinationTagInMemo != nil}
+  /// Clears the value of `destinationTagInMemo`. Subsequent reads from it will return its default value.
+  public mutating func clearDestinationTagInMemo() {self._destinationTagInMemo = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _destinationTag: UInt32? = nil
+  fileprivate var _destinationTagInMemo: Bool? = nil
 }
 
 public struct VSTronSpecific {
@@ -1231,7 +1239,7 @@ extension VSRippleSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case 2: try { try decoder.decodeSingularUInt64Field(value: &self.gas) }()
       case 3: try { try decoder.decodeSingularUInt64Field(value: &self.lastLedgerSequence) }()
       case 4: try { try decoder.decodeSingularUInt32Field(value: &self._destinationTag) }()
-      case 5: try { try decoder.decodeSingularBoolField(value: &self.destinationTagInMemo) }()
+      case 5: try { try decoder.decodeSingularBoolField(value: &self._destinationTagInMemo) }()
       default: break
       }
     }
@@ -1254,9 +1262,9 @@ extension VSRippleSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     try { if let v = self._destinationTag {
       try visitor.visitSingularUInt32Field(value: v, fieldNumber: 4)
     } }()
-    if self.destinationTagInMemo != false {
-      try visitor.visitSingularBoolField(value: self.destinationTagInMemo, fieldNumber: 5)
-    }
+    try { if let v = self._destinationTagInMemo {
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 5)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -1265,7 +1273,7 @@ extension VSRippleSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if lhs.gas != rhs.gas {return false}
     if lhs.lastLedgerSequence != rhs.lastLedgerSequence {return false}
     if lhs._destinationTag != rhs._destinationTag {return false}
-    if lhs.destinationTagInMemo != rhs.destinationTagInMemo {return false}
+    if lhs._destinationTagInMemo != rhs._destinationTagInMemo {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
