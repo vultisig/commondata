@@ -415,14 +415,9 @@ public struct VSRippleSpecific {
 
   public var lastLedgerSequence: UInt64 = 0
 
-  /// XRPL DestinationTag: 32-bit unsigned integer, optional (proto3 `optional`
-  /// so a present tag of 0 is distinguishable from "no tag"). During the
-  /// dual-write transition, tag-only sends ALSO carry the tag in the generic
-  /// KeysignPayload.memo as a canonical uint32 decimal; signers prefer this
-  /// field and fall back to the memo so mixed-version device pairs stay
-  /// byte-identical in MPC keysign. A tag combined with an independent memo
-  /// requires every signer to understand this field. The memo carrier is
-  /// retired once every platform reads this field.
+  /// XRPL DestinationTag. Proto3 optional presence distinguishes a present tag
+  /// of 0 from no tag. Consumers must preserve that presence when mapping this
+  /// signing-critical field.
   public var destinationTag: UInt32 {
     get {return _destinationTag ?? 0}
     set {_destinationTag = newValue}
@@ -432,10 +427,32 @@ public struct VSRippleSpecific {
   /// Clears the value of `destinationTag`. Subsequent reads from it will return its default value.
   public mutating func clearDestinationTag() {self._destinationTag = nil}
 
-  /// True only when KeysignPayload.memo is the transition carrier for
-  /// destination_tag rather than an independent XRPL memo. Upgraded signers
-  /// omit the carrier from the signed transaction; legacy signers drop this
-  /// field and continue decoding the canonical numeric memo as DestinationTag.
+  /// Classifies KeysignPayload.memo during the destination-tag transition.
+  /// Presence is signing-critical and defines three states:
+  ///
+  /// - true: memo is the canonical decimal carrier for destination_tag. Both
+  ///   fields must be present, and memo must exactly equal the canonical decimal
+  ///   representation of destination_tag. Upgraded signers use destination_tag
+  ///   and omit the carrier from the signed transaction's XRPL Memos field.
+  /// - false: memo is not the destination-tag carrier. If present, it is
+  ///   independent even when canonical decimal or equal to destination_tag.
+  ///   This state requires marker-aware signers.
+  /// - absent: pre-marker payload. When destination_tag is present, use it; no
+  ///   memo means a field-only tag, an exactly equal canonical memo is its
+  ///   legacy carrier, a different canonical uint32 memo is ambiguous and must
+  ///   be rejected, and any other memo is independent. Without destination_tag,
+  ///   a canonical uint32 memo is a legacy tag, any other memo is independent,
+  ///   and no memo means neither a tag nor an XRPL memo.
+  ///
+  /// A canonical uint32 decimal is "0" or a nonzero decimal without leading
+  /// zeros in the range 0..4294967295. Reject true when either field is absent,
+  /// memo is not canonical, or memo is not the exact canonical representation
+  /// of destination_tag. Field-only tags and tags with an independent memo
+  /// require field-aware signers. A mixed-version tag-only payload must use the
+  /// equal memo carrier with true. Do not assume DestinationTag 0 is
+  /// mixed-version compatible: legacy signers may reject or omit it, so it
+  /// requires upgraded signer gating. Retire the memo carrier only after every
+  /// signer understands destination_tag and this marker.
   public var destinationTagInMemo: Bool {
     get {return _destinationTagInMemo ?? false}
     set {_destinationTagInMemo = newValue}
