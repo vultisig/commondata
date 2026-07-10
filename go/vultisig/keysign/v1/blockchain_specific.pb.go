@@ -1084,11 +1084,12 @@ type RippleSpecific struct {
 	LastLedgerSequence uint64 `protobuf:"varint,3,opt,name=last_ledger_sequence,json=lastLedgerSequence,proto3" json:"last_ledger_sequence,omitempty"`
 	// XRPL DestinationTag: 32-bit unsigned integer, optional (proto3 `optional`
 	// so a present tag of 0 is distinguishable from "no tag"). During the
-	// dual-write transition the tag is ALSO carried in the generic
+	// dual-write transition, tag-only sends ALSO carry the tag in the generic
 	// KeysignPayload.memo as a canonical uint32 decimal; signers prefer this
 	// field and fall back to the memo so mixed-version device pairs stay
-	// byte-identical in MPC keysign. The memo carrier is retired once every
-	// platform reads this field.
+	// byte-identical in MPC keysign. A tag combined with an independent memo
+	// requires every signer to understand this field. The memo carrier is
+	// retired once every platform reads this field.
 	DestinationTag *uint32 `protobuf:"varint,4,opt,name=destination_tag,json=destinationTag,proto3,oneof" json:"destination_tag,omitempty"`
 }
 
