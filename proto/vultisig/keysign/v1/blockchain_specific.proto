@@ -134,6 +134,11 @@ message RippleSpecific {
   // requires every signer to understand this field. The memo carrier is
   // retired once every platform reads this field.
   optional uint32 destination_tag = 4;
+  // True only when KeysignPayload.memo is the transition carrier for
+  // destination_tag rather than an independent XRPL memo. Upgraded signers
+  // omit the carrier from the signed transaction; legacy signers drop this
+  // field and continue decoding the canonical numeric memo as DestinationTag.
+  bool destination_tag_in_memo = 5;
 }
 
 message TronSpecific {
