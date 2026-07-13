@@ -394,6 +394,14 @@ public struct VSKeysignPayload {
     set {_uniqueStorage()._signData = .signSui(newValue)}
   }
 
+  public var signRipple: VSSignRipple {
+    get {
+      if case .signRipple(let v)? = _storage._signData {return v}
+      return VSSignRipple()
+    }
+    set {_uniqueStorage()._signData = .signRipple(newValue)}
+  }
+
   /// Set true on a SecureVault QBTC claim QR. Signals to the peer device
   /// that the BTC ECDSA signature it's about to produce is for a QBTC
   /// claim — the peer derives the claimer's QBTC address from its own
@@ -570,6 +578,7 @@ public struct VSKeysignPayload {
     case signTon(VSSignTon)
     case signBitcoin(VSSignBitcoin)
     case signSui(VSSignSui)
+    case signRipple(VSSignRipple)
 
   #if !swift(>=4.1)
     public static func ==(lhs: VSKeysignPayload.OneOf_SignData, rhs: VSKeysignPayload.OneOf_SignData) -> Bool {
@@ -599,6 +608,10 @@ public struct VSKeysignPayload {
       }()
       case (.signSui, .signSui): return {
         guard case .signSui(let l) = lhs, case .signSui(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.signRipple, .signRipple): return {
+        guard case .signRipple(let l) = lhs, case .signRipple(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
       default: return false
@@ -788,6 +801,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     42: .standard(proto: "sign_ton"),
     43: .standard(proto: "sign_bitcoin"),
     45: .standard(proto: "sign_sui"),
+    46: .standard(proto: "sign_ripple"),
     44: .standard(proto: "is_qbtc_claim"),
     50: .standard(proto: "dapp_metadata"),
   ]
@@ -1219,6 +1233,19 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
             _storage._signData = .signSui(v)
           }
         }()
+        case 46: try {
+          var v: VSSignRipple?
+          var hadOneofValue = false
+          if let current = _storage._signData {
+            hadOneofValue = true
+            if case .signRipple(let m) = current {v = m}
+          }
+          try decoder.decodeSingularMessageField(value: &v)
+          if let v = v {
+            if hadOneofValue {try decoder.handleConflictingOneOf()}
+            _storage._signData = .signRipple(v)
+          }
+        }()
         case 50: try { try decoder.decodeSingularMessageField(value: &_storage._dappMetadata) }()
         default: break
         }
@@ -1381,9 +1408,17 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       if _storage._isQbtcClaim != false {
         try visitor.visitSingularBoolField(value: _storage._isQbtcClaim, fieldNumber: 44)
       }
-      try { if case .signSui(let v)? = _storage._signData {
+      switch _storage._signData {
+      case .signSui?: try {
+        guard case .signSui(let v)? = _storage._signData else { preconditionFailure() }
         try visitor.visitSingularMessageField(value: v, fieldNumber: 45)
-      } }()
+      }()
+      case .signRipple?: try {
+        guard case .signRipple(let v)? = _storage._signData else { preconditionFailure() }
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 46)
+      }()
+      default: break
+      }
       try { if let v = _storage._dappMetadata {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 50)
       } }()

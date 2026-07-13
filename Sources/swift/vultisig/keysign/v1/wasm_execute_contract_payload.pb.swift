@@ -210,6 +210,23 @@ public struct VSSignSui {
   public init() {}
 }
 
+/// Pre-built XRPL transaction supplied by a dApp. Carried verbatim so types the
+/// KeysignPayload cannot otherwise express — offers, trust lines, escrows —
+/// survive the round trip. Every signer rebuilds its signing input from this
+/// same JSON, so each party signs identical bytes.
+public struct VSSignRipple {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// XRPL transaction JSON
+  public var rawJson: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 public struct VSWasmExecuteContractPayload {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -363,6 +380,7 @@ extension VSSignSolana: @unchecked Sendable {}
 extension VSTonMessage: @unchecked Sendable {}
 extension VSSignTon: @unchecked Sendable {}
 extension VSSignSui: @unchecked Sendable {}
+extension VSSignRipple: @unchecked Sendable {}
 extension VSWasmExecuteContractPayload: @unchecked Sendable {}
 extension VSBitcoinInput: @unchecked Sendable {}
 extension VSBitcoinOutput: @unchecked Sendable {}
@@ -746,6 +764,38 @@ extension VSSignSui: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementation
 
   public static func ==(lhs: VSSignSui, rhs: VSSignSui) -> Bool {
     if lhs.unsignedTxMsg != rhs.unsignedTxMsg {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSSignRipple: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".SignRipple"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "raw_json"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.rawJson) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.rawJson.isEmpty {
+      try visitor.visitSingularStringField(value: self.rawJson, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSSignRipple, rhs: VSSignRipple) -> Bool {
+    if lhs.rawJson != rhs.rawJson {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

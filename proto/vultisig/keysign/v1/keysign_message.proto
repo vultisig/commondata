@@ -79,6 +79,7 @@ message KeysignPayload {
     SignTon sign_ton = 42;
     SignBitcoin sign_bitcoin = 43;
     SignSui sign_sui = 45;
+    SignRipple sign_ripple = 46;
   }
   // Set true on a SecureVault QBTC claim QR. Signals to the peer device
   // that the BTC ECDSA signature it's about to produce is for a QBTC
