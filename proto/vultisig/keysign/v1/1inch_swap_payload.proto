@@ -15,6 +15,15 @@ message OneInchTransaction {
   string gas_price = 5;
   int64 gas = 6;
   string swap_fee = 7;
+  // Coin context for `swap_fee`. The amount alone is not enough because
+  // providers attribute the fee to different coins (e.g. KyberSwap charges
+  // it in the destination token; LI.FI / 1inch / SwapKit charge it in the
+  // source chain's fee coin). Receivers need these fields to compute the
+  // correct fiat-equivalent value. All three are optional for backwards
+  // compatibility with senders that do not yet populate them.
+  optional string swap_fee_chain = 8;
+  optional string swap_fee_token_id = 9;
+  optional int32 swap_fee_decimals = 10;
 }
 message OneInchQuote {
   string dst_amount = 1;

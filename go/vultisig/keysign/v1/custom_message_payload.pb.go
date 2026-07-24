@@ -41,7 +41,12 @@ type CustomMessagePayload struct {
 	// length 64 chars. Untrusted — consumers must treat as display-only
 	// and not use it for authorization or routing.
 	DappName *string `protobuf:"bytes,7,opt,name=dapp_name,json=dappName,proto3,oneof" json:"dapp_name,omitempty"`
-	IconUrl  string  `protobuf:"bytes,8,opt,name=icon_url,json=iconUrl,proto3" json:"icon_url,omitempty"`
+	// URL of the dApp's icon, for UI display only. Should be an
+	// absolute HTTPS URL pointing to an image resource (e.g. PNG, SVG).
+	// Untrusted input — consumers must treat it as display-only,
+	// validate the scheme/host before fetching, and never execute or
+	// trust its contents beyond rendering.
+	IconUrl string `protobuf:"bytes,8,opt,name=icon_url,json=iconUrl,proto3" json:"icon_url,omitempty"`
 }
 
 func (x *CustomMessagePayload) Reset() {

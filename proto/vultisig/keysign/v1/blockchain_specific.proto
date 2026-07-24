@@ -44,6 +44,12 @@ message CosmosSpecific {
   TransactionType transaction_type = 4;
   optional CosmosIbcDenomTrace ibc_denom_traces = 5;
   optional CosmosIbcInfo ibc_info = 6;
+  // Per-tx signed gas limit from a `/cosmos/tx/v1beta1/simulate` estimate.
+  // When unset, signing peers fall back to the static per-chain gas limit.
+  // This value is part of the SignDoc, so every co-signing device MUST honor
+  // it identically or the MPC signature fails. Note that field 3 `gas` is the
+  // fee AMOUNT (not a limit).
+  optional uint64 gas_limit = 7;
 }
 
 message CosmosIbcDenomTrace {
@@ -69,6 +75,7 @@ enum TransactionType {
   TRANSACTION_TYPE_TON_DEPOSIT = 6;
   TRANSACTION_TYPE_TON_WITHDRAW = 7;
   TRANSACTION_TYPE_GENERIC_CONTRACT = 8;
+  TRANSACTION_TYPE_QBTC_CLAIM_WITH_PROOF = 9;
 }
 
 message SolanaSpecific {
@@ -118,6 +125,15 @@ message RippleSpecific {
   uint64 sequence = 1;
   uint64 gas = 2;
   uint64 last_ledger_sequence = 3;
+  // XRPL DestinationTag: 32-bit unsigned integer, optional (proto3 `optional`
+  // so a present tag of 0 is distinguishable from "no tag"). During the
+  // dual-write transition, tag-only sends ALSO carry the tag in the generic
+  // KeysignPayload.memo as a canonical uint32 decimal; signers prefer this
+  // field and fall back to the memo so mixed-version device pairs stay
+  // byte-identical in MPC keysign. A tag combined with an independent memo
+  // requires every signer to understand this field. The memo carrier is
+  // retired once every platform reads this field.
+  optional uint32 destination_tag = 4;
 }
 
 message TronSpecific {

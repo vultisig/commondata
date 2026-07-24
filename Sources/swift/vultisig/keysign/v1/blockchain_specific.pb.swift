@@ -31,6 +31,7 @@ public enum VSTransactionType: SwiftProtobuf.Enum {
   case tonDeposit // = 6
   case tonWithdraw // = 7
   case genericContract // = 8
+  case qbtcClaimWithProof // = 9
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -48,6 +49,7 @@ public enum VSTransactionType: SwiftProtobuf.Enum {
     case 6: self = .tonDeposit
     case 7: self = .tonWithdraw
     case 8: self = .genericContract
+    case 9: self = .qbtcClaimWithProof
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -63,6 +65,7 @@ public enum VSTransactionType: SwiftProtobuf.Enum {
     case .tonDeposit: return 6
     case .tonWithdraw: return 7
     case .genericContract: return 8
+    case .qbtcClaimWithProof: return 9
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -83,6 +86,7 @@ extension VSTransactionType: CaseIterable {
     .tonDeposit,
     .tonWithdraw,
     .genericContract,
+    .qbtcClaimWithProof,
   ]
 }
 
@@ -204,12 +208,27 @@ public struct VSCosmosSpecific {
   /// Clears the value of `ibcInfo`. Subsequent reads from it will return its default value.
   public mutating func clearIbcInfo() {self._ibcInfo = nil}
 
+  /// Per-tx signed gas limit from a `/cosmos/tx/v1beta1/simulate` estimate.
+  /// When unset, signing peers fall back to the static per-chain gas limit.
+  /// This value is part of the SignDoc, so every co-signing device MUST honor
+  /// it identically or the MPC signature fails. Note that field 3 `gas` is the
+  /// fee AMOUNT (not a limit).
+  public var gasLimit: UInt64 {
+    get {return _gasLimit ?? 0}
+    set {_gasLimit = newValue}
+  }
+  /// Returns true if `gasLimit` has been explicitly set.
+  public var hasGasLimit: Bool {return self._gasLimit != nil}
+  /// Clears the value of `gasLimit`. Subsequent reads from it will return its default value.
+  public mutating func clearGasLimit() {self._gasLimit = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _ibcDenomTraces: VSCosmosIbcDenomTrace? = nil
   fileprivate var _ibcInfo: VSCosmosIbcInfo? = nil
+  fileprivate var _gasLimit: UInt64? = nil
 }
 
 public struct VSCosmosIbcDenomTrace {
@@ -396,9 +415,28 @@ public struct VSRippleSpecific {
 
   public var lastLedgerSequence: UInt64 = 0
 
+  /// XRPL DestinationTag: 32-bit unsigned integer, optional (proto3 `optional`
+  /// so a present tag of 0 is distinguishable from "no tag"). During the
+  /// dual-write transition, tag-only sends ALSO carry the tag in the generic
+  /// KeysignPayload.memo as a canonical uint32 decimal; signers prefer this
+  /// field and fall back to the memo so mixed-version device pairs stay
+  /// byte-identical in MPC keysign. A tag combined with an independent memo
+  /// requires every signer to understand this field. The memo carrier is
+  /// retired once every platform reads this field.
+  public var destinationTag: UInt32 {
+    get {return _destinationTag ?? 0}
+    set {_destinationTag = newValue}
+  }
+  /// Returns true if `destinationTag` has been explicitly set.
+  public var hasDestinationTag: Bool {return self._destinationTag != nil}
+  /// Clears the value of `destinationTag`. Subsequent reads from it will return its default value.
+  public mutating func clearDestinationTag() {self._destinationTag = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
+
+  fileprivate var _destinationTag: UInt32? = nil
 }
 
 public struct VSTronSpecific {
@@ -463,6 +501,7 @@ extension VSTransactionType: SwiftProtobuf._ProtoNameProviding {
     6: .same(proto: "TRANSACTION_TYPE_TON_DEPOSIT"),
     7: .same(proto: "TRANSACTION_TYPE_TON_WITHDRAW"),
     8: .same(proto: "TRANSACTION_TYPE_GENERIC_CONTRACT"),
+    9: .same(proto: "TRANSACTION_TYPE_QBTC_CLAIM_WITH_PROOF"),
   ]
 }
 
@@ -707,6 +746,7 @@ extension VSCosmosSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     4: .standard(proto: "transaction_type"),
     5: .standard(proto: "ibc_denom_traces"),
     6: .standard(proto: "ibc_info"),
+    7: .standard(proto: "gas_limit"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -721,6 +761,7 @@ extension VSCosmosSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case 4: try { try decoder.decodeSingularEnumField(value: &self.transactionType) }()
       case 5: try { try decoder.decodeSingularMessageField(value: &self._ibcDenomTraces) }()
       case 6: try { try decoder.decodeSingularMessageField(value: &self._ibcInfo) }()
+      case 7: try { try decoder.decodeSingularUInt64Field(value: &self._gasLimit) }()
       default: break
       }
     }
@@ -749,6 +790,9 @@ extension VSCosmosSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     try { if let v = self._ibcInfo {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
     } }()
+    try { if let v = self._gasLimit {
+      try visitor.visitSingularUInt64Field(value: v, fieldNumber: 7)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -759,6 +803,7 @@ extension VSCosmosSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if lhs.transactionType != rhs.transactionType {return false}
     if lhs._ibcDenomTraces != rhs._ibcDenomTraces {return false}
     if lhs._ibcInfo != rhs._ibcInfo {return false}
+    if lhs._gasLimit != rhs._gasLimit {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -1166,6 +1211,7 @@ extension VSRippleSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     1: .same(proto: "sequence"),
     2: .same(proto: "gas"),
     3: .standard(proto: "last_ledger_sequence"),
+    4: .standard(proto: "destination_tag"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -1177,12 +1223,17 @@ extension VSRippleSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case 1: try { try decoder.decodeSingularUInt64Field(value: &self.sequence) }()
       case 2: try { try decoder.decodeSingularUInt64Field(value: &self.gas) }()
       case 3: try { try decoder.decodeSingularUInt64Field(value: &self.lastLedgerSequence) }()
+      case 4: try { try decoder.decodeSingularUInt32Field(value: &self._destinationTag) }()
       default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
     if self.sequence != 0 {
       try visitor.visitSingularUInt64Field(value: self.sequence, fieldNumber: 1)
     }
@@ -1192,6 +1243,9 @@ extension VSRippleSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if self.lastLedgerSequence != 0 {
       try visitor.visitSingularUInt64Field(value: self.lastLedgerSequence, fieldNumber: 3)
     }
+    try { if let v = self._destinationTag {
+      try visitor.visitSingularUInt32Field(value: v, fieldNumber: 4)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -1199,6 +1253,7 @@ extension VSRippleSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if lhs.sequence != rhs.sequence {return false}
     if lhs.gas != rhs.gas {return false}
     if lhs.lastLedgerSequence != rhs.lastLedgerSequence {return false}
+    if lhs._destinationTag != rhs._destinationTag {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

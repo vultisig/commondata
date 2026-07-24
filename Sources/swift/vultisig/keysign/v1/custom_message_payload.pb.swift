@@ -69,6 +69,11 @@ public struct VSCustomMessagePayload {
   /// Clears the value of `dappName`. Subsequent reads from it will return its default value.
   public mutating func clearDappName() {self._dappName = nil}
 
+  /// URL of the dApp's icon, for UI display only. Should be an
+  /// absolute HTTPS URL pointing to an image resource (e.g. PNG, SVG).
+  /// Untrusted input — consumers must treat it as display-only,
+  /// validate the scheme/host before fetching, and never execute or
+  /// trust its contents beyond rendering.
   public var iconURL: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()

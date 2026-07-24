@@ -20,6 +20,30 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
+/// CardanoTokenAsset describes a Cardano native asset present on a UTXO.
+/// Native assets are identified by (policy_id, asset_name) with integer
+/// quantities. See https://docs.cardano.org/developer-resources/native-tokens.
+public struct VSCardanoTokenAsset {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Hex-encoded policy id (28 bytes / 56 hex chars).
+  public var policyID: String = String()
+
+  /// Hex-encoded asset name (0..32 bytes / 0..64 hex chars). Empty for the
+  /// unnamed asset under a policy.
+  public var assetNameHex: String = String()
+
+  /// Token quantity in the asset's base units, as a decimal string to fit
+  /// values outside int64 range.
+  public var amount: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 public struct VSUtxoInfo {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -27,9 +51,17 @@ public struct VSUtxoInfo {
 
   public var hash: String = String()
 
+  /// For UTXO chains other than Cardano, this is the UTXO amount in the
+  /// chain's smallest unit (e.g. satoshis). For Cardano, this is the
+  /// lovelace amount on the UTXO; per-UTXO native assets live in
+  /// cardano_tokens.
   public var amount: Int64 = 0
 
   public var index: UInt32 = 0
+
+  /// Cardano-only: native assets carried by this UTXO. Empty for non-Cardano
+  /// chains and for ADA-only UTXOs.
+  public var cardanoTokens: [VSCardanoTokenAsset] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -37,6 +69,7 @@ public struct VSUtxoInfo {
 }
 
 #if swift(>=5.5) && canImport(_Concurrency)
+extension VSCardanoTokenAsset: @unchecked Sendable {}
 extension VSUtxoInfo: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
@@ -44,12 +77,57 @@ extension VSUtxoInfo: @unchecked Sendable {}
 
 fileprivate let _protobuf_package = "vultisig.keysign.v1"
 
+extension VSCardanoTokenAsset: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".CardanoTokenAsset"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "policy_id"),
+    2: .standard(proto: "asset_name_hex"),
+    3: .same(proto: "amount"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.policyID) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.assetNameHex) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.amount) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.policyID.isEmpty {
+      try visitor.visitSingularStringField(value: self.policyID, fieldNumber: 1)
+    }
+    if !self.assetNameHex.isEmpty {
+      try visitor.visitSingularStringField(value: self.assetNameHex, fieldNumber: 2)
+    }
+    if !self.amount.isEmpty {
+      try visitor.visitSingularStringField(value: self.amount, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSCardanoTokenAsset, rhs: VSCardanoTokenAsset) -> Bool {
+    if lhs.policyID != rhs.policyID {return false}
+    if lhs.assetNameHex != rhs.assetNameHex {return false}
+    if lhs.amount != rhs.amount {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 extension VSUtxoInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".UtxoInfo"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "hash"),
     2: .same(proto: "amount"),
     3: .same(proto: "index"),
+    4: .standard(proto: "cardano_tokens"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -61,6 +139,7 @@ extension VSUtxoInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
       case 1: try { try decoder.decodeSingularStringField(value: &self.hash) }()
       case 2: try { try decoder.decodeSingularInt64Field(value: &self.amount) }()
       case 3: try { try decoder.decodeSingularUInt32Field(value: &self.index) }()
+      case 4: try { try decoder.decodeRepeatedMessageField(value: &self.cardanoTokens) }()
       default: break
       }
     }
@@ -76,6 +155,9 @@ extension VSUtxoInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
     if self.index != 0 {
       try visitor.visitSingularUInt32Field(value: self.index, fieldNumber: 3)
     }
+    if !self.cardanoTokens.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.cardanoTokens, fieldNumber: 4)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -83,6 +165,7 @@ extension VSUtxoInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
     if lhs.hash != rhs.hash {return false}
     if lhs.amount != rhs.amount {return false}
     if lhs.index != rhs.index {return false}
+    if lhs.cardanoTokens != rhs.cardanoTokens {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

@@ -7,6 +7,7 @@ import "vultisig/keysign/v1/coin.proto";
 import "vultisig/keysign/v1/custom_message_payload.proto";
 import "vultisig/keysign/v1/erc20_approve_payload.proto";
 import "vultisig/keysign/v1/kyberswap_swap_payload.proto";
+import "vultisig/keysign/v1/swapkit_swap_payload.proto";
 import "vultisig/keysign/v1/thorchain_swap_payload.proto";
 import "vultisig/keysign/v1/tron_contract_payload.proto";
 import "vultisig/keysign/v1/utxo_info.proto";
@@ -61,6 +62,7 @@ message KeysignPayload {
     THORChainSwapPayload mayachain_swap_payload = 23;
     OneInchSwapPayload oneinch_swap_payload = 24;
     KyberSwapPayload kyberswap_swap_payload = 25;
+    SwapKitSwapPayload swapkit_swap_payload = 26;
   }
   optional Erc20ApprovePayload erc20_approve_payload = 30;
   string vault_public_key_ecdsa = 31;
@@ -79,5 +81,14 @@ message KeysignPayload {
     SignSolana sign_solana = 41;
     SignTon sign_ton = 42;
     SignBitcoin sign_bitcoin = 43;
+    SignSui sign_sui = 45;
+    SignRipple sign_ripple = 46;
   }
+  // Set true on a SecureVault QBTC claim QR. Signals to the peer device
+  // that the BTC ECDSA signature it's about to produce is for a QBTC
+  // claim — the peer derives the claimer's QBTC address from its own
+  // vault (same vault, same derived QBTC address) and computes the
+  // message hash locally so a compromised initiator cannot divert the
+  // signature to an arbitrary BTC spending tx.
+  bool is_qbtc_claim = 44;
 }
