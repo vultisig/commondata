@@ -76,6 +76,11 @@ enum TransactionType {
   TRANSACTION_TYPE_TON_WITHDRAW = 7;
   TRANSACTION_TYPE_GENERIC_CONTRACT = 8;
   TRANSACTION_TYPE_QBTC_CLAIM_WITH_PROOF = 9;
+  // XRPL TrustSet: open or modify a trust line for an issued currency, rather
+  // than pay it. The keysign amount is the trust-line limit, not a transfer
+  // amount. Required because an XRPL issued-currency coin alone cannot say
+  // which of the two operations was intended — see RippleSpecific.
+  TRANSACTION_TYPE_RIPPLE_TRUST_SET = 10;
 }
 
 message SolanaSpecific {
@@ -134,6 +139,23 @@ message RippleSpecific {
   // requires every signer to understand this field. The memo carrier is
   // retired once every platform reads this field.
   optional uint32 destination_tag = 4;
+  // Which XRPL operation this payload describes. Needed because a non-native
+  // Ripple coin is ambiguous on its own: the same (currency, issuer) pair can
+  // mean "open a trust line for this token" (TrustSet, where the keysign amount
+  // is the trust-line LIMIT) or "send this token" (Payment with a
+  // CurrencyAmount, where it is a transfer amount). Signers must not have to
+  // guess — the two produce different signed bytes.
+  //
+  // TRANSACTION_TYPE_RIPPLE_TRUST_SET selects the TrustSet. Unset (the proto3
+  // default TRANSACTION_TYPE_UNSPECIFIED, absent from the wire) keeps existing
+  // behaviour byte-identical: a native XRP Payment in drops, or — once every
+  // platform reads this field — an issued-currency Payment for a token coin.
+  //
+  // Transitional note: a signer that predates this field infers TrustSet from a
+  // non-native coin, so a TrustSet stays byte-identical across mixed-version
+  // committees, while a token Payment diverges and the ceremony fails without
+  // moving funds. Fail-safe by design, and resolved as platforms adopt.
+  TransactionType transaction_type = 5;
 }
 
 message TronSpecific {

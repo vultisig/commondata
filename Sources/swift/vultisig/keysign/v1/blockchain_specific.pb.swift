@@ -32,6 +32,12 @@ public enum VSTransactionType: SwiftProtobuf.Enum {
   case tonWithdraw // = 7
   case genericContract // = 8
   case qbtcClaimWithProof // = 9
+
+  /// XRPL TrustSet: open or modify a trust line for an issued currency, rather
+  /// than pay it. The keysign amount is the trust-line limit, not a transfer
+  /// amount. Required because an XRPL issued-currency coin alone cannot say
+  /// which of the two operations was intended — see RippleSpecific.
+  case rippleTrustSet // = 10
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -50,6 +56,7 @@ public enum VSTransactionType: SwiftProtobuf.Enum {
     case 7: self = .tonWithdraw
     case 8: self = .genericContract
     case 9: self = .qbtcClaimWithProof
+    case 10: self = .rippleTrustSet
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -66,6 +73,7 @@ public enum VSTransactionType: SwiftProtobuf.Enum {
     case .tonWithdraw: return 7
     case .genericContract: return 8
     case .qbtcClaimWithProof: return 9
+    case .rippleTrustSet: return 10
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -87,6 +95,7 @@ extension VSTransactionType: CaseIterable {
     .tonWithdraw,
     .genericContract,
     .qbtcClaimWithProof,
+    .rippleTrustSet,
   ]
 }
 
@@ -432,6 +441,24 @@ public struct VSRippleSpecific {
   /// Clears the value of `destinationTag`. Subsequent reads from it will return its default value.
   public mutating func clearDestinationTag() {self._destinationTag = nil}
 
+  /// Which XRPL operation this payload describes. Needed because a non-native
+  /// Ripple coin is ambiguous on its own: the same (currency, issuer) pair can
+  /// mean "open a trust line for this token" (TrustSet, where the keysign amount
+  /// is the trust-line LIMIT) or "send this token" (Payment with a
+  /// CurrencyAmount, where it is a transfer amount). Signers must not have to
+  /// guess — the two produce different signed bytes.
+  ///
+  /// TRANSACTION_TYPE_RIPPLE_TRUST_SET selects the TrustSet. Unset (the proto3
+  /// default TRANSACTION_TYPE_UNSPECIFIED, absent from the wire) keeps existing
+  /// behaviour byte-identical: a native XRP Payment in drops, or — once every
+  /// platform reads this field — an issued-currency Payment for a token coin.
+  ///
+  /// Transitional note: a signer that predates this field infers TrustSet from a
+  /// non-native coin, so a TrustSet stays byte-identical across mixed-version
+  /// committees, while a token Payment diverges and the ceremony fails without
+  /// moving funds. Fail-safe by design, and resolved as platforms adopt.
+  public var transactionType: VSTransactionType = .unspecified
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -502,6 +529,7 @@ extension VSTransactionType: SwiftProtobuf._ProtoNameProviding {
     7: .same(proto: "TRANSACTION_TYPE_TON_WITHDRAW"),
     8: .same(proto: "TRANSACTION_TYPE_GENERIC_CONTRACT"),
     9: .same(proto: "TRANSACTION_TYPE_QBTC_CLAIM_WITH_PROOF"),
+    10: .same(proto: "TRANSACTION_TYPE_RIPPLE_TRUST_SET"),
   ]
 }
 
@@ -1212,6 +1240,7 @@ extension VSRippleSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     2: .same(proto: "gas"),
     3: .standard(proto: "last_ledger_sequence"),
     4: .standard(proto: "destination_tag"),
+    5: .standard(proto: "transaction_type"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -1224,6 +1253,7 @@ extension VSRippleSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case 2: try { try decoder.decodeSingularUInt64Field(value: &self.gas) }()
       case 3: try { try decoder.decodeSingularUInt64Field(value: &self.lastLedgerSequence) }()
       case 4: try { try decoder.decodeSingularUInt32Field(value: &self._destinationTag) }()
+      case 5: try { try decoder.decodeSingularEnumField(value: &self.transactionType) }()
       default: break
       }
     }
@@ -1246,6 +1276,9 @@ extension VSRippleSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     try { if let v = self._destinationTag {
       try visitor.visitSingularUInt32Field(value: v, fieldNumber: 4)
     } }()
+    if self.transactionType != .unspecified {
+      try visitor.visitSingularEnumField(value: self.transactionType, fieldNumber: 5)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -1254,6 +1287,7 @@ extension VSRippleSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if lhs.gas != rhs.gas {return false}
     if lhs.lastLedgerSequence != rhs.lastLedgerSequence {return false}
     if lhs._destinationTag != rhs._destinationTag {return false}
+    if lhs.transactionType != rhs.transactionType {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
