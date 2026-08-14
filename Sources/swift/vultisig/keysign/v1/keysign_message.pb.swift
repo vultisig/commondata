@@ -422,6 +422,19 @@ public struct VSKeysignPayload {
   /// Clears the value of `dappMetadata`. Subsequent reads from it will return its default value.
   public mutating func clearDappMetadata() {_uniqueStorage()._dappMetadata = nil}
 
+  /// What this transaction IS, for wording on the screens around signing —
+  /// never for an amount, a destination, or how it is signed. Absent means the
+  /// initiator predates the field; the receiver keeps its existing behaviour.
+  /// See DisplayKind for why a receiver treats this as a hint, not authority.
+  public var displayKind: VSDisplayKind {
+    get {return _storage._displayKind ?? .unspecified}
+    set {_uniqueStorage()._displayKind = newValue}
+  }
+  /// Returns true if `displayKind` has been explicitly set.
+  public var hasDisplayKind: Bool {return _storage._displayKind != nil}
+  /// Clears the value of `displayKind`. Subsequent reads from it will return its default value.
+  public mutating func clearDisplayKind() {_uniqueStorage()._displayKind = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum OneOf_BlockchainSpecific: Equatable {
@@ -804,6 +817,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     46: .standard(proto: "sign_ripple"),
     44: .standard(proto: "is_qbtc_claim"),
     50: .standard(proto: "dapp_metadata"),
+    51: .standard(proto: "display_kind"),
   ]
 
   fileprivate class _StorageClass {
@@ -823,6 +837,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     var _signData: VSKeysignPayload.OneOf_SignData?
     var _isQbtcClaim: Bool = false
     var _dappMetadata: VSDAppMetadata? = nil
+    var _displayKind: VSDisplayKind? = nil
 
     #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
@@ -853,6 +868,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       _signData = source._signData
       _isQbtcClaim = source._isQbtcClaim
       _dappMetadata = source._dappMetadata
+      _displayKind = source._displayKind
     }
   }
 
@@ -1247,6 +1263,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
           }
         }()
         case 50: try { try decoder.decodeSingularMessageField(value: &_storage._dappMetadata) }()
+        case 51: try { try decoder.decodeSingularEnumField(value: &_storage._displayKind) }()
         default: break
         }
       }
@@ -1422,6 +1439,9 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       try { if let v = _storage._dappMetadata {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 50)
       } }()
+      try { if let v = _storage._displayKind {
+        try visitor.visitSingularEnumField(value: v, fieldNumber: 51)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -1447,6 +1467,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         if _storage._signData != rhs_storage._signData {return false}
         if _storage._isQbtcClaim != rhs_storage._isQbtcClaim {return false}
         if _storage._dappMetadata != rhs_storage._dappMetadata {return false}
+        if _storage._displayKind != rhs_storage._displayKind {return false}
         return true
       }
       if !storagesAreEqual {return false}

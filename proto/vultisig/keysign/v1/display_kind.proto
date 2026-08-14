@@ -1,0 +1,55 @@
+syntax = "proto3";
+package vultisig.keysign.v1;
+
+option go_package = "github.com/vultisig/commondata/go/vultisig/keysign/v1;v1";
+option java_package = "vultisig.keysign.v1";
+option swift_prefix = "VS";
+
+// What a transaction IS, in one word, so every device asked to sign it
+// announces it with the same verb.
+//
+// A co-signing device receives only the KeysignPayload, and for most DeFi
+// operations nothing in that payload identifies the operation: a Cosmos
+// delegate, a Solana stake and an LP deposit carry no memo at all, so a
+// co-signer cannot tell them apart from an ordinary transfer and announces
+// every one of them as "You're sending". Where a memo does exist, reading it is
+// chain-specific string archaeology (`tcy-:<bps>`, `UNBOND:<node>:<units>`),
+// and three clients parsing it independently is three vocabularies that drift.
+//
+// ⚠️ **Wording only. This field never decides an amount, a destination, or how
+// anything is signed.**
+//
+// It is set by the initiating device and is NOT part of what gets signed, so —
+// unlike `to_amount`, `to_address` or `memo` — it can disagree with the
+// transaction without changing the outcome. A receiver must treat it as a hint,
+// never as authority:
+//
+//   1. Where the signed content identifies the operation (a memo, a wasm
+//      execute message), that reading wins and this field is ignored.
+//   2. A kind that contradicts the signed content is discarded, not rendered.
+//   3. UNSPECIFIED — an older initiator, or a kind a newer one added that this
+//      client does not know — falls back to whatever the screen showed before
+//      this field existed. Never render the enum name.
+//
+// What bounds the risk is that the amount and the destination are always read
+// from the signed payload, so a wrong verb can soften how a transaction reads
+// but cannot hide what it moves.
+//
+// One verb per operation, not per asset: a TCY stake, a RUJI stake and a TON
+// pool deposit are all STAKE. Splitting them would be the same sentence
+// repeated once per asset, in every locale of every client.
+enum DisplayKind {
+  DISPLAY_KIND_UNSPECIFIED = 0;
+  DISPLAY_KIND_STAKE = 1;
+  DISPLAY_KIND_UNSTAKE = 2;
+  DISPLAY_KIND_BOND = 3;
+  DISPLAY_KIND_UNBOND = 4;
+  DISPLAY_KIND_DELEGATE = 5;
+  DISPLAY_KIND_UNDELEGATE = 6;
+  DISPLAY_KIND_REDELEGATE = 7;
+  DISPLAY_KIND_CLAIM_REWARDS = 8;
+  DISPLAY_KIND_MINT = 9;
+  DISPLAY_KIND_REDEEM = 10;
+  DISPLAY_KIND_ADD_LIQUIDITY = 11;
+  DISPLAY_KIND_REMOVE_LIQUIDITY = 12;
+}
