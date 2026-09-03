@@ -151,6 +151,19 @@ public struct VSOneInchSwapPayload {
     set {_uniqueStorage()._provider = newValue}
   }
 
+  /// Sub-provider tag for the verify screen, e.g. "CHAINFLIP", "NEAR". Mirrors
+  /// SwapKitSwapPayload.sub_provider, which non-EVM SwapKit routes already
+  /// carry. Without it a cosigning peer names the aggregator alone while the
+  /// initiator, holding the quote, names the route too — one swap described
+  /// two ways on the two screens that are supposed to agree.
+  ///
+  /// Empty for aggregators that route directly and for senders that predate
+  /// this field.
+  public var subProvider: String {
+    get {return _storage._subProvider}
+    set {_uniqueStorage()._subProvider = newValue}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -309,6 +322,7 @@ extension VSOneInchSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     4: .standard(proto: "to_amount_decimal"),
     5: .same(proto: "quote"),
     6: .same(proto: "provider"),
+    7: .standard(proto: "sub_provider"),
   ]
 
   fileprivate class _StorageClass {
@@ -318,6 +332,7 @@ extension VSOneInchSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     var _toAmountDecimal: String = String()
     var _quote: VSOneInchQuote? = nil
     var _provider: String = String()
+    var _subProvider: String = String()
 
     #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
@@ -338,6 +353,7 @@ extension VSOneInchSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
       _toAmountDecimal = source._toAmountDecimal
       _quote = source._quote
       _provider = source._provider
+      _subProvider = source._subProvider
     }
   }
 
@@ -362,6 +378,7 @@ extension VSOneInchSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
         case 4: try { try decoder.decodeSingularStringField(value: &_storage._toAmountDecimal) }()
         case 5: try { try decoder.decodeSingularMessageField(value: &_storage._quote) }()
         case 6: try { try decoder.decodeSingularStringField(value: &_storage._provider) }()
+        case 7: try { try decoder.decodeSingularStringField(value: &_storage._subProvider) }()
         default: break
         }
       }
@@ -392,6 +409,9 @@ extension VSOneInchSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
       if !_storage._provider.isEmpty {
         try visitor.visitSingularStringField(value: _storage._provider, fieldNumber: 6)
       }
+      if !_storage._subProvider.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._subProvider, fieldNumber: 7)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -407,6 +427,7 @@ extension VSOneInchSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
         if _storage._toAmountDecimal != rhs_storage._toAmountDecimal {return false}
         if _storage._quote != rhs_storage._quote {return false}
         if _storage._provider != rhs_storage._provider {return false}
+        if _storage._subProvider != rhs_storage._subProvider {return false}
         return true
       }
       if !storagesAreEqual {return false}
