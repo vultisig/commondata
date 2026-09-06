@@ -21,4 +21,15 @@ message THORChainSwapPayload {
   uint64 expiration_time = 11;
   bool is_affiliate = 12;
   string fee = 13;
+  // Price impact of the route, in basis points, as the quote reported it
+  // (`fees.slippage_bps`). Carried rather than recomputed because a co-signer
+  // fetching its own quote would price a pool that has moved since the
+  // initiator quoted it, making this the only term on the verify screen where
+  // the two devices legitimately disagree.
+  //
+  // Distinct from the total fee in bps, which is a different figure that
+  // merely looks like slippage. Optional for backwards compatibility: a sender
+  // that predates this field leaves it unset and receivers hide the row rather
+  // than showing a stand-in.
+  optional uint32 slippage_bps = 14;
 }
