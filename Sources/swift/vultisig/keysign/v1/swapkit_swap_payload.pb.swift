@@ -155,6 +155,52 @@ public struct VSSwapKitSwapPayload {
     set {_uniqueStorage()._swapID = newValue}
   }
 
+  /// Provider fee for this swap, raw in base units of the coin identified by
+  /// the three fields below. Empty for routes that carry no provider fee.
+  ///
+  /// A cosigning peer holds no quote, so a fee omitted here is a fee it can
+  /// neither recover nor display — it would show a total that understates
+  /// what the swap costs. EVM and Solana SwapKit routes carry the same data
+  /// as OneInchTransaction fields 7-10; these mirror them for the transfer
+  /// routes that ride this payload instead.
+  public var swapFee: String {
+    get {return _storage._swapFee}
+    set {_uniqueStorage()._swapFee = newValue}
+  }
+
+  /// Coin context for `swap_fee`. The amount alone is not enough because
+  /// providers attribute the fee to different coins (e.g. KyberSwap charges
+  /// it in the destination token; LI.FI / 1inch / SwapKit charge it in the
+  /// source chain's fee coin). Receivers need these fields to compute the
+  /// correct fiat-equivalent value. All three are optional for backwards
+  /// compatibility with senders that do not yet populate them.
+  public var swapFeeChain: String {
+    get {return _storage._swapFeeChain ?? String()}
+    set {_uniqueStorage()._swapFeeChain = newValue}
+  }
+  /// Returns true if `swapFeeChain` has been explicitly set.
+  public var hasSwapFeeChain: Bool {return _storage._swapFeeChain != nil}
+  /// Clears the value of `swapFeeChain`. Subsequent reads from it will return its default value.
+  public mutating func clearSwapFeeChain() {_uniqueStorage()._swapFeeChain = nil}
+
+  public var swapFeeTokenID: String {
+    get {return _storage._swapFeeTokenID ?? String()}
+    set {_uniqueStorage()._swapFeeTokenID = newValue}
+  }
+  /// Returns true if `swapFeeTokenID` has been explicitly set.
+  public var hasSwapFeeTokenID: Bool {return _storage._swapFeeTokenID != nil}
+  /// Clears the value of `swapFeeTokenID`. Subsequent reads from it will return its default value.
+  public mutating func clearSwapFeeTokenID() {_uniqueStorage()._swapFeeTokenID = nil}
+
+  public var swapFeeDecimals: Int32 {
+    get {return _storage._swapFeeDecimals ?? 0}
+    set {_uniqueStorage()._swapFeeDecimals = newValue}
+  }
+  /// Returns true if `swapFeeDecimals` has been explicitly set.
+  public var hasSwapFeeDecimals: Bool {return _storage._swapFeeDecimals != nil}
+  /// Clears the value of `swapFeeDecimals`. Subsequent reads from it will return its default value.
+  public mutating func clearSwapFeeDecimals() {_uniqueStorage()._swapFeeDecimals = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -184,6 +230,10 @@ extension VSSwapKitSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     9: .same(proto: "memo"),
     10: .standard(proto: "sub_provider"),
     11: .standard(proto: "swap_id"),
+    12: .standard(proto: "swap_fee"),
+    13: .standard(proto: "swap_fee_chain"),
+    14: .standard(proto: "swap_fee_token_id"),
+    15: .standard(proto: "swap_fee_decimals"),
   ]
 
   fileprivate class _StorageClass {
@@ -198,6 +248,10 @@ extension VSSwapKitSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     var _memo: String? = nil
     var _subProvider: String = String()
     var _swapID: String = String()
+    var _swapFee: String = String()
+    var _swapFeeChain: String? = nil
+    var _swapFeeTokenID: String? = nil
+    var _swapFeeDecimals: Int32? = nil
 
     #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
@@ -223,6 +277,10 @@ extension VSSwapKitSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
       _memo = source._memo
       _subProvider = source._subProvider
       _swapID = source._swapID
+      _swapFee = source._swapFee
+      _swapFeeChain = source._swapFeeChain
+      _swapFeeTokenID = source._swapFeeTokenID
+      _swapFeeDecimals = source._swapFeeDecimals
     }
   }
 
@@ -252,6 +310,10 @@ extension VSSwapKitSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
         case 9: try { try decoder.decodeSingularStringField(value: &_storage._memo) }()
         case 10: try { try decoder.decodeSingularStringField(value: &_storage._subProvider) }()
         case 11: try { try decoder.decodeSingularStringField(value: &_storage._swapID) }()
+        case 12: try { try decoder.decodeSingularStringField(value: &_storage._swapFee) }()
+        case 13: try { try decoder.decodeSingularStringField(value: &_storage._swapFeeChain) }()
+        case 14: try { try decoder.decodeSingularStringField(value: &_storage._swapFeeTokenID) }()
+        case 15: try { try decoder.decodeSingularInt32Field(value: &_storage._swapFeeDecimals) }()
         default: break
         }
       }
@@ -297,6 +359,18 @@ extension VSSwapKitSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
       if !_storage._swapID.isEmpty {
         try visitor.visitSingularStringField(value: _storage._swapID, fieldNumber: 11)
       }
+      if !_storage._swapFee.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._swapFee, fieldNumber: 12)
+      }
+      try { if let v = _storage._swapFeeChain {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 13)
+      } }()
+      try { if let v = _storage._swapFeeTokenID {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 14)
+      } }()
+      try { if let v = _storage._swapFeeDecimals {
+        try visitor.visitSingularInt32Field(value: v, fieldNumber: 15)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -317,6 +391,10 @@ extension VSSwapKitSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
         if _storage._memo != rhs_storage._memo {return false}
         if _storage._subProvider != rhs_storage._subProvider {return false}
         if _storage._swapID != rhs_storage._swapID {return false}
+        if _storage._swapFee != rhs_storage._swapFee {return false}
+        if _storage._swapFeeChain != rhs_storage._swapFeeChain {return false}
+        if _storage._swapFeeTokenID != rhs_storage._swapFeeTokenID {return false}
+        if _storage._swapFeeDecimals != rhs_storage._swapFeeDecimals {return false}
         return true
       }
       if !storagesAreEqual {return false}

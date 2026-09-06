@@ -37,4 +37,14 @@ message OneInchSwapPayload {
   string to_amount_decimal = 4;
   OneInchQuote quote = 5;
   string provider = 6;
+
+  // Sub-provider tag for the verify screen, e.g. "CHAINFLIP", "NEAR". Mirrors
+  // SwapKitSwapPayload.sub_provider, which non-EVM SwapKit routes already
+  // carry. Without it a cosigning peer names the aggregator alone while the
+  // initiator, holding the quote, names the route too — one swap described
+  // two ways on the two screens that are supposed to agree.
+  //
+  // Empty for aggregators that route directly and for senders that predate
+  // this field.
+  string sub_provider = 7;
 }

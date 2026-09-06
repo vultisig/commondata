@@ -85,4 +85,24 @@ message SwapKitSwapPayload {
   // Doesn't participate in signing. NOT accepted by POST /track —
   // tracking still keys off the broadcast hash + source chain id.
   string swap_id = 11;
+
+  // Provider fee for this swap, raw in base units of the coin identified by
+  // the three fields below. Empty for routes that carry no provider fee.
+  //
+  // A cosigning peer holds no quote, so a fee omitted here is a fee it can
+  // neither recover nor display — it would show a total that understates
+  // what the swap costs. EVM and Solana SwapKit routes carry the same data
+  // as OneInchTransaction fields 7-10; these mirror them for the transfer
+  // routes that ride this payload instead.
+  string swap_fee = 12;
+
+  // Coin context for `swap_fee`. The amount alone is not enough because
+  // providers attribute the fee to different coins (e.g. KyberSwap charges
+  // it in the destination token; LI.FI / 1inch / SwapKit charge it in the
+  // source chain's fee coin). Receivers need these fields to compute the
+  // correct fiat-equivalent value. All three are optional for backwards
+  // compatibility with senders that do not yet populate them.
+  optional string swap_fee_chain = 13;
+  optional string swap_fee_token_id = 14;
+  optional int32 swap_fee_decimals = 15;
 }
