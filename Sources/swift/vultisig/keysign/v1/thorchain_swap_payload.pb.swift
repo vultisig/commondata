@@ -102,6 +102,25 @@ public struct VSTHORChainSwapPayload {
     set {_uniqueStorage()._fee = newValue}
   }
 
+  /// Price impact of the route, in basis points, as the quote reported it
+  /// (`fees.slippage_bps`). Carried rather than recomputed because a co-signer
+  /// fetching its own quote would price a pool that has moved since the
+  /// initiator quoted it, making this the only term on the verify screen where
+  /// the two devices legitimately disagree.
+  ///
+  /// Distinct from the total fee in bps, which is a different figure that
+  /// merely looks like slippage. Optional for backwards compatibility: a sender
+  /// that predates this field leaves it unset and receivers hide the row rather
+  /// than showing a stand-in.
+  public var slippageBps: UInt32 {
+    get {return _storage._slippageBps ?? 0}
+    set {_uniqueStorage()._slippageBps = newValue}
+  }
+  /// Returns true if `slippageBps` has been explicitly set.
+  public var hasSlippageBps: Bool {return _storage._slippageBps != nil}
+  /// Clears the value of `slippageBps`. Subsequent reads from it will return its default value.
+  public mutating func clearSlippageBps() {_uniqueStorage()._slippageBps = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -133,6 +152,7 @@ extension VSTHORChainSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     11: .standard(proto: "expiration_time"),
     12: .standard(proto: "is_affiliate"),
     13: .same(proto: "fee"),
+    14: .standard(proto: "slippage_bps"),
   ]
 
   fileprivate class _StorageClass {
@@ -149,6 +169,7 @@ extension VSTHORChainSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     var _expirationTime: UInt64 = 0
     var _isAffiliate: Bool = false
     var _fee: String = String()
+    var _slippageBps: UInt32? = nil
 
     #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
@@ -176,6 +197,7 @@ extension VSTHORChainSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       _expirationTime = source._expirationTime
       _isAffiliate = source._isAffiliate
       _fee = source._fee
+      _slippageBps = source._slippageBps
     }
   }
 
@@ -207,6 +229,7 @@ extension VSTHORChainSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
         case 11: try { try decoder.decodeSingularUInt64Field(value: &_storage._expirationTime) }()
         case 12: try { try decoder.decodeSingularBoolField(value: &_storage._isAffiliate) }()
         case 13: try { try decoder.decodeSingularStringField(value: &_storage._fee) }()
+        case 14: try { try decoder.decodeSingularUInt32Field(value: &_storage._slippageBps) }()
         default: break
         }
       }
@@ -258,6 +281,9 @@ extension VSTHORChainSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       if !_storage._fee.isEmpty {
         try visitor.visitSingularStringField(value: _storage._fee, fieldNumber: 13)
       }
+      try { if let v = _storage._slippageBps {
+        try visitor.visitSingularUInt32Field(value: v, fieldNumber: 14)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -280,6 +306,7 @@ extension VSTHORChainSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
         if _storage._expirationTime != rhs_storage._expirationTime {return false}
         if _storage._isAffiliate != rhs_storage._isAffiliate {return false}
         if _storage._fee != rhs_storage._fee {return false}
+        if _storage._slippageBps != rhs_storage._slippageBps {return false}
         return true
       }
       if !storagesAreEqual {return false}
