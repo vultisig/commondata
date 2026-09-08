@@ -90,6 +90,7 @@ message SolanaSpecific {
   optional string to_token_associated_address = 4;
   optional bool program_id = 5;
   optional string compute_limit = 6;
+  optional uint64 last_valid_block_height = 7;
 }
 
 message PolkadotSpecific {
