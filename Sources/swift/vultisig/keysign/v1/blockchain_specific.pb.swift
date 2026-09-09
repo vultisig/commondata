@@ -328,6 +328,15 @@ public struct VSSolanaSpecific {
   /// Clears the value of `computeLimit`. Subsequent reads from it will return its default value.
   public mutating func clearComputeLimit() {self._computeLimit = nil}
 
+  public var lastValidBlockHeight: UInt64 {
+    get {return _lastValidBlockHeight ?? 0}
+    set {_lastValidBlockHeight = newValue}
+  }
+  /// Returns true if `lastValidBlockHeight` has been explicitly set.
+  public var hasLastValidBlockHeight: Bool {return self._lastValidBlockHeight != nil}
+  /// Clears the value of `lastValidBlockHeight`. Subsequent reads from it will return its default value.
+  public mutating func clearLastValidBlockHeight() {self._lastValidBlockHeight = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -336,6 +345,7 @@ public struct VSSolanaSpecific {
   fileprivate var _toTokenAssociatedAddress: String? = nil
   fileprivate var _programID: Bool? = nil
   fileprivate var _computeLimit: String? = nil
+  fileprivate var _lastValidBlockHeight: UInt64? = nil
 }
 
 public struct VSPolkadotSpecific {
@@ -952,6 +962,7 @@ extension VSSolanaSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     4: .standard(proto: "to_token_associated_address"),
     5: .standard(proto: "program_id"),
     6: .standard(proto: "compute_limit"),
+    7: .standard(proto: "last_valid_block_height"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -966,6 +977,7 @@ extension VSSolanaSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case 4: try { try decoder.decodeSingularStringField(value: &self._toTokenAssociatedAddress) }()
       case 5: try { try decoder.decodeSingularBoolField(value: &self._programID) }()
       case 6: try { try decoder.decodeSingularStringField(value: &self._computeLimit) }()
+      case 7: try { try decoder.decodeSingularUInt64Field(value: &self._lastValidBlockHeight) }()
       default: break
       }
     }
@@ -994,6 +1006,9 @@ extension VSSolanaSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     try { if let v = self._computeLimit {
       try visitor.visitSingularStringField(value: v, fieldNumber: 6)
     } }()
+    try { if let v = self._lastValidBlockHeight {
+      try visitor.visitSingularUInt64Field(value: v, fieldNumber: 7)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -1004,6 +1019,7 @@ extension VSSolanaSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if lhs._toTokenAssociatedAddress != rhs._toTokenAssociatedAddress {return false}
     if lhs._programID != rhs._programID {return false}
     if lhs._computeLimit != rhs._computeLimit {return false}
+    if lhs._lastValidBlockHeight != rhs._lastValidBlockHeight {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
