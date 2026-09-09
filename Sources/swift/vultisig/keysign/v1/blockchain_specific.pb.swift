@@ -38,6 +38,12 @@ public enum VSTransactionType: SwiftProtobuf.Enum {
   /// amount. Required because an XRPL issued-currency coin alone cannot say
   /// which of the two operations was intended — see RippleSpecific.
   case rippleTrustSet // = 10
+
+  /// XRPL Payment: transfer native XRP or an issued currency. Stated explicitly
+  /// so an issued-currency Payment is distinguishable from a legacy TrustSet
+  /// payload, whose absent enum field decodes as UNSPECIFIED and is still
+  /// inferred as a TrustSet from its non-native coin — see RippleSpecific.
+  case ripplePayment // = 11
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -57,6 +63,7 @@ public enum VSTransactionType: SwiftProtobuf.Enum {
     case 8: self = .genericContract
     case 9: self = .qbtcClaimWithProof
     case 10: self = .rippleTrustSet
+    case 11: self = .ripplePayment
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -74,6 +81,7 @@ public enum VSTransactionType: SwiftProtobuf.Enum {
     case .genericContract: return 8
     case .qbtcClaimWithProof: return 9
     case .rippleTrustSet: return 10
+    case .ripplePayment: return 11
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -96,6 +104,7 @@ extension VSTransactionType: CaseIterable {
     .genericContract,
     .qbtcClaimWithProof,
     .rippleTrustSet,
+    .ripplePayment,
   ]
 }
 
@@ -458,10 +467,12 @@ public struct VSRippleSpecific {
   /// CurrencyAmount, where it is a transfer amount). Signers must not have to
   /// guess — the two produce different signed bytes.
   ///
-  /// TRANSACTION_TYPE_RIPPLE_TRUST_SET selects the TrustSet. Unset (the proto3
-  /// default TRANSACTION_TYPE_UNSPECIFIED, absent from the wire) keeps existing
-  /// behaviour byte-identical: a native XRP Payment in drops, or — once every
-  /// platform reads this field — an issued-currency Payment for a token coin.
+  /// TRANSACTION_TYPE_RIPPLE_TRUST_SET selects the TrustSet and
+  /// TRANSACTION_TYPE_RIPPLE_PAYMENT the Payment; new originators state one of
+  /// the two for every non-native coin. Unset (the proto3 default
+  /// TRANSACTION_TYPE_UNSPECIFIED, absent from the wire) keeps existing
+  /// behaviour byte-identical: a native XRP Payment in drops, or — for a
+  /// non-native coin — the TrustSet that signers predating this field infer.
   ///
   /// Transitional note: a signer that predates this field infers TrustSet from a
   /// non-native coin, so a TrustSet stays byte-identical across mixed-version
@@ -540,6 +551,7 @@ extension VSTransactionType: SwiftProtobuf._ProtoNameProviding {
     8: .same(proto: "TRANSACTION_TYPE_GENERIC_CONTRACT"),
     9: .same(proto: "TRANSACTION_TYPE_QBTC_CLAIM_WITH_PROOF"),
     10: .same(proto: "TRANSACTION_TYPE_RIPPLE_TRUST_SET"),
+    11: .same(proto: "TRANSACTION_TYPE_RIPPLE_PAYMENT"),
   ]
 }
 

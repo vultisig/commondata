@@ -81,6 +81,11 @@ enum TransactionType {
   // amount. Required because an XRPL issued-currency coin alone cannot say
   // which of the two operations was intended — see RippleSpecific.
   TRANSACTION_TYPE_RIPPLE_TRUST_SET = 10;
+  // XRPL Payment: transfer native XRP or an issued currency. Stated explicitly
+  // so an issued-currency Payment is distinguishable from a legacy TrustSet
+  // payload, whose absent enum field decodes as UNSPECIFIED and is still
+  // inferred as a TrustSet from its non-native coin — see RippleSpecific.
+  TRANSACTION_TYPE_RIPPLE_PAYMENT = 11;
 }
 
 message SolanaSpecific {
@@ -147,10 +152,12 @@ message RippleSpecific {
   // CurrencyAmount, where it is a transfer amount). Signers must not have to
   // guess — the two produce different signed bytes.
   //
-  // TRANSACTION_TYPE_RIPPLE_TRUST_SET selects the TrustSet. Unset (the proto3
-  // default TRANSACTION_TYPE_UNSPECIFIED, absent from the wire) keeps existing
-  // behaviour byte-identical: a native XRP Payment in drops, or — once every
-  // platform reads this field — an issued-currency Payment for a token coin.
+  // TRANSACTION_TYPE_RIPPLE_TRUST_SET selects the TrustSet and
+  // TRANSACTION_TYPE_RIPPLE_PAYMENT the Payment; new originators state one of
+  // the two for every non-native coin. Unset (the proto3 default
+  // TRANSACTION_TYPE_UNSPECIFIED, absent from the wire) keeps existing
+  // behaviour byte-identical: a native XRP Payment in drops, or — for a
+  // non-native coin — the TrustSet that signers predating this field infer.
   //
   // Transitional note: a signer that predates this field infers TrustSet from a
   // non-native coin, so a TrustSet stays byte-identical across mixed-version
