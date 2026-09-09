@@ -44,6 +44,11 @@ public struct VSKeysignMessage {
 
   public var payloadID: String = String()
 
+  /// Optional custom message to be signed instead of a transaction
+  /// (e.g. EIP-191 / EIP-712 personal_sign or typed-data requests
+  /// originating from a dApp). When set, signers should treat this
+  /// as an arbitrary-message signing request and surface the dApp
+  /// identity (origin, dapp_name, icon_url) to the user for review.
   public var customMessagePayload: VSCustomMessagePayload {
     get {return _customMessagePayload ?? VSCustomMessagePayload()}
     set {_customMessagePayload = newValue}
@@ -53,6 +58,10 @@ public struct VSKeysignMessage {
   /// Clears the value of `customMessagePayload`. Subsequent reads from it will return its default value.
   public mutating func clearCustomMessagePayload() {self._customMessagePayload = nil}
 
+  /// Optional identifier for a server-stored custom payload. When the
+  /// raw payload is too large to embed in a QR code, it is uploaded
+  /// to the relay and referenced here; signers fetch the full payload
+  /// by this id before signing.
   public var customPayloadID: String {
     get {return _customPayloadID ?? String()}
     set {_customPayloadID = newValue}
@@ -69,22 +78,6 @@ public struct VSKeysignMessage {
   fileprivate var _keysignPayload: VSKeysignPayload? = nil
   fileprivate var _customMessagePayload: VSCustomMessagePayload? = nil
   fileprivate var _customPayloadID: String? = nil
-}
-
-public struct VSDAppMetadata {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  public var name: String = String()
-
-  public var url: String = String()
-
-  public var iconURL: String = String()
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
 }
 
 public struct VSKeysignPayload {
@@ -413,15 +406,6 @@ public struct VSKeysignPayload {
     set {_uniqueStorage()._isQbtcClaim = newValue}
   }
 
-  public var dappMetadata: VSDAppMetadata {
-    get {return _storage._dappMetadata ?? VSDAppMetadata()}
-    set {_uniqueStorage()._dappMetadata = newValue}
-  }
-  /// Returns true if `dappMetadata` has been explicitly set.
-  public var hasDappMetadata: Bool {return _storage._dappMetadata != nil}
-  /// Clears the value of `dappMetadata`. Subsequent reads from it will return its default value.
-  public mutating func clearDappMetadata() {_uniqueStorage()._dappMetadata = nil}
-
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum OneOf_BlockchainSpecific: Equatable {
@@ -627,7 +611,6 @@ public struct VSKeysignPayload {
 
 #if swift(>=5.5) && canImport(_Concurrency)
 extension VSKeysignMessage: @unchecked Sendable {}
-extension VSDAppMetadata: @unchecked Sendable {}
 extension VSKeysignPayload: @unchecked Sendable {}
 extension VSKeysignPayload.OneOf_BlockchainSpecific: @unchecked Sendable {}
 extension VSKeysignPayload.OneOf_SwapPayload: @unchecked Sendable {}
@@ -717,50 +700,6 @@ extension VSKeysignMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
   }
 }
 
-extension VSDAppMetadata: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".DAppMetadata"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "name"),
-    2: .same(proto: "url"),
-    3: .standard(proto: "icon_url"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.name) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.url) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.iconURL) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.name.isEmpty {
-      try visitor.visitSingularStringField(value: self.name, fieldNumber: 1)
-    }
-    if !self.url.isEmpty {
-      try visitor.visitSingularStringField(value: self.url, fieldNumber: 2)
-    }
-    if !self.iconURL.isEmpty {
-      try visitor.visitSingularStringField(value: self.iconURL, fieldNumber: 3)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: VSDAppMetadata, rhs: VSDAppMetadata) -> Bool {
-    if lhs.name != rhs.name {return false}
-    if lhs.url != rhs.url {return false}
-    if lhs.iconURL != rhs.iconURL {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
 extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".KeysignPayload"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -803,7 +742,6 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     45: .standard(proto: "sign_sui"),
     46: .standard(proto: "sign_ripple"),
     44: .standard(proto: "is_qbtc_claim"),
-    50: .standard(proto: "dapp_metadata"),
   ]
 
   fileprivate class _StorageClass {
@@ -822,7 +760,6 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     var _contractPayload: VSKeysignPayload.OneOf_ContractPayload?
     var _signData: VSKeysignPayload.OneOf_SignData?
     var _isQbtcClaim: Bool = false
-    var _dappMetadata: VSDAppMetadata? = nil
 
     #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
@@ -852,7 +789,6 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       _contractPayload = source._contractPayload
       _signData = source._signData
       _isQbtcClaim = source._isQbtcClaim
-      _dappMetadata = source._dappMetadata
     }
   }
 
@@ -1246,7 +1182,6 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
             _storage._signData = .signRipple(v)
           }
         }()
-        case 50: try { try decoder.decodeSingularMessageField(value: &_storage._dappMetadata) }()
         default: break
         }
       }
@@ -1419,9 +1354,6 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       }()
       default: break
       }
-      try { if let v = _storage._dappMetadata {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 50)
-      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -1446,7 +1378,6 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         if _storage._contractPayload != rhs_storage._contractPayload {return false}
         if _storage._signData != rhs_storage._signData {return false}
         if _storage._isQbtcClaim != rhs_storage._isQbtcClaim {return false}
-        if _storage._dappMetadata != rhs_storage._dappMetadata {return false}
         return true
       }
       if !storagesAreEqual {return false}
