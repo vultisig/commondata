@@ -8,4 +8,11 @@ option swift_prefix = "VS";
 message Erc20ApprovePayload {
   string amount = 1;
   string spender = 2;
+  // When true, every signer emits approve(spender, 0) at the payload nonce
+  // before approve(spender, amount) at nonce + 1, and the main transaction
+  // moves to nonce + 2. Set by the initiator only for tokens such as USDT
+  // that revert on a non-zero -> non-zero approve while a stale allowance
+  // remains. Defaults to false so payloads from older senders keep the
+  // two-message shape.
+  bool reset_allowance_first = 3;
 }
