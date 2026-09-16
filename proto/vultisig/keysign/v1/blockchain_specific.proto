@@ -106,6 +106,7 @@ message PolkadotSpecific {
   uint32 transaction_version = 5;
   string genesis_hash = 6;
   uint64 gas = 7;
+  bool allow_death = 8;
 }
 
 message SuiCoin {
