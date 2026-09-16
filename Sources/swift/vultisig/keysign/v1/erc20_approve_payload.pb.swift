@@ -29,6 +29,14 @@ public struct VSErc20ApprovePayload {
 
   public var spender: String = String()
 
+  /// When true, every signer emits approve(spender, 0) at the payload nonce
+  /// before approve(spender, amount) at nonce + 1, and the main transaction
+  /// moves to nonce + 2. Set by the initiator only for tokens such as USDT
+  /// that revert on a non-zero -> non-zero approve while a stale allowance
+  /// remains. Defaults to false so payloads from older senders keep the
+  /// two-message shape.
+  public var resetAllowanceFirst: Bool = false
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -47,6 +55,7 @@ extension VSErc20ApprovePayload: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "amount"),
     2: .same(proto: "spender"),
+    3: .standard(proto: "reset_allowance_first"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -57,6 +66,7 @@ extension VSErc20ApprovePayload: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularStringField(value: &self.amount) }()
       case 2: try { try decoder.decodeSingularStringField(value: &self.spender) }()
+      case 3: try { try decoder.decodeSingularBoolField(value: &self.resetAllowanceFirst) }()
       default: break
       }
     }
@@ -69,12 +79,16 @@ extension VSErc20ApprovePayload: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     if !self.spender.isEmpty {
       try visitor.visitSingularStringField(value: self.spender, fieldNumber: 2)
     }
+    if self.resetAllowanceFirst != false {
+      try visitor.visitSingularBoolField(value: self.resetAllowanceFirst, fieldNumber: 3)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: VSErc20ApprovePayload, rhs: VSErc20ApprovePayload) -> Bool {
     if lhs.amount != rhs.amount {return false}
     if lhs.spender != rhs.spender {return false}
+    if lhs.resetAllowanceFirst != rhs.resetAllowanceFirst {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
