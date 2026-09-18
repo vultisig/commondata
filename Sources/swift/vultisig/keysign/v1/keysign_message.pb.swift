@@ -44,6 +44,9 @@ public struct VSKeysignMessage {
 
   public var payloadID: String = String()
 
+  /// Set instead of keysign_payload when the request is an arbitrary-message
+  /// signature (e.g. personal_sign, EIP-712 typed data, Cosmos signArbitrary)
+  /// rather than a transaction.
   public var customMessagePayload: VSCustomMessagePayload {
     get {return _customMessagePayload ?? VSCustomMessagePayload()}
     set {_customMessagePayload = newValue}
@@ -53,6 +56,8 @@ public struct VSKeysignMessage {
   /// Clears the value of `customMessagePayload`. Subsequent reads from it will return its default value.
   public mutating func clearCustomMessagePayload() {self._customMessagePayload = nil}
 
+  /// Relay id of a CustomMessagePayload too large to embed in the QR code.
+  /// Signers fetch the payload by this id before signing.
   public var customPayloadID: String {
     get {return _customPayloadID ?? String()}
     set {_customPayloadID = newValue}
@@ -69,22 +74,6 @@ public struct VSKeysignMessage {
   fileprivate var _keysignPayload: VSKeysignPayload? = nil
   fileprivate var _customMessagePayload: VSCustomMessagePayload? = nil
   fileprivate var _customPayloadID: String? = nil
-}
-
-public struct VSDAppMetadata {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  public var name: String = String()
-
-  public var url: String = String()
-
-  public var iconURL: String = String()
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
 }
 
 public struct VSKeysignPayload {
@@ -627,7 +616,6 @@ public struct VSKeysignPayload {
 
 #if swift(>=5.5) && canImport(_Concurrency)
 extension VSKeysignMessage: @unchecked Sendable {}
-extension VSDAppMetadata: @unchecked Sendable {}
 extension VSKeysignPayload: @unchecked Sendable {}
 extension VSKeysignPayload.OneOf_BlockchainSpecific: @unchecked Sendable {}
 extension VSKeysignPayload.OneOf_SwapPayload: @unchecked Sendable {}
@@ -712,50 +700,6 @@ extension VSKeysignMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if lhs.payloadID != rhs.payloadID {return false}
     if lhs._customMessagePayload != rhs._customMessagePayload {return false}
     if lhs._customPayloadID != rhs._customPayloadID {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension VSDAppMetadata: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".DAppMetadata"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "name"),
-    2: .same(proto: "url"),
-    3: .standard(proto: "icon_url"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.name) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.url) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.iconURL) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.name.isEmpty {
-      try visitor.visitSingularStringField(value: self.name, fieldNumber: 1)
-    }
-    if !self.url.isEmpty {
-      try visitor.visitSingularStringField(value: self.url, fieldNumber: 2)
-    }
-    if !self.iconURL.isEmpty {
-      try visitor.visitSingularStringField(value: self.iconURL, fieldNumber: 3)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: VSDAppMetadata, rhs: VSDAppMetadata) -> Bool {
-    if lhs.name != rhs.name {return false}
-    if lhs.url != rhs.url {return false}
-    if lhs.iconURL != rhs.iconURL {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
