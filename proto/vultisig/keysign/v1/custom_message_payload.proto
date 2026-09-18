@@ -1,6 +1,8 @@
 syntax = "proto3";
 package vultisig.keysign.v1;
 
+import "vultisig/keysign/v1/dapp_metadata.proto";
+
 option go_package = "github.com/vultisig/commondata/go/vultisig/keysign/v1;v1";
 option java_package = "vultisig.keysign.v1";
 option swift_prefix = "VS";
@@ -11,4 +13,7 @@ message CustomMessagePayload {
   string vault_public_key_ecdsa = 3;
   string vault_local_party_id = 4;
   optional string chain = 5;
+  // The dApp that requested this signature. Unset when the message did not
+  // come from a dApp (e.g. typed in by the user).
+  optional DAppMetadata dapp_metadata = 6;
 }

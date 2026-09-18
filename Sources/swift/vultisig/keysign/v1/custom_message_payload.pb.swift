@@ -42,11 +42,23 @@ public struct VSCustomMessagePayload {
   /// Clears the value of `chain`. Subsequent reads from it will return its default value.
   public mutating func clearChain() {self._chain = nil}
 
+  /// The dApp that requested this signature. Unset when the message did not
+  /// come from a dApp (e.g. typed in by the user).
+  public var dappMetadata: VSDAppMetadata {
+    get {return _dappMetadata ?? VSDAppMetadata()}
+    set {_dappMetadata = newValue}
+  }
+  /// Returns true if `dappMetadata` has been explicitly set.
+  public var hasDappMetadata: Bool {return self._dappMetadata != nil}
+  /// Clears the value of `dappMetadata`. Subsequent reads from it will return its default value.
+  public mutating func clearDappMetadata() {self._dappMetadata = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _chain: String? = nil
+  fileprivate var _dappMetadata: VSDAppMetadata? = nil
 }
 
 #if swift(>=5.5) && canImport(_Concurrency)
@@ -65,6 +77,7 @@ extension VSCustomMessagePayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     3: .standard(proto: "vault_public_key_ecdsa"),
     4: .standard(proto: "vault_local_party_id"),
     5: .same(proto: "chain"),
+    6: .standard(proto: "dapp_metadata"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -78,6 +91,7 @@ extension VSCustomMessagePayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       case 3: try { try decoder.decodeSingularStringField(value: &self.vaultPublicKeyEcdsa) }()
       case 4: try { try decoder.decodeSingularStringField(value: &self.vaultLocalPartyID) }()
       case 5: try { try decoder.decodeSingularStringField(value: &self._chain) }()
+      case 6: try { try decoder.decodeSingularMessageField(value: &self._dappMetadata) }()
       default: break
       }
     }
@@ -103,6 +117,9 @@ extension VSCustomMessagePayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     try { if let v = self._chain {
       try visitor.visitSingularStringField(value: v, fieldNumber: 5)
     } }()
+    try { if let v = self._dappMetadata {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -112,6 +129,7 @@ extension VSCustomMessagePayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     if lhs.vaultPublicKeyEcdsa != rhs.vaultPublicKeyEcdsa {return false}
     if lhs.vaultLocalPartyID != rhs.vaultLocalPartyID {return false}
     if lhs._chain != rhs._chain {return false}
+    if lhs._dappMetadata != rhs._dappMetadata {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

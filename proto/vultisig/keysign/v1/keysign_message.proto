@@ -5,6 +5,7 @@ import "vultisig/keysign/v1/1inch_swap_payload.proto";
 import "vultisig/keysign/v1/blockchain_specific.proto";
 import "vultisig/keysign/v1/coin.proto";
 import "vultisig/keysign/v1/custom_message_payload.proto";
+import "vultisig/keysign/v1/dapp_metadata.proto";
 import "vultisig/keysign/v1/erc20_approve_payload.proto";
 import "vultisig/keysign/v1/kyberswap_swap_payload.proto";
 import "vultisig/keysign/v1/swapkit_swap_payload.proto";
@@ -24,14 +25,13 @@ message KeysignMessage {
   KeysignPayload keysign_payload = 5;
   bool use_vultisig_relay = 6;
   string payload_id = 7;
+  // Set instead of keysign_payload when the request is an arbitrary-message
+  // signature (e.g. personal_sign, EIP-712 typed data, Cosmos signArbitrary)
+  // rather than a transaction.
   optional CustomMessagePayload custom_message_payload = 8;
+  // Relay id of a CustomMessagePayload too large to embed in the QR code.
+  // Signers fetch the payload by this id before signing.
   optional string custom_payload_id = 9;
-}
-
-message DAppMetadata {
-  string name = 1;
-  string url = 2;
-  string icon_url = 3;
 }
 
 message KeysignPayload {

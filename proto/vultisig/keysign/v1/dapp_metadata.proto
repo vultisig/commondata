@@ -1,0 +1,25 @@
+syntax = "proto3";
+package vultisig.keysign.v1;
+
+option go_package = "github.com/vultisig/commondata/go/vultisig/keysign/v1;v1";
+option java_package = "vultisig.keysign.v1";
+option swift_prefix = "VS";
+
+// DAppMetadata identifies the dApp that asked for a signature. It is carried
+// by both KeysignPayload (transactions) and CustomMessagePayload (message
+// signing) so every co-signing device can show who is asking.
+//
+// All fields are untrusted: they are declared by the initiating device and
+// covered by no signature. Consumers must treat them as display-only and must
+// not use them for authorization or routing.
+message DAppMetadata {
+  // Human-readable name of the dApp. Chosen by the dApp's page, so it is not
+  // an identifier and not guaranteed unique. May be empty.
+  string name = 1;
+  // Origin of the requesting dApp: scheme and host, plus port when present
+  // (e.g. "https://app.example.com"). No path, query or fragment.
+  string url = 2;
+  // URL of the dApp's icon. Chosen by the dApp's page; consumers should
+  // validate the scheme before fetching it. May be empty.
+  string icon_url = 3;
+}
