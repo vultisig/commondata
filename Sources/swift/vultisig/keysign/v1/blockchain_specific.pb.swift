@@ -429,6 +429,47 @@ public struct VSTonSpecific {
 
   public var isActiveDestination: Bool = false
 
+  /// Set when the request is relayed: the sender pays the network fee in a
+  /// jetton and a relay broadcasts the signed W5 request as an internal
+  /// message, paying the TON gas itself. Absent for an ordinary send.
+  public var gasless: VSTonGasless {
+    get {return _gasless ?? VSTonGasless()}
+    set {_gasless = newValue}
+  }
+  /// Returns true if `gasless` has been explicitly set.
+  public var hasGasless: Bool {return self._gasless != nil}
+  /// Clears the value of `gasless`. Subsequent reads from it will return its default value.
+  public mutating func clearGasless() {self._gasless = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _gasless: VSTonGasless? = nil
+}
+
+/// A relay-assisted ("gasless") W5 request. The wallet signs `messages`
+/// verbatim as a W5 `internal_signed` request; the relay wraps it in an
+/// internal message it pays for and keeps `commission` in the gas jetton.
+public struct VSTonGasless {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// The relay that broadcasts the request and receives the commission.
+  public var relayAddress: String = String()
+
+  /// Jetton master the commission is paid in.
+  public var gasJettonMaster: String = String()
+
+  /// Commission in the gas jetton's minimal units.
+  public var commission: String = String()
+
+  /// The internal messages the relay quoted for this transfer, in signing
+  /// order: the sender's own transfer plus the commission transfer to the
+  /// relay. Every co-signer validates them against the payload before signing.
+  public var messages: [VSTonMessage] = []
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -532,6 +573,7 @@ extension VSPolkadotSpecific: @unchecked Sendable {}
 extension VSSuiCoin: @unchecked Sendable {}
 extension VSSuiSpecific: @unchecked Sendable {}
 extension VSTonSpecific: @unchecked Sendable {}
+extension VSTonGasless: @unchecked Sendable {}
 extension VSRippleSpecific: @unchecked Sendable {}
 extension VSTronSpecific: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
@@ -1216,6 +1258,7 @@ extension VSTonSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
     4: .standard(proto: "send_max_amount"),
     5: .standard(proto: "jetton_address"),
     6: .standard(proto: "is_active_destination"),
+    7: .same(proto: "gasless"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -1230,12 +1273,17 @@ extension VSTonSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
       case 4: try { try decoder.decodeSingularBoolField(value: &self.sendMaxAmount) }()
       case 5: try { try decoder.decodeSingularStringField(value: &self.jettonAddress) }()
       case 6: try { try decoder.decodeSingularBoolField(value: &self.isActiveDestination) }()
+      case 7: try { try decoder.decodeSingularMessageField(value: &self._gasless) }()
       default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
     if self.sequenceNumber != 0 {
       try visitor.visitSingularUInt64Field(value: self.sequenceNumber, fieldNumber: 1)
     }
@@ -1254,6 +1302,9 @@ extension VSTonSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
     if self.isActiveDestination != false {
       try visitor.visitSingularBoolField(value: self.isActiveDestination, fieldNumber: 6)
     }
+    try { if let v = self._gasless {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -1264,6 +1315,57 @@ extension VSTonSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
     if lhs.sendMaxAmount != rhs.sendMaxAmount {return false}
     if lhs.jettonAddress != rhs.jettonAddress {return false}
     if lhs.isActiveDestination != rhs.isActiveDestination {return false}
+    if lhs._gasless != rhs._gasless {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSTonGasless: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".TonGasless"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "relay_address"),
+    2: .standard(proto: "gas_jetton_master"),
+    3: .same(proto: "commission"),
+    4: .same(proto: "messages"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.relayAddress) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.gasJettonMaster) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.commission) }()
+      case 4: try { try decoder.decodeRepeatedMessageField(value: &self.messages) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.relayAddress.isEmpty {
+      try visitor.visitSingularStringField(value: self.relayAddress, fieldNumber: 1)
+    }
+    if !self.gasJettonMaster.isEmpty {
+      try visitor.visitSingularStringField(value: self.gasJettonMaster, fieldNumber: 2)
+    }
+    if !self.commission.isEmpty {
+      try visitor.visitSingularStringField(value: self.commission, fieldNumber: 3)
+    }
+    if !self.messages.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.messages, fieldNumber: 4)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSTonGasless, rhs: VSTonGasless) -> Bool {
+    if lhs.relayAddress != rhs.relayAddress {return false}
+    if lhs.gasJettonMaster != rhs.gasJettonMaster {return false}
+    if lhs.commission != rhs.commission {return false}
+    if lhs.messages != rhs.messages {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

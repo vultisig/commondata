@@ -1,6 +1,8 @@
 syntax = "proto3";
 package vultisig.keysign.v1;
 
+import "vultisig/keysign/v1/wasm_execute_contract_payload.proto";
+
 option go_package = "github.com/vultisig/commondata/go/vultisig/keysign/v1;v1";
 option java_package = "vultisig.keysign.v1";
 option swift_prefix = "VS";
@@ -131,6 +133,26 @@ message TonSpecific {
   bool send_max_amount = 4;
   string jetton_address = 5;
   bool is_active_destination = 6;
+  // Set when the request is relayed: the sender pays the network fee in a
+  // jetton and a relay broadcasts the signed W5 request as an internal
+  // message, paying the TON gas itself. Absent for an ordinary send.
+  TonGasless gasless = 7;
+}
+
+// A relay-assisted ("gasless") W5 request. The wallet signs `messages`
+// verbatim as a W5 `internal_signed` request; the relay wraps it in an
+// internal message it pays for and keeps `commission` in the gas jetton.
+message TonGasless {
+  // The relay that broadcasts the request and receives the commission.
+  string relay_address = 1;
+  // Jetton master the commission is paid in.
+  string gas_jetton_master = 2;
+  // Commission in the gas jetton's minimal units.
+  string commission = 3;
+  // The internal messages the relay quoted for this transfer, in signing
+  // order: the sender's own transfer plus the commission transfer to the
+  // relay. Every co-signer validates them against the payload before signing.
+  repeated TonMessage messages = 4;
 }
 
 message RippleSpecific {
