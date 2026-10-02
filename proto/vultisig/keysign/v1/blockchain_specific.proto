@@ -189,6 +189,15 @@ message RippleSpecific {
   TransactionType transaction_type = 5;
 }
 
+message NearSpecific {
+  uint64 nonce = 1;
+  bytes block_hash = 2;
+  // Unsigned decimal yoctoNEAR gas reservation paid upfront, used for local fee
+  // display and balance checks. Not a signed gas limit or cap: NEAR charges the
+  // actual gas burnt, so this value is never a ceiling on the signed tx.
+  string gas_fee = 3;
+}
+
 message TronSpecific {
   uint64 timestamp = 1;
   uint64 expiration = 2;
