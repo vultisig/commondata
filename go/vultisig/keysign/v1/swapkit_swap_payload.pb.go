@@ -55,6 +55,11 @@ type SwapKitSwapPayload struct {
 	//	"SUI"      — tx_payload is a base64-decoded Sui PTB
 	//	"CARDANO"  — tx_payload is empty (deposit-only flow);
 	//	             use target_address + from_amount to build a plain send
+	//	"CARDANO_PREBUILT" — tx_payload is the unsigned Cardano transaction
+	//	             SwapKit built; sign blake2b-256 of its body, then replace
+	//	             the witness set with the vkey witness and re-emit every
+	//	             other item byte for byte. Its deposit output need not
+	//	             pay target_address
 	//
 	// Forward-compatible: new SwapKit chains land here without a commondata
 	// bump, so long as the client SDK on each platform learns to decode the
@@ -70,6 +75,8 @@ type SwapKitSwapPayload struct {
 	//	TRON     — UTF-8 bytes of the canonical JSON of the TronWeb object
 	//	TON      — UTF-8 bytes of the canonical JSON of the transfer array
 	//	CARDANO  — empty bytes (deposit-only flow)
+	//	CARDANO_PREBUILT — hex-decoded CBOR envelope
+	//	           [body, witness_set, is_valid, aux_data]
 	//
 	// Bytes rather than string so binary payloads (PSBT, PTB) don't need
 	// base64 round-tripping. Object-shaped payloads are JSON-encoded on
