@@ -51,6 +51,7 @@ message KeysignPayload {
     RippleSpecific ripple_specific = 13;
     TronSpecific tron_specific = 14;
     CardanoChainSpecific cardano = 15;
+    NearSpecific near_specific = 16;
   }
   repeated UtxoInfo utxo_info = 20;
   optional string memo = 21;

@@ -32,3 +32,7 @@ buf generate
 ```bash
 make
 ```
+
+## Native NEAR sends (`NearSpecific`)
+
+Native NEAR transfers carry `NearSpecific` in the `KeysignPayload.blockchain_specific` oneof (tag `16`). `nonce` (`uint64`) and `block_hash` (`bytes`) are initiator-frozen signing inputs — every co-signer must sign the exact same values or the ceremony fails. `nonce` is the signing access key's current nonce plus one (read at `optimistic` finality; reusing the current value fails nonce validation), and `block_hash` is the 32-byte hash of a recent `final` block. `gas_fee` is an unsigned decimal string in yoctoNEAR (1 NEAR = 10^24 yoctoNEAR) reserved upfront by the initiator for local fee display and balance checks; it is not a signed gas limit or a cap, since NEAR charges gas actually burnt. Receiver and amount stay in the canonical `KeysignPayload.to_address` / `to_amount` fields and are not duplicated here. Clients that predate this oneof tag do not support NEAR at all and cannot co-sign such a payload. This paragraph documents the wire contract only; it makes no production-readiness claim and implies no platform parity.

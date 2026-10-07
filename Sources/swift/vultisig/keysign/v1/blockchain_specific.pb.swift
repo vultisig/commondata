@@ -530,6 +530,25 @@ public struct VSRippleSpecific {
   fileprivate var _destinationTag: UInt32? = nil
 }
 
+public struct VSNearSpecific {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var nonce: UInt64 = 0
+
+  public var blockHash: Data = Data()
+
+  /// Unsigned decimal yoctoNEAR gas reservation paid upfront, used for local fee
+  /// display and balance checks. Not a signed gas limit or cap: NEAR charges the
+  /// actual gas burnt, so this value is never a ceiling on the signed tx.
+  public var gasFee: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 public struct VSTronSpecific {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -575,6 +594,7 @@ extension VSSuiSpecific: @unchecked Sendable {}
 extension VSTonSpecific: @unchecked Sendable {}
 extension VSTonGasless: @unchecked Sendable {}
 extension VSRippleSpecific: @unchecked Sendable {}
+extension VSNearSpecific: @unchecked Sendable {}
 extension VSTronSpecific: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
@@ -1426,6 +1446,50 @@ extension VSRippleSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if lhs.lastLedgerSequence != rhs.lastLedgerSequence {return false}
     if lhs._destinationTag != rhs._destinationTag {return false}
     if lhs.transactionType != rhs.transactionType {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSNearSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".NearSpecific"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "nonce"),
+    2: .standard(proto: "block_hash"),
+    3: .standard(proto: "gas_fee"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularUInt64Field(value: &self.nonce) }()
+      case 2: try { try decoder.decodeSingularBytesField(value: &self.blockHash) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.gasFee) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.nonce != 0 {
+      try visitor.visitSingularUInt64Field(value: self.nonce, fieldNumber: 1)
+    }
+    if !self.blockHash.isEmpty {
+      try visitor.visitSingularBytesField(value: self.blockHash, fieldNumber: 2)
+    }
+    if !self.gasFee.isEmpty {
+      try visitor.visitSingularStringField(value: self.gasFee, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSNearSpecific, rhs: VSNearSpecific) -> Bool {
+    if lhs.nonce != rhs.nonce {return false}
+    if lhs.blockHash != rhs.blockHash {return false}
+    if lhs.gasFee != rhs.gasFee {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
