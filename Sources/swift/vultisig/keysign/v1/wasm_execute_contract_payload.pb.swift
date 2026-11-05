@@ -109,11 +109,22 @@ public struct VSSignAmino {
 
   public var msgs: [VSCosmosMsg] = []
 
+  /// The dApp sign doc's tx-level timeout_height; unset and 0 both mean none.
+  public var timeoutHeight: UInt64 {
+    get {return _timeoutHeight ?? 0}
+    set {_timeoutHeight = newValue}
+  }
+  /// Returns true if `timeoutHeight` has been explicitly set.
+  public var hasTimeoutHeight: Bool {return self._timeoutHeight != nil}
+  /// Clears the value of `timeoutHeight`. Subsequent reads from it will return its default value.
+  public mutating func clearTimeoutHeight() {self._timeoutHeight = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _fee: VSCosmosFee? = nil
+  fileprivate var _timeoutHeight: UInt64? = nil
 }
 
 public struct VSSignDirect {
@@ -532,6 +543,7 @@ extension VSSignAmino: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementati
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "fee"),
     2: .same(proto: "msgs"),
+    3: .standard(proto: "timeout_height"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -542,6 +554,7 @@ extension VSSignAmino: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementati
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularMessageField(value: &self._fee) }()
       case 2: try { try decoder.decodeRepeatedMessageField(value: &self.msgs) }()
+      case 3: try { try decoder.decodeSingularUInt64Field(value: &self._timeoutHeight) }()
       default: break
       }
     }
@@ -558,12 +571,16 @@ extension VSSignAmino: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementati
     if !self.msgs.isEmpty {
       try visitor.visitRepeatedMessageField(value: self.msgs, fieldNumber: 2)
     }
+    try { if let v = self._timeoutHeight {
+      try visitor.visitSingularUInt64Field(value: v, fieldNumber: 3)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: VSSignAmino, rhs: VSSignAmino) -> Bool {
     if lhs._fee != rhs._fee {return false}
     if lhs.msgs != rhs.msgs {return false}
+    if lhs._timeoutHeight != rhs._timeoutHeight {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
