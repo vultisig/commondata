@@ -27,6 +27,8 @@ message CosmosMsg {
 message SignAmino {
   CosmosFee fee = 1;
   repeated CosmosMsg msgs = 2;
+  // The dApp sign doc's tx-level timeout_height; unset and 0 both mean none.
+  optional uint64 timeout_height = 3;
 }
 
 message SignDirect {
