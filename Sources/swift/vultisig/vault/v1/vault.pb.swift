@@ -61,6 +61,9 @@ public struct VSVault {
 
   public var publicKeyFromt: String = String()
 
+  /// For backward compatibility, this field is used to store the public key of MLDSA65. it is a sha256 of MLDSA65 public key
+  public var publicKeyMldsa65: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public struct KeyShare {
@@ -125,6 +128,7 @@ extension VSVault: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
     12: .standard(proto: "public_key_mldsa44"),
     13: .standard(proto: "public_key_frozt"),
     14: .standard(proto: "public_key_fromt"),
+    15: .standard(proto: "public_key_mldsa65"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -147,6 +151,7 @@ extension VSVault: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
       case 12: try { try decoder.decodeSingularStringField(value: &self.publicKeyMldsa44) }()
       case 13: try { try decoder.decodeSingularStringField(value: &self.publicKeyFrozt) }()
       case 14: try { try decoder.decodeSingularStringField(value: &self.publicKeyFromt) }()
+      case 15: try { try decoder.decodeSingularStringField(value: &self.publicKeyMldsa65) }()
       default: break
       }
     }
@@ -199,6 +204,9 @@ extension VSVault: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
     if !self.publicKeyFromt.isEmpty {
       try visitor.visitSingularStringField(value: self.publicKeyFromt, fieldNumber: 14)
     }
+    if !self.publicKeyMldsa65.isEmpty {
+      try visitor.visitSingularStringField(value: self.publicKeyMldsa65, fieldNumber: 15)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -217,6 +225,7 @@ extension VSVault: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
     if lhs.publicKeyMldsa44 != rhs.publicKeyMldsa44 {return false}
     if lhs.publicKeyFrozt != rhs.publicKeyFrozt {return false}
     if lhs.publicKeyFromt != rhs.publicKeyFromt {return false}
+    if lhs.publicKeyMldsa65 != rhs.publicKeyMldsa65 {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
